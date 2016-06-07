@@ -1,0 +1,27 @@
+
+@import "reportalFix.css";
+
+/*A set of layout classes that let you specify layout properties directly in markup.
+You must include this file in every element that needs to use them.
+Guide to use classes here: https://elements.polymer-project.org/guides/flex-layout
+
+Sample use when `flex flex-alignment` are included:
+
+    <div class="layout horizontal layout-start">
+      <div>cross axis start alignment</div>
+    </div>
+
+The following imports are available:
+ - flex
+ - flex-reverse
+ - flex-alignment
+ - flex-factors
+ - positioning
+ */
+@import "layout/flex.css";
+@import "layout/flex-reverse.css";
+@import "layout/flex-alignment.css";
+@import "layout/flex-factors.css";
+@import "layout/positioning.css";
+
+

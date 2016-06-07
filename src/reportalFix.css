@@ -1,0 +1,7 @@
+:root{
+  --gogo:6px;
+}
+body{font-family:Roboto, sans-serif;
+font-size:var(--gogo,9px);
+  display:flex;
+}
