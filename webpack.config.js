@@ -1,6 +1,5 @@
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const JsDocPlugin = require('jsdoc-webpack-plugin');
 
 const AUTOPREFIXER_BROWSERS = [
   'Android 2.3',
@@ -40,16 +39,14 @@ module.exports = {
   plugins: [
     new ExtractTextPlugin('styles.css'),
 
-    /*new webpack.optimize.UglifyJsPlugin({
+    new webpack.optimize.UglifyJsPlugin({
       compress: {
-        warnings: false,
+        warnings: false
       },
       output: {
-        comments: false,
-      },
-    }),*/
-
-    new JsDocPlugin({conf: './jsdoc.conf'})
+        comments: false
+      }
+    })
   ],
   postcss: function (webpack) {
     return [
@@ -62,6 +59,5 @@ module.exports = {
       require('postcss-inline-svg')(),
       //require('cssnano')()
     ];
-  },
-  //watch:true
+  }
 };

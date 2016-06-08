@@ -1,5 +1,10 @@
 /**
- * Created by IvanP on 06.06.2016.
+ * Polling function to wait for the node to appear
+ * @param {Boolean} fn - function that returns a Boolean for existing node
+ * @param {Function} callback - function to execute when node is found
+ * @param {Function} errback - function to execute when timeout is exceeded
+ * @param {Number} timeout
+ * @param {Number} interval - polling interval to check for `fn` to be true
  */
 var poll = (fn, callback, errback, timeout, interval) => {
   var endTime = Number(new Date()) + (timeout || 2000);
