@@ -39,20 +39,21 @@ module.exports = {
   plugins: [
     new ExtractTextPlugin('styles.css'),
 
-    new webpack.optimize.UglifyJsPlugin({
+    /*new webpack.optimize.UglifyJsPlugin({
       compress: {
         warnings: false
       },
       output: {
         comments: false
       }
-    })
+    })*/
   ],
   postcss: function (webpack) {
     return [
       require("postcss-import")({
         addDependencyTo: webpack
       }),
+      require("postcss-apply")(),
       require("postcss-cssnext")({
         browsers:AUTOPREFIXER_BROWSERS
       }),

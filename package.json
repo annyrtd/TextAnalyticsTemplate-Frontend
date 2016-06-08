@@ -6,7 +6,7 @@
   "scripts": {
     "test": "",
     "docs": "node_modules/.bin/jsdoc --configure jsdoc.conf --verbose && git subtree push --prefix docs/text-analytics-template origin gh-pages",
-    "build":"node_modules/.bin/webpack --progress --colors --watch"
+    "build": "node_modules/.bin/webpack --progress --colors --watch"
   },
   "repository": {
     "type": "git",
@@ -23,6 +23,7 @@
     "docdash": "^0.4.0",
     "extract-text-webpack-plugin": "^1.0.1",
     "postcss": "^5.0.21",
+    "postcss-apply": "^0.2.0",
     "postcss-cssnext": "^2.6.0",
     "postcss-import": "^8.1.2",
     "postcss-inline-svg": "trysound/postcss-inline-svg",
