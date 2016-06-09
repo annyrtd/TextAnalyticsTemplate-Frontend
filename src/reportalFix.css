@@ -1,7 +1,33 @@
-:root{
-  --gogo:6px;
+/* Styles to override or fix default Reportal visuals */
+:root {
+  /* `container` gives a contained effect by setting a padding on sides to push contents from edges of the screen */
+  --container:{
+    padding: 0 15px;
+    margin: 0 auto;
+  }
 }
-body{font-family:Roboto, sans-serif;
-font-size:var(--gogo,9px);
-  display:flex;
+
+body, body.reportal-viewmode {
+  font-size: 15px;
+  line-height: 20px;
+  color: #3F454C;
+  background-color: #E1E4E9;
+  font-family: "Helvetica Neue", Roboto, sans-serif;
+  min-width:initial;
+}
+
+/** Page Title styles. Page Title must have a `.page-title` class configured in its properties */
+.page-title{
+  @apply --container;
+
+  background-color: #fff;
+  display: block;
+  line-height: 60px;
+  font-size: 22px;
+  font-weight: 500;
+}
+
+.report-filters-horizontal{
+  padding:10px 20px;
+  background-color: #f0f2f5;
 }

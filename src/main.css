@@ -1,7 +1,12 @@
-
+/* Styles to override or fix default Reportal visuals */
 @import "reportalFix.css";
 
-/*A set of layout classes  and mixins that let you specify layout properties directly in markup.
+/** styles for Reportal Navigator configured to show as `tabs` with style set to `None` */
+@import "reportalNavigator-DA/style.css";
+
+
+
+/*A set of layout classes and mixins that let you specify layout properties directly in markup.
 Guide to use classes and mixins are in the README.md of this boilerplate
 
 Sample use when `flex flex-alignment` are included:
