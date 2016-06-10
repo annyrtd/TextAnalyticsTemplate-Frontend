@@ -4,6 +4,16 @@
   --container:{
     padding: 0 15px;
     margin: 0 auto;
+  };
+  --arrow-down:{
+    content: " ";
+    position: absolute;
+    border-color: #737B8E transparent transparent;
+    border-style: solid;
+    border-width: 5px 5px 0;
+    display: block;
+    height: 0;
+    width: 0;
   }
 }
 
