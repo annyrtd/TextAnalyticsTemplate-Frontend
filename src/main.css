@@ -6,6 +6,7 @@
 
 /** styles for Reportal List dropdowns. A dropdown needs to be wrapped with an element with `.reportal-dropdown` class and may have a preceding <label>  */
 @import "reportalList/reportal-dropdown.css";
+@import "reportalList/reportal-checkbox-radio.css";
 
 
 /*A set of layout classes and mixins that let you specify layout properties directly in markup.

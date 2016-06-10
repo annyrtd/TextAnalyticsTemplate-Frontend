@@ -1,4 +1,6 @@
-# `.reportal-dropdown`
+# Reportal List component
+
+### `.reportal-dropdown`
 
 `reportal-dropdown.css` contains styles (compatible with IE9+) to restyle the `<select>` element. A Reportal Dropdown component needs to be wrapped with an element with `.reportal-dropdown` class and may have a preceding `<label>` 
 
@@ -23,3 +25,6 @@ In Reportal Page editor it looks like this:
         <confirmit:wysiwygcomponent type="ReportalDropDown" id="c9759ce9-b33e-4989-a079-e31af7c2e5e1" />
       </span>
 
+### Checkbox && Radio
+
+These will inherit styles globally (from `reportal-checkbox-radio.css`) and do not need to be wrapped.
