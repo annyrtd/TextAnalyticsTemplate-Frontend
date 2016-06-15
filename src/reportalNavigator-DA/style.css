@@ -52,6 +52,7 @@
           margin-right: 1px;
           transition: .25s background-color ease-in-out;
           outline:0;
+          text-decoration:none !important;
       }
 
       &.css-menu-selected > a,

@@ -1,0 +1,43 @@
+.table{
+  width:100%;
+
+  &>thead>tr>td,
+  &>thead>tr>th{
+      background-color: #f0f2f5;
+      border-left: 1px solid #fff;
+      font-size:12px;
+      line-height:12px;
+      padding:8px;
+      vertical-align:bottom;
+      text-align:left;
+      font-weight:normal;
+      &:first-child{border-left:0}
+  }
+  &>tbody>tr:first-child>td{padding-top:8px !important;}
+  &.barchart>thead>tr:last-child>td:last-child,
+  &.barchart>thead>tr:last-child>th:last-child{
+    border-left:0;
+    color:transparent !important
+  }
+  &>tbody td {
+       padding: 2px 8px;
+       min-height:24px;
+       line-height:16px;
+        vertical-align:middle;
+       height:24px;
+       border-bottom: 1px solid #f0f2f5;
+  }
+  &.barchart>tbody>tr>td:last-child{
+    border-bottom:0;
+    vertical-align:bottom;
+    padding-bottom:0 !important;
+    &>.barchart{
+        /*the barchart itself*/
+        height:16px !important;
+       & td{
+        border-left:0 !important;
+        height:16px !important;
+      }
+      }
+  }
+}

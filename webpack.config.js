@@ -4,8 +4,8 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const AUTOPREFIXER_BROWSERS = [
   'Android 2.3',
   'Android >= 4',
-  'Chrome >= 35',
-  'Firefox >= 31',
+  'Chrome >= 32',
+  'Firefox >= 28',
   'Explorer >= 9',
   'iOS >= 7',
   'Opera >= 12',

@@ -1,6 +1,9 @@
 /** Styles to override or fix default Reportal visuals */
 @import "reportalFix.css";
 
+/*Viewer presentation styles fixes*/
+@import "viewerPresentation/viewerPresentation.css";
+
 /** styles for Reportal Navigator configured to show as `tabs` with style set to `None` */
 @import "reportalNavigator-DA/style.css";
 
@@ -33,3 +36,7 @@ The following imports of classes files are available:
 @import "layout/flex-factors.css";
 @import "layout/positioning.css";
 
+/*creates boxes with class `.box` and on optional nested element `.heading` will pose as a header. a `.box` will have outer margin to separate from other elements*/
+@import "layout/box-model.css";
+
+@import "aggregatedTable/aggregatedTable.css";

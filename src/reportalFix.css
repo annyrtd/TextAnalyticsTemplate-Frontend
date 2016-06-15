@@ -14,8 +14,23 @@
     display: block;
     height: 0;
     width: 0;
-  }
+  };
+  --border-radius:3px;
+  --transition:{
+    transition-delay: 0s;
+    transition-duration: .25s;
+    transition-property: opacity,background-color,color,fill;
+    transition-timing-function: ease-in-out;
+  };
+  --icon-export:url(data:image/svg+xml,%3Csvg%20fill%3D%22%2334393f%22%20%20viewBox%3D%220%200%2024%2024%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%3Cpath%20d%3D%22M19.35%2010.04C18.67%206.59%2015.64%204%2012%204%209.11%204%206.6%205.64%205.35%208.04%202.34%208.36%200%2010.91%200%2014c0%203.31%202.69%206%206%206h13c2.76%200%205-2.24%205-5%200-2.64-2.05-4.78-4.65-4.96zM17%2013l-5%205-5-5h3V9h4v4h3z%22/%3E%3C/svg%3E);
+  --icon-add:url(data:image/svg+xml,%3Csvg%20fill%3D%22%2334393f%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20width%3D%2224%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%3Cpath%20d%3D%22M19%2013h-6v6h-2v-6H5v-2h6V5h2v6h6v2z%22/%3E%3C/svg%3E);
 }
+
+
+
+
+
+*{box-sizing:border-box}
 
 body, body.reportal-viewmode {
   font-size: 15px;
@@ -40,4 +55,55 @@ body, body.reportal-viewmode {
 .report-filters-horizontal{
   padding:10px 20px;
   background-color: #f0f2f5;
+
+  & > * {display:inline-block}
 }
+
+/* styles for buttons and elements with class `.btn` */
+[class^=icon-] {
+  fill: #a5a8ad;
+}
+[class*=" icon-"], [class^=icon-] {
+  display: inline-block;
+  line-height: 1;
+  pointer-events: none;
+  position: relative;
+  text-transform: none;
+  top: 1px;
+  transition: inherit;
+}
+.btn, button {
+  -webkit-appearance: button;
+  display: inline-block;
+  margin-bottom: 0;
+  text-align: center;
+  cursor: pointer;
+  border: 1px solid transparent;
+  -webkit-user-select: none;
+  user-select: none;
+@apply --transition;
+  background-color: transparent;
+  height: 30px;
+  line-height: 20px;
+  position: relative;
+  padding: 4px 10px;
+  font-size: 14px;
+  border-radius: var(--border-radius,3px);
+  font-weight: 400;
+
+  &.active, &:active{
+    box-shadow: none
+  }
+&:hover>[class^=icon-]{opacity:1;}
+}
+
+.icon-export{
+  width:24px;
+  height:24px;
+  margin-right:8px;
+  vertical-align:bottom;
+  opacity:0.6;
+  background:var(--icon-export);
+}
+
+
