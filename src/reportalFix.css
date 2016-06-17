@@ -29,8 +29,10 @@ body, body.reportal-viewmode {
 
 /* styles for buttons and elements with class `.btn` */
 [class^=icon-] {
-  fill: #a5a8ad;
+  fill: #3f3f3f;
+  opacity:0.4;
 }
+
 [class*=" icon-"], [class^=icon-] {
   display: inline-block;
   line-height: 1;
@@ -62,7 +64,7 @@ body, body.reportal-viewmode {
   &.active, &:active{
     box-shadow: none
   }
-&:hover>[class^=icon-]{opacity:1;}
+  &:hover>[class^=icon-]{opacity:1;}
 }
 
 .icon-export{
@@ -70,8 +72,70 @@ body, body.reportal-viewmode {
   height:24px;
   margin-right:8px;
   vertical-align:bottom;
-  opacity:0.6;
   background:var(--icon-export);
+}
+.icon-filter{
+  width:20px;
+  height:15px;
+  margin-right:8px;
+  vertical-align:bottom;
+  background:var(--icon-filter);
+}
+.icon-add{
+  width:20px;
+  height:20px;
+  margin-right:8px;
+  vertical-align:bottom;
+  background:var(--icon-add);
+}
+
+/* styles for filter-bar which includes a filter button and filter summary + clear button */
+.filter-bar{
+  @apply --layout-horizontal;
+  @apply --layout-wrap;
+
+  margin:16px 24px;
+
+  & .filter-button{
+    background-color: #FFF;
+    fill:#3f3f3f;
+    transition: .25s background-color ease-in-out;
+    margin-right:8px;
+
+    &>svg{
+      background:none;
+      opacity:1;
+      margin:0;
+      vertical-align:middle;
+    }
+    &:hover,
+    &:active,
+    &:focus{
+      background-color: #3f3f3f;
+      fill:#FFF;
+    }
+  }
+
+
+    & .SelectorHeading,
+    & .well-filter-summary{
+      height: 30px;
+      border-radius: 3px;
+      padding: 0 8px;
+      vertical-align: top;
+      line-height: 30px;
+      font-size: 13px;
+      cursor: default;
+      pointer-events: painted;
+    }
+    & .well-filter-summary{
+      background: #8F97A2;
+      transition: .25s background-color ease-in-out;
+      color: #fff;
+      &:hover{
+        background-color: #6a737d
+      }
+    }
 }
 
 

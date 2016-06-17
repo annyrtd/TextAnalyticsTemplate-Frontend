@@ -1,20 +1,5 @@
 @import "./variables.css";
 
-/** Styles to override or fix default Reportal visuals */
-@import "reportalFix.css";
-
-/*Viewer presentation styles fixes*/
-@import "viewerPresentation/viewerPresentation.css";
-
-/** styles for Reportal Navigator configured to show as `tabs` with style set to `None` */
-@import "reportalNavigator-DA/style.css";
-
-/** styles for Reportal List selects. A select needs to be wrapped with an element with `reportal-select` or `reportal-select multiple` class and may have a preceding <label>  */
-@import "reportal-inputs/reportal-select.css";
-
-@import "reportal-inputs/reportal-checkbox-radio.css";
-
-
 /*A set of layout classes and mixins that let you specify layout properties directly in markup.
 Guide to use classes and mixins are in the README.md of this boilerplate
 
@@ -41,5 +26,21 @@ The following imports of classes files are available:
 
 /*creates boxes with class `.box` and on optional nested element `.heading` will pose as a header. a `.box` will have outer margin to separate from other elements*/
 @import "layout/box-model.css";
+
+/** Styles to override or fix default Reportal visuals */
+@import "reportalFix.css";
+
+/*Viewer presentation styles fixes*/
+@import "viewerPresentation/viewerPresentation.css";
+
+/** styles for Reportal Navigator configured to show as `tabs` with style set to `None` */
+@import "reportalNavigator-DA/style.css";
+
+/** styles for Reportal List selects. A select needs to be wrapped with an element with `reportal-select` or `reportal-select multiple` class and may have a preceding <label>  */
+@import "reportal-inputs/reportal-select.css";
+
+@import "reportal-inputs/reportal-checkbox-radio.css";
+
+
 
 @import "aggregatedTable/aggregatedTable.css";
