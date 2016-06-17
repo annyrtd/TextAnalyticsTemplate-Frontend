@@ -1,3 +1,5 @@
+@import "./variables.css";
+
 /** Styles to override or fix default Reportal visuals */
 @import "reportalFix.css";
 
@@ -7,9 +9,10 @@
 /** styles for Reportal Navigator configured to show as `tabs` with style set to `None` */
 @import "reportalNavigator-DA/style.css";
 
-/** styles for Reportal List dropdowns. A dropdown needs to be wrapped with an element with `.reportal-dropdown` class and may have a preceding <label>  */
-@import "reportalList/reportal-dropdown.css";
-@import "reportalList/reportal-checkbox-radio.css";
+/** styles for Reportal List selects. A select needs to be wrapped with an element with `reportal-select` or `reportal-select multiple` class and may have a preceding <label>  */
+@import "reportal-inputs/reportal-select.css";
+
+@import "reportal-inputs/reportal-checkbox-radio.css";
 
 
 /*A set of layout classes and mixins that let you specify layout properties directly in markup.

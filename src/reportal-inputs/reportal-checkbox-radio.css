@@ -1,23 +1,4 @@
-:root{--reportal-checkbox-padding:8px}
-
-.reportal-checkbox, .reportal-radio{
-  position: relative;
-  display: inline-block;
-  box-sizing: border-box;
-  padding: var(--reportal-dropdown-padding);
-  padding-top:0;
-
-  & > * {
-    display: block;
-  }
-
-  & > label {
-    font-size: inherit;
-    color:inherit;
-    padding: 7px 0;
-    font-family:inherit;
-  }
-}
+@import "common-styles.css";
 
 [type=radio],[type=checkbox]{
   position: absolute;
