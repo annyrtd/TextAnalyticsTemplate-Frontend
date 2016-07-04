@@ -1,10 +1,7 @@
-const Cf = require('./lib/base.js');
+//const Cf = require('./lib/base.js');
 
+import Confirmit from './lib/base.js';
 
-var poll = require('./commonFunctions.js');
+import poll from './commonFunctions.js';
 
-console.log(new Confirmit({
-  properties:{
-    hello:{type:String, value:'world'}
-  }
-}));
+import FixedHeader from './aggregatedTable/FixedHeader.js';

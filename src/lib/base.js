@@ -6,7 +6,7 @@ class ConfirmitBase {
 
   /*allows changing properties with deep nested sub-properties via dotted syntax. Notifies with 'property-changed' event*/
   static update(obj,value){
-    //console.log('will set '+ obj + ' to ' + value);
+    console.log('will set '+ obj + ' to ' + value);
     let o=this, first, _prev;
     if(obj.indexOf('.')>0){ // it's a deep property
       var deep = obj.split('.');
@@ -27,7 +27,7 @@ class ConfirmitBase {
       o[obj] = value;
     }
     if(_prev!==this[first]){
-      $(this).trigger({type:first+'-changed', detail:[this[first], _prev]});
+      //$(this).trigger({type:first+'-changed', detail:[this[first], _prev]});
     }
   }
 
@@ -50,7 +50,7 @@ class ConfirmitBase {
     return target;
   }
 
-  _logger(level, args) {
+  static _logger(level, args) {
     // accept ['foo', 'bar'] and [['foo', 'bar']]
     if (args.length === 1 && Array.isArray(args[0])) {
       args = args[0];
@@ -70,6 +70,8 @@ class ConfirmitBase {
     this._logger('log', args);
   }
 
+  
+
   static _warn() {
     var args = Array.prototype.slice.call(arguments, 0);
     this._logger('warn', args);
@@ -88,12 +90,12 @@ class ConfirmitBase {
 class Confirmit extends ConfirmitBase{
   constructor(prototype){
     console.log(prototype);
-    super()
-    
+    super();
+
 
     var factory = prototype;
     if(factory.properties){
-      this.desugarProperties(factory);
+      //this.desugarProperties(factory);
     }
     if(factory.options){
       factory = super.mixin(factory,factory.options);
@@ -110,7 +112,7 @@ class Confirmit extends ConfirmitBase{
           node = host.querySelector('#' + name[0]);
           name = name[1];
         }
-        $(node).on(name, host[factory.listeners[eventName]]);
+        //$(node).on(name, host[factory.listeners[eventName]]);
       }
       delete factory.listeners;
     }
@@ -122,12 +124,11 @@ class Confirmit extends ConfirmitBase{
   }
   desugarProperties(proto){
     proto._defaultProperties = proto._defaultProperties || {};
-    $.extend(true, proto._defaultProperties, proto.properties);
     var prop='';
     for(prop in proto.properties){
       if(!(prop in proto)) {
         if (proto.properties[prop].observer) {//property observer
-          $(proto.context).on(prop + '-changed', proto[proto.properties[prop].observer]);
+          //$(proto.context).on(prop + '-changed', proto[proto.properties[prop].observer]);
         }
       }
       proto[prop] = proto.properties[prop].value;
@@ -137,4 +138,4 @@ class Confirmit extends ConfirmitBase{
   };
 }
 
-module.exports = Confirmit;
+export default Confirmit;

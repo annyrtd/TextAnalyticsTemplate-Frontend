@@ -27,4 +27,4 @@ var poll = (fn, callback, errback, timeout, interval) => {
 };
 
 
-module.exports = poll;
+export default poll;

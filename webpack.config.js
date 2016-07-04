@@ -60,5 +60,6 @@ module.exports = {
       require('postcss-inline-svg')(),
       //require('cssnano')()
     ];
-  }
+  },
+  watch:true
 };
