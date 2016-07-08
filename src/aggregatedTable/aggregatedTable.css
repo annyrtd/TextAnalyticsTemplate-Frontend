@@ -108,3 +108,54 @@
   display:none;
   border:none;
 }
+
+/*Hierarchycal styles*/
+.reportal-hierarchy-table tr.level0 {
+  font-weight: bold;
+}
+
+.reportal-hierarchy-table tr.level1>td:first-child {
+  padding-left: 25px;
+}
+
+.reportal-hierarchy-table tr.level2>td:first-child {
+  padding-left: 50px;
+}
+
+.reportal-collapse-button {
+  width: 15px;
+  display: inline-block;
+}
+
+.reportal-collapsed-row .reportal-collapse-button, .reportal-uncollapsed-row .reportal-collapse-button{
+  cursor: pointer;
+}
+
+
+.reportal-collapsed-row .reportal-collapse-button>div{
+  width: 0;
+  height: 0;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  border-left: 5px solid var(--neutral-color, #cdd1d9);
+}
+
+.reportal-uncollapsed-row .reportal-collapse-button>div {
+  width: 0;
+  height: 0;
+  border-left: 5px transparent;
+  border-right: 5px transparent;
+  border-top: 5px solid var(--neutral-color, #cdd1d9);
+}
+
+.reportal-no-children .reportal-collapse-button>div {
+  width: 8px;
+  height: 8px;
+  border: 1px solid var(--neutral-color, #cdd1d9);
+  border-radius: 50%;
+}
+
+.reportal-hidden-row{
+  display: none;
+}
+
