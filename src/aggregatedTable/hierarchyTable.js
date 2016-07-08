@@ -97,7 +97,7 @@ class HierarchyTable{
    * function to set class to the row itself
    * @param {Element} row
      */
-  static toggleCollapsedClass(row){
+  toggleCollapsedClass(row){
     if(row.classList.contains("reportal-collapsed-row") || row.classList.contains("reportal-uncollapsed-row")){
       row.classList.toggle("reportal-collapsed-row");
       row.classList.toggle("reportal-uncollapsed-row");
