@@ -124,7 +124,8 @@
 
 .reportal-collapse-button {
   width: 15px;
-  display: inline-block;
+  height: 15px;
+  display: inline-table;
 }
 
 .reportal-collapsed-row .reportal-collapse-button, .reportal-uncollapsed-row .reportal-collapse-button{

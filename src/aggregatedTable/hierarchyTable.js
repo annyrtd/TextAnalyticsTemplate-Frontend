@@ -17,10 +17,8 @@ class HierarchyTable{
    * Initializes the hierarchical structure for a table by creating new set of table rows with correct order and additional information in attributes
    * */
   init(){
-    this.changedTable = [];
-
-    //create new array of rows
-    this.parseHierarchy();
+    //creating new array of rows
+    var changedTable = this.parseHierarchy();
 
     //remove all old rows
     while(this.source.querySelectorAll("tbody")[0].firstChild){
@@ -28,16 +26,17 @@ class HierarchyTable{
     }
 
     //append new rows
-    this.changedTable.forEach((item,index)=>{this.source.querySelectorAll("tbody")[0].appendChild(item);});
+    changedTable.forEach((item,index)=>{this.source.querySelectorAll("tbody")[0].appendChild(item);});
   }
 
   /**
    * recursive function taking rows according to hierarchy object, adding information to that row and adding this row to the changedTable
    * @param {Array} hierarchy - array of hierarchy objects from reportal
    * @param {int} level - depth of the function
+   * @param {Array} array - changedTable for children level
      */
-  parseHierarchy(hierarchy=this.hierarchy,level=0){
-    hierarchy.forEach((item,index)=>{
+  parseHierarchy(hierarchy=this.hierarchy,level=0,array=[]){
+    return hierarchy.reduce((resultArray,item,array,index)=>{
 
       //finding correct row of the table
       var row = this.source.querySelectorAll("tbody>tr")[this.rowheaders[item.id].index];
@@ -52,15 +51,17 @@ class HierarchyTable{
         row.setAttribute("parent",item.parent);
       }
 
-      //adding buttol to the left of the rowheader
+      //adding button to the left of the rowheader
       this.addCollapseButton(row);
 
-      //ading row to the new table
-      this.changedTable.push(row);
+      //adding row to the new table
+      resultArray.push(row);
 
       //run function for child elements
-      level<2?this.parseHierarchy(item.children, level + 1):null;
-    })
+
+      level<2?resultArray = this.parseHierarchy(item.children, level + 1,resultArray):null;
+      return resultArray
+    },array);
   }
 
   /**
