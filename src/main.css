@@ -40,7 +40,9 @@ The following imports of classes files are available:
 @import "reportal-inputs/reportal-select.css";
 
 @import "reportal-inputs/reportal-checkbox-radio.css";
+@import "reportal-inputs/reportal-radio-toggle.css";
 
-
+/** Styles for kpi-tiles */
+@import "kpi-tile/kpi-tile.css";
 
 @import "aggregatedTable/aggregatedTable.css";
