@@ -37,7 +37,7 @@ module.exports = {
     ]
   },
   plugins: [
-    new ExtractTextPlugin('styles.css'),
+    new ExtractTextPlugin('styles.css')
 
     /*new webpack.optimize.UglifyJsPlugin({
       compress: {
@@ -56,8 +56,8 @@ module.exports = {
       require("postcss-apply")(),
       require("postcss-cssnext")({
         browsers:AUTOPREFIXER_BROWSERS
-      }),
-      require('postcss-inline-svg')(),
+      })
+      //require('postcss-inline-svg')(),
       //require('cssnano')()
     ];
   },
