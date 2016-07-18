@@ -17,15 +17,12 @@ class HierarchyTable{
    * Initializes the hierarchical structure for a table by creating new set of table rows with correct order and additional information in attributes
    * */
   init(){
-    //creating new array of rows
     var changedTable = this.parseHierarchy();
 
-    //remove all old rows
     while(this.source.querySelectorAll("tbody")[0].firstChild){
       this.source.querySelectorAll("tbody")[0].removeChild(this.source.querySelectorAll("tbody")[0].firstChild)
     }
 
-    //append new rows
     changedTable.forEach((item,index)=>{this.source.querySelectorAll("tbody")[0].appendChild(item);});
   }
 
@@ -38,30 +35,36 @@ class HierarchyTable{
   parseHierarchy(hierarchy=this.hierarchy,level=0,array=[]){
     return hierarchy.reduce((resultArray,item,array,index)=>{
 
-      //finding correct row of the table
+
       var row = this.source.querySelectorAll("tbody>tr")[this.rowheaders[item.id].index];
 
-      //adding some useful classes
+
       row.setAttribute("self-id",item.id);
       row.classList.add("level"+level.toString());
-      level>0?row.classList.add("reportal-hidden-row"):null;
+      level > 0 ? row.classList.add("reportal-hidden-row") : null;
+      level > 0 ? this.clearLink(row) : null;
       row.classList.add(item.children.length>0?"reportal-collapsed-row":"reportal-no-children");
 
       if(item.parent){
         row.setAttribute("parent",item.parent);
       }
 
-      //adding button to the left of the rowheader
       this.addCollapseButton(row);
-
-      //adding row to the new table
       resultArray.push(row);
 
-      //run function for child elements
-
-      level<2?resultArray = this.parseHierarchy(item.children, level + 1,resultArray):null;
+      level < 2 ? resultArray = this.parseHierarchy(item.children, level + 1,resultArray) : null;
       return resultArray
     },array);
+  }
+
+  clearLink(row){
+    var link = row.querySelectorAll("a")[0];
+    if(link) {
+      var text = link.innerText;
+      var parentCell = link.parentElement;
+      parentCell.removeChild(link);
+      parentCell.innerText = text;
+    }
   }
 
   /**
@@ -69,30 +72,25 @@ class HierarchyTable{
    * @param {Element} row
      */
   addCollapseButton(row){
-    //creating button itself
     var collapseButton = document.createElement("div");
-
-    //creating element for triangle or circle image
     var collapseButtonImage = document.createElement("div");
     collapseButton.appendChild(collapseButtonImage);
 
     collapseButton.classList.add("reportal-collapse-button");
 
-    //set funnction to collapse rows oncklick
     collapseButton.onclick = e => {this.toggleCollapsing(row)};
 
-    //adding button to the rowheader
     row.children[0].insertBefore(collapseButton,row.children[0].firstChild);
   }
 
   /**
-   * function to collapse and uncollapse rows on button click
+   * function to collapse and expand rows on button click
    * @param {Element} row
      */
   toggleCollapsing(row){
     this.toggleCollapsedClass(row);
     this.toggleHiddenRows(row);
-    }
+  }
 
   /**
    * function to set class to the row itself
@@ -112,22 +110,16 @@ class HierarchyTable{
   toggleHiddenRows(row){
     var id = row.getAttribute("self-id");
 
-    //finding all children of the row
-    [].slice.call(this.source.querySelectorAll("[parent="+id+"]")).forEach((item,index)=>{
+    Array.prototype.slice.call(this.source.querySelectorAll("[parent="+id+"]")).forEach((item,index)=>{
 
-      //checking parent state
       if(row.classList.contains("reportal-collapsed-row")){
-
-        //hide children rows
         item.classList.add("reportal-hidden-row");
         if(item.classList.contains("reportal-uncollapsed-row")){
           this.toggleCollapsedClass(item);
         }
-        //hide children of children
         this.toggleHiddenRows(item);
       }else{
         if(row.classList.contains("reportal-uncollapsed-row")){
-          //show only direct chilrens
           item.classList.remove("reportal-hidden-row");
         }
       }
@@ -136,7 +128,7 @@ class HierarchyTable{
 
 }
 
-[].slice.call(document.querySelectorAll('table.reportal-hierarchy-table:not(.fixed)')).forEach((table)=>{
+Array.prototype.slice.call(document.querySelectorAll('table.reportal-hierarchy-table:not(.fixed)')).forEach((table)=>{
   var hierarchyTable= new HierarchyTable(table,hierarchy,rowheaders);
 });
 
