@@ -10,6 +10,7 @@ class HierarchyTable{
     this.hierarchy = hierarchy;
     this.rowheaders = rowheaders;
     this.hasListeners = hasListeners;
+    this.data=null;
     this.init();
   }
 
@@ -17,29 +18,43 @@ class HierarchyTable{
    * Initializes the hierarchical structure for a table by creating new set of table rows with correct order and additional information in attributes
    * */
   init(){
-    var changedTable = this.parseHierarchy();
-
-    while(this.source.querySelectorAll("tbody")[0].firstChild){
-      this.source.querySelectorAll("tbody")[0].removeChild(this.source.querySelectorAll("tbody")[0].firstChild)
+    this.data = this.data || this.parseHierarchy();
+    console.log(this.data);
+    let tbody = this.source.querySelector("tbody");
+    if(tbody.firstChild && tbody.firstChild.nodeType==3){
+      tbody.removeChild(tbody.firstChild)
     }
 
-    changedTable.forEach((item,index)=>{this.source.querySelectorAll("tbody")[0].appendChild(item);});
+    this.data.forEach((item,index)=>{tbody.appendChild(item.meta.row);});
   }
 
   /**
-   * recursive function taking rows according to hierarchy object, adding information to that row and adding this row to the changedTable
+   * Recursive function taking rows according to `hierarchy` object, adding information to that row, retrieving data from the row, and adding this array to `this.data`
+   * Each item in the array has a `meta {Object}` property that has the following structure:
+   *
+   * ``` javascript
+   * {
+   *    collapsed: Boolean, // if true, the row is collapsed, defined if `hasChildren`
+   *    hasChildren: Boolean, // if true, it has children
+   *    flatName: String, // label for flat view ('/'-separated)
+   *    name: String, // label for the current level (single-label without parent prefixes)
+   *    id: String, // item id from Reportal table
+   *    level: Number, // hierarchy level
+   *    parent: String, // parent id of the nested level
+   *    row: HTMLTableRowElement // reference to the `tr` element in the table
+   * }
+   * ```
+   *
    * @param {Array} hierarchy - array of hierarchy objects from reportal
    * @param {int} level - depth of the function
    * @param {Array} array - changedTable for children level
-     */
+   * @return {Array}
+   */
   parseHierarchy(hierarchy=this.hierarchy,level=0,array=[]){
-    return hierarchy.reduce((resultArray,item,array,index)=>{
-
-
+    return hierarchy.reduce((resultArray,item,index,array)=>{
       var row = this.source.querySelectorAll("tbody>tr")[this.rowheaders[item.id].index];
-
-
       row.setAttribute("self-id",item.id);
+
       row.classList.add("level"+level.toString());
       level > 0 ? row.classList.add("reportal-hidden-row") : null;
       level > 0 ? this.clearLink(row) : null;
@@ -49,12 +64,32 @@ class HierarchyTable{
         row.setAttribute("parent",item.parent);
       }
 
-      this.addCollapseButton(row);
-      resultArray.push(row);
+      resultArray.push([].slice.call(row.children).map((td)=>{
+          return td.children.length==0?this._isNumber(td.textContent.trim()):td.innerHTML
+        }));
 
+      resultArray[resultArray.length-1].meta={
+        row:row,
+        id:item.id,
+        flatName: item.name,
+        name: item.name.split('/').reverse()[0].trim(),
+        parent:item.parent,
+        level:level,
+        collapsed:item.children.length>0?true:undefined,
+        hasChildren:item.children.length>0
+      };
+      this.addCollapseButton(row);
       level < 2 ? resultArray = this.parseHierarchy(item.children, level + 1,resultArray) : null;
       return resultArray
     },array);
+  }
+  
+
+  _isNumber(str){
+    console.log(parseFloat(str));
+    if(!isNaN(parseFloat(str)) && parseFloat(str).toString().length ==str.length){
+      return parseFloat(str)
+    } else if(str.length==0){return null} else {return str}
   }
 
   clearLink(row){
@@ -70,7 +105,7 @@ class HierarchyTable{
   /**
    * function to add button to the left of the rowheader
    * @param {Element} row
-     */
+   */
   addCollapseButton(row){
     var collapseButton = document.createElement("div");
     var collapseButtonImage = document.createElement("div");
@@ -86,7 +121,7 @@ class HierarchyTable{
   /**
    * function to collapse and expand rows on button click
    * @param {Element} row
-     */
+   */
   toggleCollapsing(row){
     this.toggleCollapsedClass(row);
     this.toggleHiddenRows(row);
@@ -95,7 +130,7 @@ class HierarchyTable{
   /**
    * function to set class to the row itself
    * @param {Element} row
-     */
+   */
   toggleCollapsedClass(row){
     if(row.classList.contains("reportal-collapsed-row") || row.classList.contains("reportal-uncollapsed-row")){
       row.classList.toggle("reportal-collapsed-row");
@@ -106,24 +141,24 @@ class HierarchyTable{
   /**
    * function to hide or show child rows
    * @param row
-     */
+   */
   toggleHiddenRows(row){
     var id = row.getAttribute("self-id");
 
     Array.prototype.slice.call(this.source.querySelectorAll("[parent="+id+"]")).forEach((item,index)=>{
 
       if(row.classList.contains("reportal-collapsed-row")){
-        item.classList.add("reportal-hidden-row");
-        if(item.classList.contains("reportal-uncollapsed-row")){
-          this.toggleCollapsedClass(item);
-        }
-        this.toggleHiddenRows(item);
-      }else{
-        if(row.classList.contains("reportal-uncollapsed-row")){
-          item.classList.remove("reportal-hidden-row");
-        }
+      item.classList.add("reportal-hidden-row");
+      if(item.classList.contains("reportal-uncollapsed-row")){
+        this.toggleCollapsedClass(item);
       }
-    });
+      this.toggleHiddenRows(item);
+    }else{
+      if(row.classList.contains("reportal-uncollapsed-row")){
+        item.classList.remove("reportal-hidden-row");
+      }
+    }
+  });
   }
 
 }
