@@ -44,7 +44,8 @@ class HierarchyTable{
     }
   }
   /**
-   * @returns {Boolean} flat
+   * getter for `flat`
+   * @return {Boolean}
    * */
   get flat(){
     return this._flat;
@@ -52,6 +53,7 @@ class HierarchyTable{
 
   /**
    * Replaces category label in the array in the hierarchical column position and in the html row through meta. Replacing it in the array is important for sorting by category.
+   * @param {Array} row - an item in the `this.data` Array
    * */
   updateCategoryLabel(row){
       let cell = row.meta.row.children.item(this.column);
@@ -130,6 +132,7 @@ class HierarchyTable{
 
   /**
    * Removes a drilldown link from elements that are the lowest level of hierarchy and don't need it
+   * @param {HTMLTableRowElement} row - row element in the table
    * */
   clearLink(row){
     var link = row.querySelector("a");
