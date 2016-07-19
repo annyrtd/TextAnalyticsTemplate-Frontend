@@ -113,7 +113,7 @@ class HierarchyTable{
     row.children[0].insertBefore(collapseButton,row.children[0].firstChild);
   }
 
-  
+
   /**
    * function to collapse and expand rows on button click
    * @param {Element} row
@@ -124,13 +124,14 @@ class HierarchyTable{
   }
 
   /**
-   * function to set class to the row itself
+   * function to set class to the row itself and reflect collapsed state in `meta.collapsed`
    * @param {Element} row
    */
   toggleCollapsedClass(row){
     if(row.classList.contains("reportal-collapsed-row") || row.classList.contains("reportal-uncollapsed-row")){
       row.classList.toggle("reportal-collapsed-row");
       row.classList.toggle("reportal-uncollapsed-row");
+      this.data[row.rowIndex-1].meta.collapsed = !this.data[row.rowIndex-1].meta.collapsed;
     }
   }
 
@@ -142,19 +143,18 @@ class HierarchyTable{
     var id = row.getAttribute("self-id");
 
     Array.prototype.slice.call(this.source.querySelectorAll("[parent="+id+"]")).forEach((item,index)=>{
-
       if(row.classList.contains("reportal-collapsed-row")){
-      item.classList.add("reportal-hidden-row");
-      if(item.classList.contains("reportal-uncollapsed-row")){
-        this.toggleCollapsedClass(item);
+        item.classList.add("reportal-hidden-row");
+        if(item.classList.contains("reportal-uncollapsed-row")){
+          this.toggleCollapsedClass(item);
+        }
+        this.toggleHiddenRows(item);
+      }else{
+        if(row.classList.contains("reportal-uncollapsed-row")){
+          item.classList.remove("reportal-hidden-row");
+        }
       }
-      this.toggleHiddenRows(item);
-    }else{
-      if(row.classList.contains("reportal-uncollapsed-row")){
-        item.classList.remove("reportal-hidden-row");
-      }
-    }
-  });
+    });
   }
 
 }
