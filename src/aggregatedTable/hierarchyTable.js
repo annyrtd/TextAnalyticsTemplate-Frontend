@@ -1,17 +1,22 @@
 class HierarchyTable{
   /**
+   * After hierarchy is initialized, `HierarchyTable.data` array will reflect the rows of the table in their visible order and contain `meta` for each row in the array
    * @param {HTMLTableElement} source - source table that needs a cloned header
    * @param {Array} hierarchy - array of hierarchy objects from reportal
-   * @param {Object}rowheaders - JSON object which contains all table rowheaders with category id and index of table row
-   * @param {Boolean} hasListeners - if header cells have events on them
+   * @param {Object} rowheaders - JSON object which contains all table rowheaders with category id and index of table row
+   * @param {Number} [hierColumn=0] - index of column in the table that contains hierarchy (increments from `0`)
+   * @param {Boolean} [flat=false] - Should hierarchy be rendered flatly(`true`), or in a tree-fashion (`false`).
    * */
-  constructor(source,hierarchy,rowheaders,hasListeners){
+  constructor({source,hierarchy,rowheaders,hierColumn = 0,flat = false} = {}){
     this.source = source;
     this.hierarchy = hierarchy;
     this.rowheaders = rowheaders;
-    this.hasListeners = hasListeners;
     this.data=null;
+    this.column = hierColumn;
+    this.flat = flat;
     this.init();
+    console.log(this.flat);
+    console.log(this);
   }
 
   /**
@@ -19,13 +24,40 @@ class HierarchyTable{
    * */
   init(){
     this.data = this.data || this.parseHierarchy();
-    console.log(this.data);
     let tbody = this.source.querySelector("tbody");
     if(tbody.firstChild && tbody.firstChild.nodeType==3){
       tbody.removeChild(tbody.firstChild)
     }
+    this.data.forEach((item)=>{tbody.appendChild(item.meta.row);});
+  }
 
-    this.data.forEach((item,index)=>{tbody.appendChild(item.meta.row);});
+  /**
+   * Sets `this.flat`, adds/removes `.reportal-heirarchy-flat-view` to the table and updates labels for hierarchy column to flat/hierarchical view
+   * */
+  set flat(flat){
+    this._flat=flat;
+    flat?this.source.classList.add('reportal-heirarchy-flat-view'):this.source.classList.remove('reportal-heirarchy-flat-view');
+    if(this.data){
+      this.data.forEach((row)=> {
+        this.updateCategoryLabel(row);
+      });
+    }
+  }
+  /**
+   * getter for `flat`
+   * @return {Boolean}
+   * */
+  get flat(){
+    return this._flat;
+  }
+
+  /**
+   * Replaces category label in the array in the hierarchical column position and in the html row through meta. Replacing it in the array is important for sorting by category.
+   * @param {Array} row - an item in the `this.data` Array
+   * */
+  updateCategoryLabel(row){
+      let cell = row.meta.row.children.item(this.column);
+      row[this.column] = cell.childNodes.item(cell.childNodes.length-1).nodeValue = this.flat? row.meta.flatName: row.meta.name;
   }
 
   /**
@@ -63,7 +95,7 @@ class HierarchyTable{
       if(item.parent){
         row.setAttribute("parent",item.parent);
       }
-
+      //we need to push to the array before we add arrows/circles to labels so that we have clean labels in array and may sort them as strings
       resultArray.push([].slice.call(row.children).map((td)=>{
           return td.children.length==0?this._isNumber(td.textContent.trim()):td.innerHTML
         }));
@@ -78,7 +110,10 @@ class HierarchyTable{
         collapsed:item.children.length>0?true:undefined,
         hasChildren:item.children.length>0
       };
+      // adds a toggle button
       this.addCollapseButton(row);
+      // initializes row headers according to `this.flat`
+      this.updateCategoryLabel(resultArray[resultArray.length-1]);
       level < 2 ? resultArray = this.parseHierarchy(item.children, level + 1,resultArray) : null;
       return resultArray
     },array);
@@ -95,6 +130,10 @@ class HierarchyTable{
     } else if(str.length==0){return null} else {return str}
   }
 
+  /**
+   * Removes a drilldown link from elements that are the lowest level of hierarchy and don't need it
+   * @param {HTMLTableRowElement} row - row element in the table
+   * */
   clearLink(row){
     var link = row.querySelector("a");
     if(link) {
@@ -104,19 +143,20 @@ class HierarchyTable{
 
   /**
    * function to add button to the left of the rowheader
-   * @param {Element} row
+   * @param {HTMLTableRowElement} row - row element in the table
    */
   addCollapseButton(row){
     var collapseButton = document.createElement("div");
     collapseButton.classList.add("reportal-collapse-button");
     collapseButton.addEventListener('click', () => {this.toggleCollapsing(row)});
-    row.children[0].insertBefore(collapseButton,row.children[0].firstChild);
+    row.children[this.column].insertBefore(collapseButton,row.children[this.column].firstChild);
+    row.children[this.column].classList.add('reportal-hierarchical-cell');
   }
 
 
   /**
    * function to collapse and expand rows on button click
-   * @param {Element} row
+   * @param {HTMLTableRowElement} row - row element in the table
    */
   toggleCollapsing(row){
     this.toggleCollapsedClass(row);
@@ -125,7 +165,7 @@ class HierarchyTable{
 
   /**
    * function to set class to the row itself and reflect collapsed state in `meta.collapsed`
-   * @param {Element} row
+   * @param {HTMLTableRowElement} row - row element in the table
    */
   toggleCollapsedClass(row){
     if(row.classList.contains("reportal-collapsed-row") || row.classList.contains("reportal-uncollapsed-row")){
@@ -137,7 +177,7 @@ class HierarchyTable{
 
   /**
    * function to hide or show child rows
-   * @param row
+   * @param {HTMLTableRowElement} row - row element in the table
    */
   toggleHiddenRows(row){
     var id = row.getAttribute("self-id");
@@ -149,7 +189,7 @@ class HierarchyTable{
           this.toggleCollapsedClass(item);
         }
         this.toggleHiddenRows(item);
-      }else{
+      } else{
         if(row.classList.contains("reportal-uncollapsed-row")){
           item.classList.remove("reportal-hidden-row");
         }
@@ -160,7 +200,7 @@ class HierarchyTable{
 }
 
 Array.prototype.slice.call(document.querySelectorAll('table.reportal-hierarchy-table:not(.fixed)')).forEach((table)=>{
-  var hierarchyTable= new HierarchyTable(table,hierarchy,rowheaders);
+  var hierarchyTable= new HierarchyTable({source:table,hierarchy:hierarchy,rowheaders:rowheaders,flat:true});
 });
 
 export default HierarchyTable;

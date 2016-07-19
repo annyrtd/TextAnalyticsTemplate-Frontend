@@ -114,13 +114,13 @@
   font-weight: bold;
 }
 
-.reportal-hierarchy-table>tbody>tr>td:first-child {padding-left:0}
+.reportal-hierarchy-table>tbody>tr>td.reportal-hierarchical-cell {padding-left:0}
 
-.reportal-hierarchy-table tr.level1>td:first-child {
+.reportal-hierarchy-table tr.level1>td.reportal-hierarchical-cell {
   padding-left: 20px;
 }
 
-.reportal-hierarchy-table tr.level2>td:first-child {
+.reportal-hierarchy-table tr.level2>td.reportal-hierarchical-cell {
   padding-left: 40px;
 }
 
@@ -168,3 +168,10 @@
   display: none;
 }
 
+.reportal-heirarchy-flat-view>tbody>tr{
+  display:table-row;
+  &>td.reportal-hierarchical-cell{
+    padding-left:8px !important;
+    &>.reportal-collapse-button{display:none}
+  }
+}
