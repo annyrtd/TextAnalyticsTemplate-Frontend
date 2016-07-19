@@ -83,22 +83,22 @@ class HierarchyTable{
       return resultArray
     },array);
   }
-  
 
+  /**
+   * Inspects if the current string might be converted to number and renders it as number. If string length is 0, returns `null`. If none applies returns the string as is.
+   * @param {String} str - value of the cell if not HTML contents
+   * @return {Number|null|String}
+   * */
   _isNumber(str){
-    console.log(parseFloat(str));
     if(!isNaN(parseFloat(str)) && parseFloat(str).toString().length ==str.length){
       return parseFloat(str)
     } else if(str.length==0){return null} else {return str}
   }
 
   clearLink(row){
-    var link = row.querySelectorAll("a")[0];
+    var link = row.querySelector("a");
     if(link) {
-      var text = link.innerText;
-      var parentCell = link.parentElement;
-      parentCell.removeChild(link);
-      parentCell.innerText = text;
+      link.parentElement.textContent = link.textContent;
     }
   }
 
@@ -108,16 +108,12 @@ class HierarchyTable{
    */
   addCollapseButton(row){
     var collapseButton = document.createElement("div");
-    var collapseButtonImage = document.createElement("div");
-    collapseButton.appendChild(collapseButtonImage);
-
     collapseButton.classList.add("reportal-collapse-button");
-
-    collapseButton.onclick = e => {this.toggleCollapsing(row)};
-
+    collapseButton.addEventListener('click', () => {this.toggleCollapsing(row)});
     row.children[0].insertBefore(collapseButton,row.children[0].firstChild);
   }
 
+  
   /**
    * function to collapse and expand rows on button click
    * @param {Element} row
