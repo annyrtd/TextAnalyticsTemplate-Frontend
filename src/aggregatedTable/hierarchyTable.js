@@ -36,7 +36,6 @@ class HierarchyTable{
       tbody.removeChild(tbody.firstChild)
     }
     this.data.forEach((item)=>{tbody.appendChild(item.meta.row);});
-
   }
 
 
@@ -66,8 +65,10 @@ class HierarchyTable{
    * @param {Array} row - an item in the `this.data` Array
    * */
   updateCategoryLabel(row){
-      let cell = row.meta.row.children.item(this.column);
-      row[this.column] = cell.childNodes.item(cell.childNodes.length-1).nodeValue = this.flat? row.meta.flatName: row.meta.name;
+      let cell = row.meta.row.children.item(this.column),
+      // we want to male sure if there is a link (drill-down content) then we populate the link with new title, else write to the last text node.
+        label = cell.querySelector('a')? cell.querySelector('a').textContent : cell.childNodes.item(cell.childNodes.length-1).nodeValue;
+      row[this.column] = label = this.flat? row.meta.flatName: row.meta.name;
   }
 
   /**

@@ -152,9 +152,9 @@ body, body.reportal-viewmode {
   position: absolute;
   bottom: 14px;
 
-  &.cf_positive,
-  &.cf_negative,
-  &.cf_neutral{
+  & .cf_positive,
+  & .cf_negative,
+  & .cf_neutral{
     margin-right: 20px;
 
     &:before{
@@ -179,3 +179,4 @@ body, body.reportal-viewmode {
     background: var(--negative-color,#fd9900);
   }
 }
+
