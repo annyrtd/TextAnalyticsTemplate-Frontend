@@ -1,6 +1,7 @@
 .reportal-table{
   width:100%;
   font-size:14px;
+  border-collapse:collapse;
 
   &>thead>tr>td,
   &>thead>tr>th{
@@ -12,6 +13,8 @@
       vertical-align:bottom;
       text-align:left;
       font-weight:normal;
+      white-space:nowrap;
+
       &:first-child{border-left:0}
   }
 
@@ -30,7 +33,7 @@
      position:relative;
      left:-59px;
      width:200px;
-    border-left:0;
+     border-left:0;
   }
   &.reportal-barchart>thead>tr:last-child>td:nth-last-child(2),
   &.reportal-barchart>thead>tr:last-child>th:nth-last-child(2) {
@@ -44,12 +47,13 @@
    }
 
   &>tbody>tr>td {
-       padding: 2px 8px;
-       min-height:24px;
-       line-height:16px;
-        vertical-align:middle;
-       height:32px;
-       border-bottom: 1px solid #f0f2f5;
+      padding: 2px 8px;
+      min-height:24px;
+      line-height:16px;
+      vertical-align:middle;
+      height:32px;
+      border-bottom: 1px solid #f0f2f5;
+      white-space:nowrap;
 
       &:first-child{
         white-space:nowrap;
@@ -101,13 +105,16 @@
     background: var(--negative-color,#fd9900);
   }
 }
+
+/* fixed header table*/
 .reportal-table.fixed{
-  position:fixed;
+  position:absolute;
   top:0;
   width:auto;
   display:none;
   border:none;
 }
+/*.aggregatedTableContainer{position:relative}*/
 
 /*Hierarchycal styles*/
 .reportal-hierarchy-table tr.level0 {

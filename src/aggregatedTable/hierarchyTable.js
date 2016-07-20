@@ -1,6 +1,11 @@
 class HierarchyTable{
   /**
-   * After hierarchy is initialized, `HierarchyTable.data` array will reflect the rows of the table in their visible order and contain `meta` for each row in the array
+   * Converts flat view rowheaders into a tree-view rowheaders with ability to switch between views.
+   * After hierarchy is initialized, `HierarchyTable.data` array will reflect the rows of the table in their visible order and contain `meta` for each row in the array.
+   * When a row is collapsed, a `reportal-table-hierarchy-collapsed` Event is fired.
+   * When a row is uncollapsed, a `reportal-table-hierarchy-uncollapsed` Event is fired.
+   * When a row is switched to flat-view, a `reportal-table-hierarchy-flat-view` Event is fired.
+   * When a row is switched to tree-view, a `reportal-table-hierarchy-tree-view` Event is fired.
    * @param {HTMLTableElement} source - source table that needs a cloned header
    * @param {Array} hierarchy - array of hierarchy objects from reportal
    * @param {Object} rowheaders - JSON object which contains all table rowheaders with category id and index of table row
@@ -13,10 +18,12 @@ class HierarchyTable{
     this.rowheaders = rowheaders;
     this.data=null;
     this.column = hierColumn;
+    this._collapseEvent = this.constructor.newEvent('reportal-table-hierarchy-collapsed');
+    this._uncollapseEvent = this.constructor.newEvent('reportal-table-hierarchy-uncollapsed');
+    this._flatEvent = this.constructor.newEvent('reportal-table-hierarchy-flat-view');
+    this._treeEvent = this.constructor.newEvent('reportal-table-hierarchy-tree-view');
     this.flat = flat;
     this.init();
-    console.log(this.flat);
-    console.log(this);
   }
 
   /**
@@ -29,7 +36,9 @@ class HierarchyTable{
       tbody.removeChild(tbody.firstChild)
     }
     this.data.forEach((item)=>{tbody.appendChild(item.meta.row);});
+
   }
+
 
   /**
    * Sets `this.flat`, adds/removes `.reportal-heirarchy-flat-view` to the table and updates labels for hierarchy column to flat/hierarchical view
@@ -42,6 +51,7 @@ class HierarchyTable{
         this.updateCategoryLabel(row);
       });
     }
+    flat?this.source.dispatchEvent(this._flatEvent):this.source.dispatchEvent(this._treeEvent)
   }
   /**
    * getter for `flat`
@@ -148,7 +158,7 @@ class HierarchyTable{
   addCollapseButton(row){
     var collapseButton = document.createElement("div");
     collapseButton.classList.add("reportal-collapse-button");
-    collapseButton.addEventListener('click', () => {this.toggleCollapsing(row)});
+    collapseButton.addEventListener('click', () => this.toggleCollapsing(row));
     row.children[this.column].insertBefore(collapseButton,row.children[this.column].firstChild);
     row.children[this.column].classList.add('reportal-hierarchical-cell');
   }
@@ -161,6 +171,16 @@ class HierarchyTable{
   toggleCollapsing(row){
     this.toggleCollapsedClass(row);
     this.toggleHiddenRows(row);
+    this.data[row.rowIndex-1].meta.collapsed?row.dispatchEvent(this._collapseEvent):row.dispatchEvent(this._uncollapseEvent);
+  }
+
+
+  static newEvent(name){
+    //TODO: refactor this code when event library is added
+    var event = document.createEvent('Event');
+    // Define that the event name is `name`.
+    event.initEvent(name, true, true);
+    return event;
   }
 
   /**
@@ -199,8 +219,8 @@ class HierarchyTable{
 
 }
 
-Array.prototype.slice.call(document.querySelectorAll('table.reportal-hierarchy-table:not(.fixed)')).forEach((table)=>{
+/*Array.prototype.slice.call(document.querySelectorAll('table.reportal-hierarchy-table:not(.fixed)')).forEach((table)=>{
   var hierarchyTable= new HierarchyTable({source:table,hierarchy:hierarchy,rowheaders:rowheaders,flat:true});
-});
+});*/
 
 export default HierarchyTable;
