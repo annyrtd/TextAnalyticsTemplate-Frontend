@@ -72,9 +72,10 @@
       }
     }
   }
+&.reportal-categories>thead>tr>td[class*="_cc"]{position:relative;}
   &.reportal-categories>thead>tr>td[class*="_cc"]:before{
       /*cpecific class to set header for the first column*/
-      content:"Categories"
+      content:"Categories";
   }
    &>tbody>tr>td.cf_positive,
    &>tbody>tr>td.cf_negative,
@@ -104,6 +105,22 @@
   &>tbody>tr>td.cf_negative:after {
     background: var(--negative-color,#fd9900);
   }
+  & .btn.hierarchy-tree,
+  & .btn.hierarchy-flat{
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      height: auto;
+      width: auto;
+      border: 0;
+      background-color: transparent;
+      -webkit-appearance: none;
+      padding: 0;
+      line-height: initial;
+      display: block;
+      margin: 0 4px;
+    }
+  & .btn.hierarchy-tree{right:34px;}
 }
 
 /* fixed header table*/
@@ -142,7 +159,8 @@
   position: relative;
   vertical-align: middle;
 }
-.reportal-collapsed-row .reportal-collapse-button:before, .reportal-uncollapsed-row .reportal-collapse-button:before{
+.reportal-collapsed-row .reportal-collapse-button:before,
+.reportal-uncollapsed-row .reportal-collapse-button:before{
   content:'';
   position: absolute;
   border-color: #737B8E transparent transparent;

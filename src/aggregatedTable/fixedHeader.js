@@ -50,7 +50,6 @@ class FixedHeader {
    * Calculates widths for all columns in the fixed header based on the `this.source`
    * */
   resizeFixed(){
-    console.log('resized');
     var initialHeader = this.source.querySelectorAll('thead>tr>*');
     var clonedHeader = this.clonedHeader.querySelectorAll('thead>tr>*');
     [].slice.call(clonedHeader).forEach((el,index) => {
@@ -67,7 +66,7 @@ class FixedHeader {
     var offset = window.pageYOffset,
       tableOffsetTop = this.source.parentNode.offsetTop,
       tableOffsetBottom = tableOffsetTop + this.source.offsetHeight - this.source.querySelector('thead').offsetHeight;
-    console.log(offset,tableOffsetTop, tableOffsetBottom);
+    //console.log(offset,tableOffsetTop, tableOffsetBottom);
     if(offset < tableOffsetTop || offset > tableOffsetBottom){this.clonedHeader.style.display='none';}
     else if(offset >= tableOffsetTop && offset <= tableOffsetBottom){
       if(this.clonedHeader.style.display == 'none' || this.clonedHeader.style.display == ''){this.clonedHeader.style.display='table'};
