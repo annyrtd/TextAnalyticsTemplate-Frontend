@@ -73,7 +73,8 @@ body, body.reportal-viewmode {
   font-weight: 400;
 
   &.active, &:active{
-    box-shadow: none
+    box-shadow: none;
+    &>[class^=icon-]{opacity:1;}
   }
   &:hover>[class^=icon-]{opacity:1;}
 }
@@ -84,6 +85,20 @@ body, body.reportal-viewmode {
   margin-right:8px;
   vertical-align:bottom;
   background:var(--icon-export);
+}
+.icon-hierarchy-tree{
+  width:24px;
+  height:24px;
+  background:var(--icon-hierarchy-tree);
+  cursor:pointer;
+  pointer-events: all;
+}
+.icon-hierarchy-flat{
+  width:24px;
+  height:24px;
+  background:var(--icon-hierarchy-flat);
+  cursor:pointer;
+  pointer-events: all;
 }
 .icon-filter{
   width:20px;
