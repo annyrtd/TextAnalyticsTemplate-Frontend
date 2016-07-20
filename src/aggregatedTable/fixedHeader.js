@@ -59,17 +59,19 @@ class FixedHeader {
     this.clonedHeader.style.width = this.source.offsetWidth+'px';
   }
 
+
   /**
    * Displays a fixed header when the table header is scrolled off the screen
    * */
   scrollFixed() {
     var offset = window.pageYOffset,
-      tableOffsetTop = this.source.offsetTop,
+      tableOffsetTop = this.source.parentNode.offsetTop,
       tableOffsetBottom = tableOffsetTop + this.source.offsetHeight - this.source.querySelector('thead').offsetHeight;
+    console.log(offset,tableOffsetTop, tableOffsetBottom);
     if(offset < tableOffsetTop || offset > tableOffsetBottom){this.clonedHeader.style.display='none';}
     else if(offset >= tableOffsetTop && offset <= tableOffsetBottom){
       if(this.clonedHeader.style.display == 'none' || this.clonedHeader.style.display == ''){this.clonedHeader.style.display='table'};
-      this.clonedHeader.style.top=offset+'px';
+      this.clonedHeader.style.top=offset-tableOffsetTop+'px';
     }
   }
 

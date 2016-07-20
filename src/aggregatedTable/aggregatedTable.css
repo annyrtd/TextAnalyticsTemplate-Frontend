@@ -114,7 +114,11 @@
   display:none;
   border:none;
 }
-/*.aggregatedTableContainer{position:relative}*/
+.aggregatedTableContainer{
+  position: relative;
+  width:100%;
+  overflow-x: auto;
+}
 
 /*Hierarchycal styles*/
 .reportal-hierarchy-table tr.level0 {
