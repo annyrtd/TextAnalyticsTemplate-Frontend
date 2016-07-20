@@ -4,9 +4,9 @@
 class FixedHeader {
   /**
    * @param {HTMLTableElement} source - source table that needs a cloned header
-   * @param {Boolean} hasListeners - if header cells have events on them
+   * @param {Boolean} [hasListeners=false] - if header cells have events on them //TODO: add hasListeners functionality
    * */
-  constructor(source,hasListeners){
+  constructor({source,hasListeners=false}={}){
     this.source = source;
     this.hasListeners = hasListeners;
     this.init();
@@ -50,23 +50,27 @@ class FixedHeader {
    * Calculates widths for all columns in the fixed header based on the `this.source`
    * */
   resizeFixed(){
+    console.log('resized');
     var initialHeader = this.source.querySelectorAll('thead>tr>*');
     var clonedHeader = this.clonedHeader.querySelectorAll('thead>tr>*');
     [].slice.call(clonedHeader).forEach((el,index) => {
       el.style.width=initialHeader[index].offsetWidth+'px';
     });
+    this.clonedHeader.style.width = this.source.offsetWidth+'px';
   }
 
   /**
    * Displays a fixed header when the table header is scrolled off the screen
    * */
   scrollFixed() {
-    var offset = window.scrollY,
+    var offset = window.pageYOffset,
       tableOffsetTop = this.source.offsetTop,
       tableOffsetBottom = tableOffsetTop + this.source.offsetHeight - this.source.querySelector('thead').offsetHeight;
     if(offset < tableOffsetTop || offset > tableOffsetBottom){this.clonedHeader.style.display='none';}
-    else if(offset >= tableOffsetTop && offset <= tableOffsetBottom && this.clonedHeader.style.display == 'none'){this.clonedHeader.style.display='table';}
-
+    else if(offset >= tableOffsetTop && offset <= tableOffsetBottom){
+      if(this.clonedHeader.style.display == 'none' || this.clonedHeader.style.display == ''){this.clonedHeader.style.display='table'};
+      this.clonedHeader.style.top=offset+'px';
+    }
   }
 
   /**
@@ -74,19 +78,18 @@ class FixedHeader {
    * */
   resizeThrottler() {
     // ignore resize events as long as an actualResizeHandler execution is in the queue
-      var resizeTimeout = setTimeout(()=>{
+    var resizeTimeout = setTimeout(()=>{
         resizeTimeout = null;
         this.resizeFixed();
         // The resizeFixed will execute at a rate of 15fps
       }, 66);
-
   }
 }
 
 // init this feature for all tables
-[].slice.call(document.querySelectorAll('table.reportal-fixed-header')).forEach((table)=>{
-  var table= new FixedHeader(table);
-});
+/*[].slice.call(document.querySelectorAll('table.reportal-fixed-header')).forEach((table)=>{
+  var table= new FixedHeader({source:table});
+});*/
 
 export default FixedHeader;
 
