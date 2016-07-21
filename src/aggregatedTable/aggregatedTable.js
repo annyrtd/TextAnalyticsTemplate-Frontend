@@ -5,7 +5,7 @@
 import HierarchyTable from './hierarchyTable.js';
 import FixedHeader from './FixedHeader.js';
 
-class AggregatedTable {
+class AggregatedTable{
   /**
    * A class that unifies work with Aggregated tables. Enabling a fixed header, search functionality, sorting, hierarchy etc can be done here.
    * @param {HTMLTableElement} table - table on which the action is to be performed
@@ -23,6 +23,7 @@ class AggregatedTable {
       let buttonHost = this.hierarchy.source.querySelector(`thead>tr>td:nth-child(${this.hierarchy.column+1})`);
       this.addToggleButton(buttonHost,'hierarchy-tree',false,'Tree View');
       this.addToggleButton(buttonHost,'hierarchy-flat',true,'Flat View');
+      if(this.hierarchy.search.enabled){this.addSearchBox(buttonHost);}
     }
     if(fixedHeader && typeof fixedHeader == 'object'){
       fixedHeader.source = fixedHeader.source||table;
@@ -32,6 +33,7 @@ class AggregatedTable {
       [].slice.call(buttonHost.children).forEach((item)=>{item.parentNode.removeChild(item)}); //clears hierarchy toggle buttons cloned from original header
       this.addToggleButton(buttonHost,'hierarchy-tree',false,'Tree View');
       this.addToggleButton(buttonHost,'hierarchy-flat',true,'Flat View');
+      if(this.hierarchy.search.enabled){this.addSearchBox(buttonHost);}
     }
     this.source=table;
     this.init();
@@ -75,6 +77,70 @@ class AggregatedTable {
     buttonContainer.appendChild(button);
     host.appendChild(buttonContainer);
   }
+
+  addSearchBox(host){
+    let button = document.createElement('span'),
+        buttonContainer = document.createElement('span'),
+        searchfield = document.createElement('input');
+
+    searchfield.type='text';
+    button.classList.add('icon-search');
+    buttonContainer.classList.add('btn');
+    buttonContainer.title='Search categories';
+
+    searchfield.addEventListener('keyup',e=>{
+      this.updateSearchTarget(e); //update search parameters
+      efficientSearch(); // debounce search
+    });
+
+    var efficientSearch = this.search();
+
+    buttonContainer.appendChild(button);
+    buttonContainer.appendChild(searchfield);
+    host.appendChild(buttonContainer);
+
+  }
+
+  updateSearchTarget(e){
+    this.hierarchy.search.target = e.target;
+    this.hierarchy.search.query = e.target.value;
+  }
+
+  search(){
+    let hierarchy =this.hierarchy,
+        settings = hierarchy.search;
+    return this.constructor.debounce(function(){
+      let value = settings.query;
+      if(value.length>0){
+        if(!settings.searching){settings.searching=true;}
+        hierarchy.searchRowheaders(value);
+      } else {settings.searching=false;}
+    }, settings.timeout, settings.immediate);
+
+  }
+
+  /**
+   * A debouncing function, used for cases when as `func` function needs to be called less often, after a certain `wait` timeout or `immediate`-ly
+   * @param {Function} func - the function that needs to be executed at a lesser rate
+   * @param {Number} [wait=300] - timeout after which the `func`tion executes
+   * @param {Boolean} [immediate=false] - flag to be set when function needs to be executed immediately (overrides `wait` timeout)
+   * */
+  static debounce (func, wait=300, immediate=false){
+    var timeout;
+    return ()=>{
+      var context = this, args = arguments;
+      var later = function() {
+        timeout = null;
+        if (!immediate) func.apply(context, args);
+      };
+      var callNow = immediate && !timeout;
+      clearTimeout(timeout);
+      timeout = setTimeout(later, wait);
+      if (callNow) func.apply(context, args);
+    };
+  }
+
+
 }
 
 export default AggregatedTable;
