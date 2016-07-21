@@ -204,3 +204,7 @@
     &>.reportal-collapse-button{display:none}
   }
 }
+.reportal-hierarchy-searching>tbody>tr{
+  display:none;
+  &.matched-search:not(.reportal-hidden-row){display:table-row}
+}

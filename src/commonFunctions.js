@@ -1,3 +1,5 @@
+
+export class Common{
 /**
  * Polling function to wait for the node to appear
  * @param {Boolean} fn - function that returns a Boolean for existing node
@@ -6,7 +8,7 @@
  * @param {Number} timeout
  * @param {Number} interval - polling interval to check for `fn` to be true
  */
-var poll = (fn, callback, errback, timeout, interval) => {
+  poll (fn, callback, errback, timeout, interval) {
   var endTime = Number(new Date()) + (timeout || 2000);
   interval = interval || 100;
 
@@ -25,6 +27,4 @@ var poll = (fn, callback, errback, timeout, interval) => {
     }
   })();
 };
-
-
-export default poll;
+}
