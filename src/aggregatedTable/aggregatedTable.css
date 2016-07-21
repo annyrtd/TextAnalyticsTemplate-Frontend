@@ -206,5 +206,5 @@
 }
 .reportal-hierarchy-searching>tbody>tr{
   display:none;
-  &.matched-search{display:table-row}
+  &.matched-search:not(.reportal-hidden-row){display:table-row}
 }

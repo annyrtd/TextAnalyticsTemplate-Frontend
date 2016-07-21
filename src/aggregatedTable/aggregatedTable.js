@@ -114,7 +114,9 @@ class AggregatedTable{
       if(value.length>0){
         if(!settings.searching){settings.searching=true;}
         hierarchy.searchRowheaders(value);
-      } else {settings.searching=false;}
+      } else {
+        settings.searching=false;
+      }
     }, settings.timeout, settings.immediate);
 
   }
