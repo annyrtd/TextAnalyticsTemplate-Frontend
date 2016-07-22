@@ -72,7 +72,7 @@
       }
     }
   }
-&.reportal-categories>thead>tr>td[class*="_cc"]{position:relative;}
+  &.reportal-categories>thead>tr>td[class*="_cc"]{position:relative;}
   &.reportal-categories>thead>tr>td[class*="_cc"]:before{
       /*cpecific class to set header for the first column*/
       content:"Categories";
@@ -106,11 +106,12 @@
     background: var(--negative-color,#fd9900);
   }
   & .btn.hierarchy-tree,
-  & .btn.hierarchy-flat{
+  & .btn.hierarchy-flat,
+  & .btn.hierarchy-search{
       position: absolute;
       bottom: 0;
       right: 0;
-      height: auto;
+      height: 28px;
       width: auto;
       border: 0;
       background-color: transparent;
@@ -119,8 +120,67 @@
       line-height: initial;
       display: block;
       margin: 0 4px;
+      vertical-align: middle;
     }
   & .btn.hierarchy-tree{right:34px;}
+  & .btn.hierarchy-search{
+      width:26px;
+      right:64px;
+      height:26px;
+      margin: 1px 4px;
+      border-radius:0;
+      left:auto;
+      transition:  width,background-color,left,transform,opacity .25s ease-in-out;
+
+
+      &>input{
+        display:none;
+        background-color: transparent;
+        margin-left:-24px;
+        border: 0;
+        height: 20px;
+        font-size: 12px;
+        padding-left: 24px;
+        width: 1%;
+        vertical-align:top;
+        outline: 0;
+      }
+      &>.clear-button{
+         display:none;
+         vertical-align: top;
+         margin: 0;
+         width:24px;
+         height:24px;
+      }
+      &.visible{
+         width:auto;
+         background-color:#f0f2f5;
+         left:0;
+         padding: 2px 0;
+         border-bottom: 1px solid #ccc;
+
+         & >input{
+           display:inline-block;
+           width: calc(100% - 24px);
+         }
+         & > .icon-search{
+           pointer-events:none;
+           opacity: 1;
+
+         }
+         & > .clear-button{
+           pointer-events:all;
+           display: inline-block;
+           transform:rotate(-135deg);
+           cursor:pointer;
+           z-index:2;
+         }
+         &>.icon-search, &>.clear-button{
+            top:-1px;
+         }
+
+}
+    }
 }
 
 /* fixed header table*/
@@ -140,6 +200,10 @@
 /*Hierarchycal styles*/
 .reportal-hierarchy-table tr.level0 {
   font-weight: bold;
+}
+
+.reportal-hierarchy-table>thead>tr:first-child>td:first-child{
+  padding-right:100px;
 }
 
 .reportal-hierarchy-table>tbody>tr>td.reportal-hierarchical-cell {padding-left:0}

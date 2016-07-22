@@ -78,36 +78,83 @@ class AggregatedTable{
     host.appendChild(buttonContainer);
   }
 
+  /**
+   * Adds a search icon and a search box to the header of the hierarchy column (`host`)
+   * @param {HTMLTableCellElement} host - header of the hierarchy column
+   * */
   addSearchBox(host){
     let button = document.createElement('span'),
         buttonContainer = document.createElement('span'),
+        clearButton = document.createElement('span'),
         searchfield = document.createElement('input');
 
     searchfield.type='text';
     button.classList.add('icon-search');
-    buttonContainer.classList.add('btn');
-    buttonContainer.title='Search categories';
+    clearButton.classList.add('icon-add', 'clear-button');
+    buttonContainer.classList.add('btn', 'hierarchy-search');
+
+    //listener to display search field on search-icon click
+    button.addEventListener('click',e=>{
+      console.log(e, e.target);
+      if(!this.hierarchy.search.visible){this.hierarchy.search.visible = true;}
+      e.target.parentNode.querySelector('input').focus();
+    });
+
+    //listener to display search field on search-icon click
+    clearButton.addEventListener('click',e=>{
+      this.clearSearch();
+    });
+
+    buttonContainer.title = searchfield.placeholder = 'Search categories...';
+
+    let efficientSearch = this.search();
 
     searchfield.addEventListener('keyup',e=>{
       this.updateSearchTarget(e); //update search parameters
-      efficientSearch(); // debounce search
+      efficientSearch();          // call search less frequently
     });
 
-    var efficientSearch = this.search();
+    
+    searchfield.addEventListener('blur',e=>{
+      if(e.target.value.length==0)this.clearSearch(); //update search parameters
+  });
+
+
 
     buttonContainer.appendChild(button);
     buttonContainer.appendChild(searchfield);
+    buttonContainer.appendChild(clearButton);
     host.appendChild(buttonContainer);
 
   }
 
+  clearSearch(){
+    this.hierarchy.search.target = null;
+    this.hierarchy.search.query='';
+    this.hierarchy.search.visible=false;
+    this.hierarchy.search.searching=false;
+    var inputs = this.hierarchy.source.parentNode.querySelectorAll(`table>thead>tr>td:nth-child(${this.hierarchy.column+1}) input`);
+    if(inputs && inputs.length>1){inputs.forEach(input=>{input.value = '';})}
+
+  }
+
+  /**
+   * Updates `search.target` && `search.query` in `hierarchy.search` to know which input triggered the search and update the `search.query` in the other
+   * @param {Event} e - a debounced event triggered by input field when a person enters text
+   * */
   updateSearchTarget(e){
     this.hierarchy.search.target = e.target;
     this.hierarchy.search.query = e.target.value;
+    var inputs = this.hierarchy.source.parentNode.querySelectorAll(`table>thead>tr>td:nth-child(${this.hierarchy.column+1}) input`);
+    if(inputs && inputs.length>1){inputs.forEach(input=>{if(input!=e.target){input.value = e.target.value;return;}})}
   }
 
+  /**
+   * Wrapping function that debounces search, sets `search.searching` [(click for info)]{@link HierarchyTable#setupSearch} and calls `hierarchy.searchRowheaders` [(click for info)]{@link HierarchyTable#searchRowheaders}
+   * @return {Function}
+   * */
   search(){
-    let hierarchy =this.hierarchy,
+    let hierarchy = this.hierarchy,
         settings = hierarchy.search;
     return this.constructor.debounce(function(){
       let value = settings.query;
@@ -126,6 +173,7 @@ class AggregatedTable{
    * @param {Function} func - the function that needs to be executed at a lesser rate
    * @param {Number} [wait=300] - timeout after which the `func`tion executes
    * @param {Boolean} [immediate=false] - flag to be set when function needs to be executed immediately (overrides `wait` timeout)
+   * @return {Function}
    * */
   static debounce (func, wait=300, immediate=false){
     var timeout;
