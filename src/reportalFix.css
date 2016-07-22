@@ -41,6 +41,9 @@ body, body.reportal-viewmode {
 [class^=icon-] {
   fill: #3f3f3f;
   opacity:0.4;
+  width:24px;
+  height:24px;
+  margin-right:8px;
 }
 [class*=" icon-"], [class^=icon-] {
   display: inline-block;
@@ -80,39 +83,34 @@ body, body.reportal-viewmode {
 }
 
 .icon-export{
-  width:24px;
-  height:24px;
-  margin-right:8px;
   vertical-align:bottom;
   background:var(--icon-export);
 }
-.icon-hierarchy-tree{
-  width:24px;
-  height:24px;
-  background:var(--icon-hierarchy-tree);
+.icon-hierarchy-tree,.icon-hierarchy-flat,.icon-search{
+  margin:0;
   cursor:pointer;
   pointer-events: all;
 }
+.icon-hierarchy-tree{
+  background:var(--icon-hierarchy-tree);
+}
 .icon-hierarchy-flat{
-  width:24px;
-  height:24px;
   background:var(--icon-hierarchy-flat);
-  cursor:pointer;
-  pointer-events: all;
 }
 .icon-filter{
   width:20px;
   height:15px;
-  margin-right:8px;
   vertical-align:bottom;
   background:var(--icon-filter);
 }
 .icon-add{
   width:20px;
   height:20px;
-  margin-right:8px;
   vertical-align:bottom;
   background:var(--icon-add);
+}
+.icon-search{
+  background:var(--icon-search);
 }
 .icon-comment,
 .icon-face-positive,

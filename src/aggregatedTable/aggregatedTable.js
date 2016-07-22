@@ -85,23 +85,56 @@ class AggregatedTable{
   addSearchBox(host){
     let button = document.createElement('span'),
         buttonContainer = document.createElement('span'),
+        clearButton = document.createElement('span'),
         searchfield = document.createElement('input');
 
     searchfield.type='text';
     button.classList.add('icon-search');
-    buttonContainer.classList.add('btn');
-    buttonContainer.title='Search categories';
+    clearButton.classList.add('icon-add', 'clear-button');
+    buttonContainer.classList.add('btn', 'hierarchy-search');
+
+    //listener to display search field on search-icon click
+    button.addEventListener('click',e=>{
+      console.log(e, e.target);
+      if(!this.hierarchy.search.visible){this.hierarchy.search.visible = true;}
+      e.target.parentNode.querySelector('input').focus();
+    });
+
+    //listener to display search field on search-icon click
+    clearButton.addEventListener('click',e=>{
+      this.clearSearch();
+    });
+
+    buttonContainer.title = searchfield.placeholder = 'Search categories...';
 
     let efficientSearch = this.search();
+
     searchfield.addEventListener('keyup',e=>{
       this.updateSearchTarget(e); //update search parameters
       efficientSearch();          // call search less frequently
     });
 
+    
+    searchfield.addEventListener('blur',e=>{
+      if(e.target.value.length==0)this.clearSearch(); //update search parameters
+  });
+
+
 
     buttonContainer.appendChild(button);
     buttonContainer.appendChild(searchfield);
+    buttonContainer.appendChild(clearButton);
     host.appendChild(buttonContainer);
+
+  }
+
+  clearSearch(){
+    this.hierarchy.search.target = null;
+    this.hierarchy.search.query='';
+    this.hierarchy.search.visible=false;
+    this.hierarchy.search.searching=false;
+    var inputs = this.hierarchy.source.parentNode.querySelectorAll(`table>thead>tr>td:nth-child(${this.hierarchy.column+1}) input`);
+    if(inputs && inputs.length>1){inputs.forEach(input=>{input.value = '';})}
 
   }
 
