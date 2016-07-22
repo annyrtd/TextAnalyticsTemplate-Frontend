@@ -112,6 +112,8 @@ class AggregatedTable{
   updateSearchTarget(e){
     this.hierarchy.search.target = e.target;
     this.hierarchy.search.query = e.target.value;
+    var inputs = this.hierarchy.source.parentNode.querySelectorAll(`table>thead>tr>td:nth-child(${this.hierarchy.column+1}) input`);
+    if(inputs && inputs.length>1){inputs.forEach(input=>{if(input!=e.target){input.value = e.target.value;return;}})}
   }
 
   /**

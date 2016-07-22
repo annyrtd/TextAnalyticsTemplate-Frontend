@@ -114,6 +114,26 @@ body, body.reportal-viewmode {
   vertical-align:bottom;
   background:var(--icon-add);
 }
+.icon-comment,
+.icon-face-positive,
+.icon-face-neutral,
+.icon-face-negative{
+  width:48px;
+  height:48px;
+  margin-right:8px;
+}
+.icon-comment{
+  background:var(--icon-comment);
+}
+.icon-face-positive{
+  background:var(--icon-face-positive);
+}
+.icon-face-neutral{
+  background:var(--icon-face-neutral);
+}
+.icon-face-negative{
+  background:var(--icon-face-negative);
+}
 
 /* styles for filter-bar which includes a filter button and filter summary + clear button */
 .filter-bar{

@@ -5,11 +5,19 @@ class FixedHeader {
   /**
    * @param {HTMLTableElement} source - source table that needs a cloned header
    * @param {Boolean} [hasListeners=false] - if header cells have events on them //TODO: add hasListeners functionality
+   * @param {Boolean} [visible=false] - if the header is visible on init
    * */
-  constructor({source,hasListeners=false}={}){
+  constructor({source,hasListeners=false, visible=false}={}){
+    this._visible = false;
     this.source = source;
     this.hasListeners = hasListeners;
     this.init();
+    this.visible = visible;
+  }
+  get visible(){return this._visible}
+  set visible(val){
+    this._visible=val;
+    val?this.clonedHeader.style.display='table':this.clonedHeader.style.display='none';
   }
 
   /**
@@ -67,9 +75,11 @@ class FixedHeader {
       tableOffsetTop = this.source.parentNode.offsetTop,
       tableOffsetBottom = tableOffsetTop + this.source.offsetHeight - this.source.querySelector('thead').offsetHeight;
     //console.log(offset,tableOffsetTop, tableOffsetBottom);
-    if(offset < tableOffsetTop || offset > tableOffsetBottom){this.clonedHeader.style.display='none';}
+    if(offset < tableOffsetTop || offset > tableOffsetBottom){
+      this.visible=false;
+    }
     else if(offset >= tableOffsetTop && offset <= tableOffsetBottom){
-      if(this.clonedHeader.style.display == 'none' || this.clonedHeader.style.display == ''){this.clonedHeader.style.display='table'};
+      this.visible=true;
       this.clonedHeader.style.top=offset-tableOffsetTop+'px';
     }
   }
