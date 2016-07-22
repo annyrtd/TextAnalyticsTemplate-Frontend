@@ -78,6 +78,10 @@ class AggregatedTable{
     host.appendChild(buttonContainer);
   }
 
+  /**
+   * Adds a search icon and a search box to the header of the hierarchy column (`host`)
+   * @param {HTMLTableCellElement} host - header of the hierarchy column
+   * */
   addSearchBox(host){
     let button = document.createElement('span'),
         buttonContainer = document.createElement('span'),
@@ -88,12 +92,12 @@ class AggregatedTable{
     buttonContainer.classList.add('btn');
     buttonContainer.title='Search categories';
 
+    let efficientSearch = this.search();
     searchfield.addEventListener('keyup',e=>{
       this.updateSearchTarget(e); //update search parameters
-      efficientSearch(); // debounce search
+      efficientSearch();          // call search less frequently
     });
 
-    var efficientSearch = this.search();
 
     buttonContainer.appendChild(button);
     buttonContainer.appendChild(searchfield);
@@ -101,13 +105,21 @@ class AggregatedTable{
 
   }
 
+  /**
+   * Updates `search.target` && `search.query` in `hierarchy.search` to know which input triggered the search and update the `search.query` in the other
+   * @param {Event} e - a debounced event triggered by input field when a person enters text
+   * */
   updateSearchTarget(e){
     this.hierarchy.search.target = e.target;
     this.hierarchy.search.query = e.target.value;
   }
 
+  /**
+   * Wrapping function that debounces search, sets `search.searching` [(click for info)]{@link HierarchyTable#setupSearch} and calls `hierarchy.searchRowheaders` [(click for info)]{@link HierarchyTable#searchRowheaders}
+   * @return {Function}
+   * */
   search(){
-    let hierarchy =this.hierarchy,
+    let hierarchy = this.hierarchy,
         settings = hierarchy.search;
     return this.constructor.debounce(function(){
       let value = settings.query;
@@ -126,6 +138,7 @@ class AggregatedTable{
    * @param {Function} func - the function that needs to be executed at a lesser rate
    * @param {Number} [wait=300] - timeout after which the `func`tion executes
    * @param {Boolean} [immediate=false] - flag to be set when function needs to be executed immediately (overrides `wait` timeout)
+   * @return {Function}
    * */
   static debounce (func, wait=300, immediate=false){
     var timeout;

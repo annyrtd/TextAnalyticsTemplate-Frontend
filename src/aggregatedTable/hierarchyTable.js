@@ -78,10 +78,8 @@ class HierarchyTable{
       set searching(val){
           _searching=val;
           val?self.source.classList.add('reportal-hierarchy-searching'):self.source.classList.remove('reportal-hierarchy-searching');
-
           if(!val){
-            console.log(this.searching);
-            self.clearSearch();
+            self.collapseAll(); // we want to collapse all expanded rows that could be expanded during search
           }
       }
     }
@@ -176,7 +174,10 @@ class HierarchyTable{
       this.search.searching = false; // clears search
       this.search.searching = true; //reinit search
       this.searchRowheaders(this.search.query); //pass the same query
+    } else if(this.search && !this.search.searching && !flat){
+      this.data.forEach((row)=>{this.toggleHiddenRows(row.meta)});
     }
+
     flat?this.source.dispatchEvent(this._flatEvent):this.source.dispatchEvent(this._treeEvent)
   }
   /**
@@ -331,7 +332,7 @@ class HierarchyTable{
           childRow.meta.hidden=true;                                  // hide all its children and
           if(childRow.meta.hasChildren && !childRow.meta.collapsed){  // if a child can be collapsed
             childRow.meta.collapsed=true;                             // collapse it and
-            this.toggleHiddenRows(childRow.meta);                          // repeat for its children
+            this.toggleHiddenRows(childRow.meta);                     // repeat for its children
           }
         } else {                                                      // otherwise make sure we show all children of an expanded row
           childRow.meta.hidden=false;
@@ -340,6 +341,10 @@ class HierarchyTable{
     }
   }
 
+  /**
+   * This function runs through the data and looks for a match in `row.meta.flatName` (for flat view) or `row.meta.name` (for tree view) against the `str`.
+   * @param {String} str - expression to match against (is contained in `this.search.query`)
+   * */
   searchRowheaders(str){
     let regexp = new RegExp(str,'i');
     this.data.forEach((row)=>{
@@ -352,8 +357,10 @@ class HierarchyTable{
     });
   }
 
-  clearSearch(){
-    console.log('clearing searching');
+  /*
+  * Collapses all rows which were previously uncollapsed
+  * **/
+  collapseAll(){
     this.data.forEach((row)=>{
       let collapsed = row.meta.collapsed;
       if(typeof collapsed != undefined && !collapsed){
@@ -362,19 +369,30 @@ class HierarchyTable{
     });
   }
 
+  /**
+   * Uncollapses the immediate parents of a row which `meta` is passed as an attribute. Utility function for serach to uncollapse all parents of a row that was matched during search
+   * @param {Object} meta - `row.meta` object. See {@link HierarchyTable#setupMeta} for details
+   * */
   uncollapseParents(meta){
   if(meta.parent.length>0){ // if `parent` String is not empty - then it's not top level parent.
     let parent = this.data.find(row => row.meta.id==meta.parent);
-    console.log(parent);
     if(parent.meta.collapsed){parent.meta.collapsed=false};
     parent.meta.row.classList.add('matched-search');
     this.uncollapseParents(parent.meta);
   }
   }
 
+  /**
+   * Sets `meta.matches=true` on rows whose `parent` matches `id` passed in `meta` object attribute.
+   * This utility function is used in search in tree-view mode, necessary tagging children of a matched row (passed in `meta`) as an indirect match, just in case the user wants to expand the row.
+   * @param {Object} meta - `row.meta` object. See {@link HierarchyTable#setupMeta} for details
+   * */
   displayChildren(meta){
       if (meta.hasChildren) {
-        let children = this.data.filter(row => row.meta.parent == meta.id ).forEach(child => {child.meta.row.classList.add('matched-search');this.displayChildren(child.meta)});
+        let children = this.data.filter(row => row.meta.parent == meta.id).forEach(child => {
+            child.meta.matches = true;
+            this.displayChildren(child.meta); // iterate for children of this element if any
+          });
       }
   }
 
