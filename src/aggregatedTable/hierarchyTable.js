@@ -38,7 +38,6 @@ class HierarchyTable{
     this.search = this.setupSearch(search);
     this.init();
     this.__lastEffectiveParent = null;// we'll store row of parent when doing search for effectiveness of children recursion in `searchRowheaders`
-
   }
 
   /**
@@ -170,10 +169,11 @@ class HierarchyTable{
 
   /**
    * Sets `this.flat`, adds/removes `.reportal-heirarchy-flat-view` to the table and updates labels for hierarchy column to flat/hierarchical view
+   * @param {Boolean} val - value to set on `flat`
    * */
-  set flat(flat){
-    this._flat=flat;
-    flat?this.source.classList.add('reportal-heirarchy-flat-view'):this.source.classList.remove('reportal-heirarchy-flat-view');
+  set flat(val){
+    this._flat=val;
+    val?this.source.classList.add('reportal-heirarchy-flat-view'):this.source.classList.remove('reportal-heirarchy-flat-view');
     // we want to update labels to match the selected view
     if(this.search && this.search.searching && this.search.highlight){this.search.highlight.remove();} //clear highlighting
     if(this.data){
@@ -186,11 +186,11 @@ class HierarchyTable{
       this.search.searching = false; // clears search
       this.search.searching = true; //reinit search
       this.searchRowheaders(this.search.query); //pass the same query
-    } else if(this.search && !this.search.searching && !flat){
+    } else if(this.search && !this.search.searching && !val){
       this.data.forEach((row)=>{this.toggleHiddenRows(row.meta)});
     }
 
-    flat?this.source.dispatchEvent(this._flatEvent):this.source.dispatchEvent(this._treeEvent)
+    val?this.source.dispatchEvent(this._flatEvent):this.source.dispatchEvent(this._treeEvent)
   }
   /**
    * getter for `flat`
