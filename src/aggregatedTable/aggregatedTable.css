@@ -13,7 +13,7 @@
       vertical-align:bottom;
       text-align:left;
       font-weight:normal;
-      white-space:nowrap;
+     /* white-space:nowrap;*/
 
       &:first-child{border-left:0}
   }
@@ -173,7 +173,6 @@
            display: inline-block;
            transform:rotate(-135deg);
            cursor:pointer;
-           z-index:2;
          }
          &>.icon-search, &>.clear-button{
             top:-1px;

@@ -5,6 +5,17 @@
 class Highlight {
   /**
    * Highlights text in an `element` by wrapping the matched string passed via {@link Highlight#apply} method into a `tag`.
+   *
+   * Example:
+   *
+   * ``` javascript
+   * var hi = new Highlight({
+   *        element: [].slice.call(document.querySelectorAll('.nodeForHightlight')),
+   *        type: 'open'
+   *        });
+   * hi.apply('highlight this');
+   * ```
+   *
    * @param {HTMLElement} element=document.body - Element in which the search and highlighting will happen. A valid Array (`!NodeList`) of nodes can be passed here.
    * @param {String} tag=EM - The tag used by default to apply highlighting to matched words is the  EM (emphasis) tag. We can change that if we want by passing a second parameter with a different tag name. You can use any tag that renders inline - so not a DIV or similar block element which would break the layout.
    * @param {String} type=left+right - Type of match. `open` will look at all occurences, `left` - at the left word boundary, `right` - at the right word boundary, by default it must match the whole word.
@@ -77,7 +88,6 @@ class Highlight {
    * @param {HTMLElement} node - a node on which highlighting will be performed
    */
   highlightWords(node) {
-    console.log(node);
     if(node === undefined || !node) return;
     if(!this.matchRegex) return;
     if(this.skipTags.test(node.nodeName)) return;
@@ -87,7 +97,6 @@ class Highlight {
     }
     if(node.nodeType == 3) { // NODE_TEXT
       let nv= node.nodeValue,regs= this.matchRegex.exec(nv);
-      console.log(this.matchRegex,nv, regs);
 
       if(nv && regs) {
         if(!this.wordColor[regs[0].toLowerCase()]) {
