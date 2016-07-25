@@ -23,7 +23,9 @@ class AggregatedTable{
       let buttonHost = this.hierarchy.source.querySelector(`thead>tr>td:nth-child(${this.hierarchy.column+1})`);
       this.addToggleButton(buttonHost,'hierarchy-tree',false,'Tree View');
       this.addToggleButton(buttonHost,'hierarchy-flat',true,'Flat View');
-      if(this.hierarchy.search.enabled){this.addSearchBox(buttonHost);}
+      if(this.hierarchy.search.enabled){
+        this.addSearchBox(buttonHost);
+      }
     }
     if(fixedHeader && typeof fixedHeader == 'object'){
       fixedHeader.source = fixedHeader.source||table;
@@ -111,6 +113,7 @@ class AggregatedTable{
     searchfield.addEventListener('keyup',e=>{
       this.updateSearchTarget(e); //update search parameters
       efficientSearch();          // call search less frequently
+
     });
 
 
@@ -134,7 +137,6 @@ class AggregatedTable{
     this.hierarchy.search.searching=false;
     var inputs = this.hierarchy.source.parentNode.querySelectorAll(`table>thead>tr>td:nth-child(${this.hierarchy.column+1}) input`);
     if(inputs && inputs.length>1){inputs.forEach(input=>{input.value = '';})}
-
   }
 
   /**
@@ -154,7 +156,8 @@ class AggregatedTable{
    * */
   search(){
     let hierarchy = this.hierarchy,
-        settings = hierarchy.search;
+        settings = hierarchy.search,
+        self=this;
     return this.constructor.debounce(function(){
       let value = settings.query;
       if(value.length>0){

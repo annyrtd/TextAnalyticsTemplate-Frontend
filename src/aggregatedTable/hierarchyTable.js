@@ -1,3 +1,5 @@
+import Highlight from '../lib/Highlight.js';
+
 class HierarchyTable{
   /**
    * Converts flat view rowheaders into a tree-view rowheaders with ability to switch between views.
@@ -59,29 +61,32 @@ class HierarchyTable{
    * @param {Boolean} [searching=false] - this property is mostly for internal use and is set when searching is in progress, which adds a class to the table hiding all rows not matching search
    * @param {String} [query=''] - search string
    * @param {HTMLInputElement} target - the input element that triggered the search.
+   * @param {Boolean} [visible=false] - search box is visible
+   * @param {Boolean} [highlight=true] - search matches will be highlighted
    * */
-  setupSearch({enabled = false, immediate = false, timeout=300, searching=false, query='', target, visible=false}={}){
+  setupSearch({enabled = false, immediate = false, timeout=300, searching=false, query='', target, visible=false,highlight = true}={}){
     var _searching = searching,
       self = this,
       _query = query,
-      _visible=visible;
+      _visible=visible,
+      _highlight = highlight? new Highlight({element:[].slice.call(this.source.querySelectorAll(`tbody>tr>td:nth-child(${this.column+1})`)),type:'open'}):null;
+
     return {
       timeout,
       enabled,
       immediate,
       target,
-
+      highlight:_highlight,
       get query(){return _query},
       set query(val){
         _query = val;
+        if(val.length==0 && this.highlight){this.highlight.remove();} // clear highlighting when query length is 0
       },
 
       get visible(){return _visible},
       set visible(val){
         _visible = val;
-        //console.log(self.source.parentNode, self.source.parentNode.querySelector('.hierarchy-search'),val);
         [].slice.call(self.source.parentNode.querySelectorAll('.hierarchy-search')).forEach(button=>{
-          console.log(button,val);
         val?button.classList.add('visible'):button.classList.remove('visible');});
       },
 
@@ -128,12 +133,10 @@ class HierarchyTable{
       get hidden(){return _hidden},
       set hidden(val){
         _hidden=val;
-        if(!val){console.log('hidden released')}
         val?this.row.classList.add("reportal-hidden-row"):this.row.classList.remove("reportal-hidden-row");
       },
       get collapsed(){return _collapsed},
       set collapsed(val){
-        //console.log('will set collapsed');
         if(typeof val != undefined && this.hasChildren){
           _collapsed=val;
           if(val){
@@ -151,7 +154,6 @@ class HierarchyTable{
       get matches(){return _matches},
       set matches(val){
         _matches=val;
-        console.log(this.name,val);
         if(val){
           this.row.classList.add("matched-search");
         } else {
@@ -172,6 +174,7 @@ class HierarchyTable{
     this._flat=flat;
     flat?this.source.classList.add('reportal-heirarchy-flat-view'):this.source.classList.remove('reportal-heirarchy-flat-view');
     // we want to update labels to match the selected view
+    if(this.search && this.search.searching && this.search.highlight){this.search.highlight.remove();} //clear highlighting
     if(this.data){
       this.data.forEach((row)=> {
         this.updateCategoryLabel(row);
@@ -179,7 +182,6 @@ class HierarchyTable{
     }
     //if the search is in progress, we need to model hierarchical/flat search which is basically redoing the search.
     if(this.search && this.search.searching){
-      console.log('search in progress');
       this.search.searching = false; // clears search
       this.search.searching = true; //reinit search
       this.searchRowheaders(this.search.query); //pass the same query
@@ -356,7 +358,7 @@ class HierarchyTable{
    * //TODO: add higlighting to the matched query in strings
    * */
   searchRowheaders(str){
-    let regexp = new RegExp(str,'i');
+    let regexp = new RegExp('('+str+')','i');
     this.data.forEach((row)=>{
       if(this.flat){
         row.meta.matches = regexp.test(row.meta.flatName);
@@ -383,6 +385,7 @@ class HierarchyTable{
           }
       }
     });
+    this.search.highlight.apply(str);
   }
 
   /*
