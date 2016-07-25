@@ -20,7 +20,10 @@ class Highlight {
     this.setMatchType(type);
     this.matchRegex = "";
   }
-
+  /**
+   * Sets a type of search
+   * @param {String} type=left+right - Type of match. `open` will look at all occurences, `left` - at the left word boundary, `right` - at the right word boundary, by default it must match the whole word.
+   * */
   setMatchType(type){
     switch(type)
     {
