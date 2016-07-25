@@ -142,14 +142,15 @@ class HierarchyTable{
           if(val){
             this.row.classList.add("reportal-collapsed-row");
             this.row.classList.remove("reportal-uncollapsed-row");
+            self.toggleHiddenRows(this);
             this.row.dispatchEvent(self._collapseEvent);
           } else {
             this.row.classList.add("reportal-uncollapsed-row");
             this.row.classList.remove("reportal-collapsed-row");
+            self.toggleHiddenRows(this);
             this.row.dispatchEvent(self._uncollapseEvent);
           }
         }
-        self.toggleHiddenRows(this);
       },
       get matches(){return _matches},
       set matches(val){

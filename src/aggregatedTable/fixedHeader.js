@@ -11,6 +11,7 @@ class FixedHeader {
     this._visible = false;
     this.source = source;
     this.hasListeners = hasListeners;
+    this.clonedHeader = null;
     this.init();
     this.visible = visible;
   }
@@ -58,6 +59,7 @@ class FixedHeader {
    * Calculates widths for all columns in the fixed header based on the `this.source`
    * */
   resizeFixed(){
+    console.log('resized');
     var initialHeader = this.source.querySelectorAll('thead>tr>*');
     var clonedHeader = this.clonedHeader.querySelectorAll('thead>tr>*');
     [].slice.call(clonedHeader).forEach((el,index) => {

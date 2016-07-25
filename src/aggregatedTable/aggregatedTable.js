@@ -47,7 +47,17 @@ class AggregatedTable{
    * */
   init(){
     // for collapsable hierarchy we want to update cells in the fixed(floating) header.
-    ['collapsed','uncollapsed','tree-view','flat-view'].forEach((eventNameChunk)=>{this.source.addEventListener(`reportal-table-hierarchy-${eventNameChunk}`,()=>{this.fixedHeader.resizeFixed()});})
+    var _target;
+    var resizeDebouncer = this.constructor.debounce(()=>this.fixedHeader.resizeFixed(),100);
+    var scrollDebouncer = this.constructor.debounce(()=>this.scrollToElement(_target),100);
+    ['collapsed','uncollapsed','tree-view','flat-view'].forEach((eventNameChunk)=>{
+      this.source.addEventListener(`reportal-table-hierarchy-${eventNameChunk}`,(e)=>{
+      resizeDebouncer();
+      _target = e.target;
+      scrollDebouncer();
+        //this.constructor.debounce(()=>this.scrollToElement(e.target),100)();
+      });
+    })
   }
 
   /**
@@ -75,6 +85,7 @@ class AggregatedTable{
           !item.classList.contains('active')?item.classList.add('active'):item.classList.remove('active');
         })}
       }
+      this.scrollToElement(e.target);
     });
     buttonContainer.appendChild(button);
     host.appendChild(buttonContainer);
@@ -148,6 +159,24 @@ class AggregatedTable{
     this.hierarchy.search.query = e.target.value;
     var inputs = this.hierarchy.source.parentNode.querySelectorAll(`table>thead>tr>td:nth-child(${this.hierarchy.column+1}) input`);
     if(inputs && inputs.length>1){inputs.forEach(input=>{if(input!=e.target){input.value = e.target.value;return;}})}
+  }
+
+  /**
+   * Scrolls pare so that the element that's been clicked stays ato the top of the table and compensates for scrolling header.
+   * There is a flaw that the collapsed/uncollapsed event is triggered for all searching, so a debouncer is set in place, though it does scroll to the last expanded found element
+   * @param {HTMLElement} el - element that triggered the event
+   * */
+  scrollToElement(el){
+      var floatingHeader = this.fixedHeader.visible?this.fixedHeader.clonedHeader.offsetHeight:0,
+          offset = this.source.parentNode.offsetTop + el.offsetTop - floatingHeader;
+      window.scrollTo(0, offset);
+      window.setTimeout(()=>{ //fix for floating header not visible before the first scroll happens.
+        floatingHeader = this.fixedHeader.visible?this.fixedHeader.clonedHeader.offsetHeight:0;
+        let offset1 = this.source.parentNode.offsetTop + el.offsetTop - floatingHeader;
+          if(offset!=offset1 && Math.abs(offset1-offset)>5){
+            window.scrollTo(0, offset1);
+          }
+      },0);
   }
 
   /**
