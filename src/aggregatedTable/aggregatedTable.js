@@ -95,10 +95,9 @@ class AggregatedTable{
 
     //listener to display search field on search-icon click
     button.addEventListener('click',e=>{
-      console.log(e, e.target);
-      if(!this.hierarchy.search.visible){this.hierarchy.search.visible = true;}
-      e.target.parentNode.querySelector('input').focus();
-    });
+    if(!this.hierarchy.search.visible){this.hierarchy.search.visible = true;}
+    e.target.parentNode.querySelector('input').focus();
+  });
 
     //listener to display search field on search-icon click
     clearButton.addEventListener('click',e=>{
@@ -108,13 +107,13 @@ class AggregatedTable{
     buttonContainer.title = searchfield.placeholder = 'Search categories...';
 
     let efficientSearch = this.search();
-
+    //TODO: add cursor following the header (if a floating header appeared, cursor must focus there)
     searchfield.addEventListener('keyup',e=>{
       this.updateSearchTarget(e); //update search parameters
       efficientSearch();          // call search less frequently
     });
 
-    
+
     searchfield.addEventListener('blur',e=>{
       if(e.target.value.length==0)this.clearSearch(); //update search parameters
   });
