@@ -18,7 +18,22 @@ class FixedHeader {
   get visible(){return this._visible}
   set visible(val){
     this._visible=val;
-    val?this.clonedHeader.style.display='table':this.clonedHeader.style.display='none';
+    if(val){
+      this.clonedHeader.style.display='table'
+      this.source.dispatchEvent(this.constructor.newEvent('reportal-fixed-header-visible'));
+    } else {
+      this.clonedHeader.style.display='none';
+      this.source.dispatchEvent(this.constructor.newEvent('reportal-fixed-header-hidden'));
+    }
+
+  }
+
+  static newEvent(name){
+    //TODO: refactor this code when event library is added
+    var event = document.createEvent('Event');
+    // Define that the event name is `name`.
+    event.initEvent(name, true, true);
+    return event;
   }
 
   /**
@@ -59,7 +74,6 @@ class FixedHeader {
    * Calculates widths for all columns in the fixed header based on the `this.source`
    * */
   resizeFixed(){
-    console.log('resized');
     var initialHeader = this.source.querySelectorAll('thead>tr>*');
     var clonedHeader = this.clonedHeader.querySelectorAll('thead>tr>*');
     [].slice.call(clonedHeader).forEach((el,index) => {
@@ -77,11 +91,11 @@ class FixedHeader {
       tableOffsetTop = this.source.parentNode.offsetTop,
       tableOffsetBottom = tableOffsetTop + this.source.offsetHeight - this.source.querySelector('thead').offsetHeight;
     //console.log(offset,tableOffsetTop, tableOffsetBottom);
-    if(offset < tableOffsetTop || offset > tableOffsetBottom){
+    if((offset < tableOffsetTop || offset > tableOffsetBottom) && this.visible){
       this.visible=false;
     }
     else if(offset >= tableOffsetTop && offset <= tableOffsetBottom){
-      this.visible=true;
+      if(!this.visible){this.visible=true;}
       this.clonedHeader.style.top=offset-tableOffsetTop+'px';
     }
   }

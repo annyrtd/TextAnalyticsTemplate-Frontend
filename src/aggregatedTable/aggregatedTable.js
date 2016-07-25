@@ -35,12 +35,14 @@ class AggregatedTable{
       [].slice.call(buttonHost.children).forEach((item)=>{item.parentNode.removeChild(item)}); //clears hierarchy toggle buttons cloned from original header
       this.addToggleButton(buttonHost,'hierarchy-tree',false,'Tree View');
       this.addToggleButton(buttonHost,'hierarchy-flat',true,'Flat View');
-      if(this.hierarchy.search.enabled){this.addSearchBox(buttonHost);}
+      if(this.hierarchy.search.enabled){
+        this.addSearchBox(buttonHost);
+      }
     }
     this.source=table;
     this.init();
-  }
 
+  }
 
   /**
    * Initializes the app
@@ -49,15 +51,39 @@ class AggregatedTable{
     // for collapsable hierarchy we want to update cells in the fixed(floating) header.
     var _target;
     var resizeDebouncer = this.constructor.debounce(()=>this.fixedHeader.resizeFixed(),100);
-    var scrollDebouncer = this.constructor.debounce(()=>this.scrollToElement(_target),100);
+    var scrollDebouncer = this.constructor.debounce(()=>this.scrollToElement(_target),50);
     ['collapsed','uncollapsed','tree-view','flat-view'].forEach((eventNameChunk)=>{
       this.source.addEventListener(`reportal-table-hierarchy-${eventNameChunk}`,(e)=>{
       resizeDebouncer();
       _target = e.target;
       scrollDebouncer();
-        //this.constructor.debounce(()=>this.scrollToElement(e.target),100)();
       });
-    })
+    });
+    this.focusFollows();
+
+  }
+
+  /**
+   * Allows focus to follow from a search field into floating header and back when header disappears.
+   * */
+  focusFollows(){
+    if(this.fixedHeader){
+      var inputs = [].slice.call(this.source.parentNode.querySelectorAll(`table>thead>tr>td:nth-child(${this.hierarchy.column+1}) input`));
+      ['visible','hidden'].forEach(eventChunk=>{
+        this.source.addEventListener(`reportal-fixed-header-${eventChunk}`,(e)=>{
+          if(this.hierarchy.search.searching && document.activeElement && inputs.indexOf(document.activeElement)!=-1){
+            let current = this.hierarchy.search.target;
+            for(let i=0;i<inputs.length;i++ ){
+              if(inputs[i]!=document.activeElement){
+                inputs[i].focus();
+                this.hierarchy.search.target=inputs[i];
+                break;
+              }
+            }
+          }
+        })
+      });
+    }
   }
 
   /**
@@ -85,7 +111,7 @@ class AggregatedTable{
           !item.classList.contains('active')?item.classList.add('active'):item.classList.remove('active');
         })}
       }
-      this.scrollToElement(e.target);
+      //this.scrollToElement(e.target);
     });
     buttonContainer.appendChild(button);
     host.appendChild(buttonContainer);
@@ -141,6 +167,9 @@ class AggregatedTable{
 
   }
 
+  /**
+   * Nulls search and redoes it, used in toggling between `flat` and `tree` views in hierarchy, necessary because the search is done on different name strings
+   * */
   clearSearch(){
     this.hierarchy.search.target = null;
     this.hierarchy.search.query='';
@@ -162,22 +191,52 @@ class AggregatedTable{
   }
 
   /**
-   * Scrolls pare so that the element that's been clicked stays ato the top of the table and compensates for scrolling header.
+   * Smooth-scrolls page so that the element that's been clicked stays ato the top of the table and compensates for scrolling header.
    * There is a flaw that the collapsed/uncollapsed event is triggered for all searching, so a debouncer is set in place, though it does scroll to the last expanded found element
    * @param {HTMLElement} el - element that triggered the event
    * */
   scrollToElement(el){
-      var floatingHeader = this.fixedHeader.visible?this.fixedHeader.clonedHeader.offsetHeight:0,
+    let visible = window.pageYOffset>this.source.parentNode.offsetTop;
+    var floatingHeader = visible?this.fixedHeader.clonedHeader.offsetHeight:0,
           offset = this.source.parentNode.offsetTop + el.offsetTop - floatingHeader;
-      window.scrollTo(0, offset);
-      window.setTimeout(()=>{ //fix for floating header not visible before the first scroll happens.
-        floatingHeader = this.fixedHeader.visible?this.fixedHeader.clonedHeader.offsetHeight:0;
-        let offset1 = this.source.parentNode.offsetTop + el.offsetTop - floatingHeader;
-          if(offset!=offset1 && Math.abs(offset1-offset)>5){
-            window.scrollTo(0, offset1);
-          }
-      },0);
+          this.scrollTo(offset,200);
+
+      window.setTimeout(()=>{
+      if(visible!=window.pageYOffset>this.source.parentNode.offsetTop){
+          this.scrollTo(this.source.parentNode.offsetTop + el.offsetTop - (window.pageYOffset>this.source.parentNode.offsetTop?this.fixedHeader.clonedHeader.offsetHeight:0),20)
+      }
+    },250);
+
   }
+
+  scrollTo(to, duration) {
+  var start = window.pageYOffset || document.documentElement.scrollTop,
+    change = to - start,
+    currentTime = 0,
+    increment = 20;
+
+  var animateScroll = function(){
+    currentTime += increment;
+    var val = easeInOutQuad(currentTime, start, change, duration);
+    window.scrollTo(0,val);
+    if(currentTime < duration) {
+      setTimeout(animateScroll, increment);
+    }
+  };
+  animateScroll();
+
+  //t = current time
+  //b = start value
+  //c = change in value
+  //d = duration
+    function easeInOutQuad (t, b, c, d) {
+      t /= d/2;
+      if (t < 1) return c/2*t*t + b;
+      t--;
+      return -c/2 * (t*(t-2) - 1) + b;
+    }
+}
+
 
   /**
    * Wrapping function that debounces search, sets `search.searching` [(click for info)]{@link HierarchyTable#setupSearch} and calls `hierarchy.searchRowheaders` [(click for info)]{@link HierarchyTable#searchRowheaders}
