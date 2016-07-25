@@ -1,3 +1,5 @@
+import Highlight from '../lib/Highlight.js';
+
 class HierarchyTable{
   /**
    * Converts flat view rowheaders into a tree-view rowheaders with ability to switch between views.
@@ -35,6 +37,7 @@ class HierarchyTable{
     this.flat = flat;
     this.search = this.setupSearch(search);
     this.init();
+    this.__lastEffectiveParent = null;// we'll store row of parent when doing search for effectiveness of children recursion in `searchRowheaders`
 
   }
 
@@ -58,29 +61,32 @@ class HierarchyTable{
    * @param {Boolean} [searching=false] - this property is mostly for internal use and is set when searching is in progress, which adds a class to the table hiding all rows not matching search
    * @param {String} [query=''] - search string
    * @param {HTMLInputElement} target - the input element that triggered the search.
+   * @param {Boolean} [visible=false] - search box is visible
+   * @param {Boolean} [highlight=true] - search matches will be highlighted
    * */
-  setupSearch({enabled = false, immediate = false, timeout=300, searching=false, query='', target, visible=false}={}){
+  setupSearch({enabled = false, immediate = false, timeout=300, searching=false, query='', target, visible=false,highlight = true}={}){
     var _searching = searching,
       self = this,
       _query = query,
-      _visible=visible;
+      _visible=visible,
+      _highlight = highlight? new Highlight({element:[].slice.call(this.source.querySelectorAll(`tbody>tr>td:nth-child(${this.column+1})`)),type:'open'}):null;
+
     return {
       timeout,
       enabled,
       immediate,
       target,
-
+      highlight:_highlight,
       get query(){return _query},
       set query(val){
         _query = val;
+        if(val.length==0 && this.highlight){this.highlight.remove();} // clear highlighting when query length is 0
       },
 
       get visible(){return _visible},
       set visible(val){
         _visible = val;
-        //console.log(self.source.parentNode, self.source.parentNode.querySelector('.hierarchy-search'),val);
         [].slice.call(self.source.parentNode.querySelectorAll('.hierarchy-search')).forEach(button=>{
-          console.log(button,val);
         val?button.classList.add('visible'):button.classList.remove('visible');});
       },
 
@@ -127,12 +133,10 @@ class HierarchyTable{
       get hidden(){return _hidden},
       set hidden(val){
         _hidden=val;
-        if(!val){console.log('hidden released')}
         val?this.row.classList.add("reportal-hidden-row"):this.row.classList.remove("reportal-hidden-row");
       },
       get collapsed(){return _collapsed},
       set collapsed(val){
-        //console.log('will set collapsed');
         if(typeof val != undefined && this.hasChildren){
           _collapsed=val;
           if(val){
@@ -150,7 +154,6 @@ class HierarchyTable{
       get matches(){return _matches},
       set matches(val){
         _matches=val;
-        console.log(this.name,val);
         if(val){
           this.row.classList.add("matched-search");
         } else {
@@ -171,6 +174,7 @@ class HierarchyTable{
     this._flat=flat;
     flat?this.source.classList.add('reportal-heirarchy-flat-view'):this.source.classList.remove('reportal-heirarchy-flat-view');
     // we want to update labels to match the selected view
+    if(this.search && this.search.searching && this.search.highlight){this.search.highlight.remove();} //clear highlighting
     if(this.data){
       this.data.forEach((row)=> {
         this.updateCategoryLabel(row);
@@ -178,7 +182,6 @@ class HierarchyTable{
     }
     //if the search is in progress, we need to model hierarchical/flat search which is basically redoing the search.
     if(this.search && this.search.searching){
-      console.log('search in progress');
       this.search.searching = false; // clears search
       this.search.searching = true; //reinit search
       this.searchRowheaders(this.search.query); //pass the same query
@@ -299,7 +302,7 @@ class HierarchyTable{
    * Removes a drilldown link from elements that are the lowest level of hierarchy and don't need it
    * @param {HTMLTableRowElement} row - row element in the table
    * */
-  clearLink(row){
+    clearLink(row){
     var link = row.querySelector("a");
     if(link) {
       link.parentElement.textContent = link.textContent;
@@ -352,31 +355,37 @@ class HierarchyTable{
   /**
    * This function runs through the data and looks for a match in `row.meta.flatName` (for flat view) or `row.meta.name` (for tree view) against the `str`.
    * @param {String} str - expression to match against (is contained in `this.search.query`)
+   * //TODO: add higlighting to the matched query in strings
    * */
   searchRowheaders(str){
-    let regexp = new RegExp(str,'i');
+    let regexp = new RegExp('('+str+')','i');
     this.data.forEach((row)=>{
       if(this.flat){
         row.meta.matches = regexp.test(row.meta.flatName);
-        console.log('is flat');
         row.meta.hidden=false;
       } else {
-        // if it has a parent and maybe not matches and the parent has match, then let it and its children be displayed
-        if(row.meta.parent.length>0 && !regexp.test(row.meta.name) && this.data.find(parent=>parent.meta.id==row.meta.parent).meta.matches){
+        let parent; // we want to temporarily store the parent for recursion to be computationally effective and not to perform filtering of `data` on every sneeze
+       if(row.meta.parent.length>0 && this.__lastEffectiveParent!=null && this.__lastEffectiveParent.meta.id == row.meta.parent){
+         parent = this.__lastEffectiveParent;
+       } else {
+         parent = this.__lastEffectiveParent = this.data.find(parent=>parent.meta.id==row.meta.parent);
+       }
+      // if it has a parent and maybe not matches and the parent has match, then let it and its children be displayed
+      if(row.meta.parent.length>0 && !regexp.test(row.meta.name) && parent.meta.matches){
           // just in case it's been covered in previous iteration
           if(!row.meta.matches){row.meta.matches=true}
-          //this.displayChildren(row.meta);
+          row.meta.hidden=parent.meta.collapsed;
 
         } else { // if has no parent or parent not matched let's test it, maybe it can have a match, if so, display his parents and children
           let matches = regexp.test(row.meta.name);
           row.meta.matches = matches;
             if(matches){
               this.uncollapseParents(row.meta);
-              //this.displayChildren(row.meta);
             }
           }
       }
     });
+    this.search.highlight.apply(str);
   }
 
   /*
@@ -396,32 +405,13 @@ class HierarchyTable{
    * @param {Object} meta - `row.meta` object. See {@link HierarchyTable#setupMeta} for details
    * */
   uncollapseParents(meta){
-  if(meta.parent.length>0){ // if `parent` String is not empty - then it's not top level parent.
-    let parent = this.data.find(row => row.meta.id==meta.parent);
-    if(parent.meta.collapsed){parent.meta.collapsed=false};
-    parent.meta.row.classList.add('matched-search');
-    this.uncollapseParents(parent.meta);
+    if(meta.parent.length>0){ // if `parent` String is not empty - then it's not top level parent.
+      let parent = this.data.find(row => row.meta.id==meta.parent);
+      if(parent.meta.collapsed){parent.meta.collapsed=false};
+      parent.meta.row.classList.add('matched-search');
+      this.uncollapseParents(parent.meta);
+    }
   }
-  }
-
-  /**
-   * //commented out because it turned out that recursive loop through children is excessive since the algorythm will still go through array.
-   * Sets `meta.matches=true` on rows whose `parent` matches `id` passed in `meta` object attribute.
-   * This utility function is used in search in tree-view mode, necessary tagging children of a matched row (passed in `meta`) as an indirect match, just in case the user wants to expand the row.
-   * @param {Object} meta - `row.meta` object. See {@link HierarchyTable#setupMeta} for details
-   *
-  displayChildren(meta){
-      if (meta.hasChildren) {
-        console.log('has children', meta);
-        let children = this.data.filter(row => row.meta.parent == meta.id);
-        console.log(children);
-      children.forEach(child => {
-            child.meta.matches = true;
-        console.log('set matches to' + child.meta.name +' child of '+ meta.name, child.meta.matches);
-        this.displayChildren(child.meta); // iterate for children of this element if any
-          });
-      }
-  }*/
 
 }
 
