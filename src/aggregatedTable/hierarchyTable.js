@@ -35,6 +35,7 @@ class HierarchyTable{
     this.flat = flat;
     this.search = this.setupSearch(search);
     this.init();
+    this.__lastEffectiveParent = null;// we'll store row of parent when doing search for effectiveness of children recursion in `searchRowheaders`
 
   }
 
@@ -361,9 +362,14 @@ class HierarchyTable{
         row.meta.matches = regexp.test(row.meta.flatName);
         row.meta.hidden=false;
       } else {
-        // if it has a parent and maybe not matches and the parent has match, then let it and its children be displayed
-        let parent = this.data.find(parent=>parent.meta.id==row.meta.parent);
-        if(row.meta.parent.length>0 && !regexp.test(row.meta.name) && parent.meta.matches){
+        let parent; // we want to temporarily store the parent for recursion to be computationally effective and not to perform filtering of `data` on every sneeze
+       if(row.meta.parent.length>0 && this.__lastEffectiveParent!=null && this.__lastEffectiveParent.meta.id == row.meta.parent){
+         parent = this.__lastEffectiveParent;
+       } else {
+         parent = this.__lastEffectiveParent = this.data.find(parent=>parent.meta.id==row.meta.parent);
+       }
+      // if it has a parent and maybe not matches and the parent has match, then let it and its children be displayed
+      if(row.meta.parent.length>0 && !regexp.test(row.meta.name) && parent.meta.matches){
           // just in case it's been covered in previous iteration
           if(!row.meta.matches){row.meta.matches=true}
           row.meta.hidden=parent.meta.collapsed;
