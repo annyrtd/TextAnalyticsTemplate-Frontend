@@ -4,16 +4,18 @@
 
 import HierarchyTable from './hierarchyTable.js';
 import FixedHeader from './FixedHeader.js';
+import SortTable from './SortTable.js';
 
 class AggregatedTable{
   /**
    * A class that unifies work with Aggregated tables. Enabling a fixed header, search functionality, sorting, hierarchy etc can be done here.
    * @param {HTMLTableElement} table - table on which the action is to be performed
    * @param {Object} hierarchy - config for {@link HierarchyTable}. See {@link HierarchyTable} docs for available object properties. If hierarchy.source is not defined, it will automatically receive value from `table`
-   * @param {Object} fixedHeader - config for {@link FixedHeader}. See {@link FixedHeader} docs for available object properties. If hierarchy.source is not defined, it will automatically receive value from `table`
+   * @param {Object} fixedHeader - config for {@link FixedHeader}. See {@link FixedHeader} docs for available object properties. If fixedHeader.source is not defined, it will automatically receive value from `table`
+   * @param {Object} sorting - config for {@link SortTable}. See {@link SortTable} docs for available object properties. If sorting.source is not defined, it will automatically receive value from `table`. If sorting.data is not explicitly defined, it will automatically receive value from `hierarchy.data`
    * */
-  constructor({table, hierarchy, fixedHeader}={}){
-    this.hierarchy=null;
+  constructor({table, hierarchy, fixedHeader,sorting}={}){
+    this.hierarchy=this.sorting=null;
     if(hierarchy && typeof hierarchy == 'object'){
       // initialize hierarchy column to be parsed and presented as tree
       hierarchy.source = hierarchy.source||table;
@@ -35,10 +37,24 @@ class AggregatedTable{
       [].slice.call(buttonHost.children).forEach((item)=>{item.parentNode.removeChild(item)}); //clears hierarchy toggle buttons cloned from original header
       this.addToggleButton(buttonHost,'hierarchy-tree',false,'Tree View');
       this.addToggleButton(buttonHost,'hierarchy-flat',true,'Flat View');
+
       if(this.hierarchy.search.enabled){
         this.addSearchBox(buttonHost);
       }
     }
+    if(sorting){
+      this.sorting = new SortTable({
+        enabled:sorting.enabled,
+        defaultHeaderRow:sorting.defaultHeaderRow,
+        columns: sorting.columns,
+        excludedColumns:sorting.excludedColumns,
+        defaultSorting:sorting.defaultSorting,
+        source:table,
+        data:this.data
+      });
+      this.data = this.sorting.data; // we want to update this.data according to the initially sorted data.
+    }
+    console.log(this.sorting);
     this.source=table;
     this.init();
 
@@ -60,7 +76,6 @@ class AggregatedTable{
       });
     });
     this.focusFollows();
-
   }
 
   /**

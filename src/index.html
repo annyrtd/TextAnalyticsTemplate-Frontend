@@ -1499,7 +1499,8 @@
   var upgradedTable = new Reportal.AggregatedTable({
     table:document.querySelector('table.reportal-hierarchy-table'),
     hierarchy: {hierarchy:hierarchy,rowheaders:rowheaders,search:{enabled:true}},
-    fixedHeader: {hasListeners:true}
+    fixedHeader: {hasListeners:true},
+    sorting: {enabled:true,defaultSorting:[{column:0,direction:'asc'}]}
   });
 </script>
 </body>
