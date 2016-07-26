@@ -178,7 +178,26 @@
             top:-1px;
          }
 
-}
+      }
+    }
+  &>thead td.sortable{
+      cursor:pointer;
+      &.sorted.asc:after{
+        content: var(--icon-arrow-up);
+        padding-left:8px;
+      }
+      &.sorted.desc:after{
+        content: var(--icon-arrow-up);
+        transform:rotate(180deg);
+        padding-right:8px;
+      }
+      &:after{
+        display:inline-block;
+        bottom: -3px;
+        position: relative;
+        color:#424242;
+
+    }
     }
 }
 
@@ -271,3 +290,4 @@
   display:none;
   &.matched-search:not(.reportal-hidden-row){display:table-row}
 }
+

@@ -50,11 +50,11 @@ class AggregatedTable{
         excludedColumns:sorting.excludedColumns,
         defaultSorting:sorting.defaultSorting,
         source:table,
-        data:this.data
+        data:this.data,
+        auxHeader: this.fixedHeader.clonedHeader // fixed header //TODO: add resize event when sorting happens, can be done after row reordering
       });
       this.data = this.sorting.data; // we want to update this.data according to the initially sorted data.
     }
-    console.log(this.sorting);
     this.source=table;
     this.init();
 

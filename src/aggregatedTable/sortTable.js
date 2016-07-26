@@ -7,23 +7,24 @@ class SortTable{
    * Makes a table sortable, gives API for sorting. It sorts `data` array, but doesn't move rows in the `source` table, because of differences in implementation
    * @param {Boolean} enabled=false - enables sorting on a header of a table
    * @param {HTMLTableElement} source - source table sorting will be applied to
+   * @param {HTMLTableElement} [auxHeader] - the floating header if any, will reflect and trigger sorting on header when scrolled.
    * @param {Number} [defaultHeaderRow=-1] - index of the row in `thead` (incremented from 0) that will have sorting enabled for columns. If `-1` then last row.
    * @param {Array} [columns] - Array of column indices (incremented from 0) that will have sorting enabled. If not specified, all columns will be sortable. Optionally `excludedColumns` can be specified instead as a shorthand to pass only indices of columns to be excluded from sorting, assumning that others will be made sortable
    * @param {Array} [excludedColumns] - Array of column indices (incremented from 0) that will be excluded from sorting. Can be used as a shorthand instead of `columns`.
-   * @param {Object} defaultSorting - an array of objects that specify default sorting
+   * @param {Object} [defaultSorting] - an array of objects that specify default sorting
    * @param {Number} defaultSorting.column - column index
    * @param {String} defaultSorting.direction - sort direction (`asc`|`desc`)
    * @param {Array} data - data with information for rows to be sorted
    * */
-  constructor({enabled=false,source,defaultHeaderRow=-1,columns,excludedColumns,defaultSorting=[],data=[]}={}){
+  constructor({enabled=false,source,auxHeader,defaultHeaderRow=-1,columns,excludedColumns,defaultSorting=[],data=[]}={}){
     this.enabled=enabled;
     this.source=source;
     this.data = data;
-    //this.sortOrder = [];
     // calculate default header row
     let headerRows = source.querySelector('thead').children,
+        auxHeaderRows = auxHeader?auxHeader.querySelector('thead').children:null,
         headerRowIndex = defaultHeaderRow==-1?headerRows.length+defaultHeaderRow:defaultHeaderRow;
-    this.defaultHeaderRow={index:headerRowIndex, row:headerRows.item(headerRowIndex)};
+    this.defaultHeaderRow={index:headerRowIndex, row:headerRows.item(headerRowIndex), auxRow:auxHeaderRows?auxHeaderRows.item(headerRowIndex):null};
 
     this.sortOrder = [];//necessary for proper initialization of `columns`
     this.columns=this.setupColumns(columns, excludedColumns);
@@ -66,8 +67,8 @@ class SortTable{
      * @param {String} obj.direction - sort direction (`asc`|`desc`)
      * */
     sortOrder.add = function(obj){
-      console.log(self.columns,obj,self.columns[obj.column]);
       self.columns[obj.column].cell.classList.add('sorted',obj.direction);
+      if(self.columns[obj.column].auxCell)self.columns[obj.column].auxCell.classList.add('sorted',obj.direction);
       sortOrder.push(obj);
     };
 
@@ -78,6 +79,7 @@ class SortTable{
      * */
     sortOrder.remove = function(index,column){
       self.columns[column].cell.classList.remove('sorted','asc','desc');
+      if(self.columns[column].auxCell)self.columns[column].auxCell.classList.remove('sorted','asc','desc');
       this.splice(index,1);
     };
 
@@ -89,7 +91,7 @@ class SortTable{
   }
 
   /**
-   * Creates an array of objects corresponding to the cells of `defaultHeaderRow`, that contain `sortable` property, denoting the column is sortable, `index` of the column and reference to the `cell`
+   * Creates an array of objects corresponding to the cells of `defaultHeaderRow`, that contain `sortable` property, denoting the column is sortable, `index` of the column and reference to the `cell`. Adds `.sortable` to a sortable cell
    * @return {{sortable:Boolean, index:Number, cell: HTMLTableCellElement}} - an array of objects that have this structure
    * */
   setupColumns(columns,excluded){
@@ -99,6 +101,13 @@ class SortTable{
     if(headerRows.length>1 && headerRows.item(0).children.item(0).rowSpan>1){ // if there is more than one row in header and if the first header has a cell with rowspan, add it to the array
       headerColumns.unshift(headerRows.item(0));
     }
+    if(this.defaultHeaderRow.auxRow){
+      var auxHeaderRows = this.defaultHeaderRow.auxRow.parentNode.children;
+      var auxHeaderColumns = [].slice.call(this.defaultHeaderRow.auxRow.children);
+      if(headerRows.length>1 && headerRows.item(0).children.item(0).rowSpan>1){
+        auxHeaderColumns.unshift(auxHeaderRows.item(0));
+      }
+    }
     return headerColumns.map((cell,index)=>{
         let sortable = (!(columns && columns.indexOf(td.cellIndex)==-1) || (excluded && excluded.indexOf(index)==-1)); // is in columns and not in excluded,
         if(sortable){
@@ -106,6 +115,14 @@ class SortTable{
             if(el.target.localName =='td'||el.target.localName =='th'){this.updateSorting(el.target);} //we want to capture click on the cell and not buttons in it
           });
           cell.classList.add('sortable');
+          if(auxHeaderColumns){
+            var auxCell = auxHeaderColumns[index];
+            auxCell.addEventListener('click',(el)=>{
+              if(el.target.localName =='td'||el.target.localName =='th'){this.updateSorting(el.target);} //we want to capture click on the cell and not buttons in it
+            });
+            auxCell.classList.add('sortable');
+          }
+
         }
         let _sorted = null,
           self = this;
@@ -116,12 +133,15 @@ class SortTable{
            _sorted = val;
            if(val){
              this.cell.classList.add('sorted');
+             this.auxCell?this.auxCell.classList.add('sorted'):null;
            } else {
              this.cell.classList.remove('sorted','asc','desc');
+             this.auxCell?this.auxCell.classList.remove('sorted','asc','desc'):null;
            }
          },
          index,
-         cell: cell
+         cell: cell,
+         auxCell: auxCell
        }
     });
   }

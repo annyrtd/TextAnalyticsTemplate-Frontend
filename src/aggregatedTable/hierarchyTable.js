@@ -46,6 +46,8 @@ class HierarchyTable{
   init(){
     this.data = this.data || this.parseHierarchy();
     let tbody = this.source.querySelector("tbody");
+    this.source.querySelector(`thead>tr>td:nth-child(${this.column+1})`).classList.add('reportal-hierarchical-header');
+
     if(tbody.firstChild && tbody.firstChild.nodeType==3){
       tbody.removeChild(tbody.firstChild)
     }
