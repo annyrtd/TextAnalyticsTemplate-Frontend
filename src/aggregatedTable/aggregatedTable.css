@@ -1,6 +1,7 @@
 .reportal-table{
   width:100%;
   font-size:14px;
+  border-collapse:collapse;
 
   &>thead>tr>td,
   &>thead>tr>th{
@@ -12,6 +13,8 @@
       vertical-align:bottom;
       text-align:left;
       font-weight:normal;
+     /* white-space:nowrap;*/
+
       &:first-child{border-left:0}
   }
 
@@ -30,7 +33,7 @@
      position:relative;
      left:-59px;
      width:200px;
-    border-left:0;
+     border-left:0;
   }
   &.reportal-barchart>thead>tr:last-child>td:nth-last-child(2),
   &.reportal-barchart>thead>tr:last-child>th:nth-last-child(2) {
@@ -44,12 +47,13 @@
    }
 
   &>tbody>tr>td {
-       padding: 2px 8px;
-       min-height:24px;
-       line-height:16px;
-        vertical-align:middle;
-       height:32px;
-       border-bottom: 1px solid #f0f2f5;
+      padding: 2px 8px;
+      min-height:24px;
+      line-height:16px;
+      vertical-align:middle;
+      height:32px;
+      border-bottom: 1px solid #f0f2f5;
+      white-space:nowrap;
 
       &:first-child{
         white-space:nowrap;
@@ -68,9 +72,10 @@
       }
     }
   }
+  &.reportal-categories>thead>tr>td[class*="_cc"]{position:relative;}
   &.reportal-categories>thead>tr>td[class*="_cc"]:before{
       /*cpecific class to set header for the first column*/
-      content:"Categories"
+      content:"Categories";
   }
    &>tbody>tr>td.cf_positive,
    &>tbody>tr>td.cf_negative,
@@ -100,13 +105,95 @@
   &>tbody>tr>td.cf_negative:after {
     background: var(--negative-color,#fd9900);
   }
+  & .btn.hierarchy-tree,
+  & .btn.hierarchy-flat,
+  & .btn.hierarchy-search{
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      height: 28px;
+      width: auto;
+      border: 0;
+      background-color: transparent;
+      -webkit-appearance: none;
+      padding: 0;
+      line-height: initial;
+      display: block;
+      margin: 0 4px;
+      vertical-align: middle;
+    }
+  & .btn.hierarchy-tree{right:34px;}
+  & .btn.hierarchy-search{
+      width:26px;
+      right:64px;
+      height:26px;
+      margin: 1px 4px;
+      border-radius:0;
+      left:auto;
+      transition:  width,background-color,left,transform,opacity .25s ease-in-out;
+
+
+      &>input{
+        display:none;
+        background-color: transparent;
+        margin-left:-24px;
+        border: 0;
+        height: 20px;
+        font-size: 12px;
+        padding-left: 24px;
+        width: 1%;
+        vertical-align:top;
+        outline: 0;
+      }
+      &>.clear-button{
+         display:none;
+         vertical-align: top;
+         margin: 0;
+         width:24px;
+         height:24px;
+      }
+      &.visible{
+         width:auto;
+         background-color:#f0f2f5;
+         left:0;
+         padding: 2px 0;
+         border-bottom: 1px solid #ccc;
+
+         & >input{
+           display:inline-block;
+           width: calc(100% - 24px);
+         }
+         & > .icon-search{
+           pointer-events:none;
+           opacity: 1;
+
+         }
+         & > .clear-button{
+           pointer-events:all;
+           display: inline-block;
+           transform:rotate(-135deg);
+           cursor:pointer;
+         }
+         &>.icon-search, &>.clear-button{
+            top:-1px;
+         }
+
 }
+    }
+}
+
+/* fixed header table*/
 .reportal-table.fixed{
-  position:fixed;
+  position:absolute;
   top:0;
   width:auto;
   display:none;
   border:none;
+}
+.aggregatedTableContainer{
+  position: relative;
+  width:100%;
+  overflow-x: auto;
 }
 
 /*Hierarchycal styles*/
@@ -114,49 +201,73 @@
   font-weight: bold;
 }
 
-.reportal-hierarchy-table tr.level1>td:first-child {
-  padding-left: 25px;
+.reportal-hierarchy-table>thead>tr:first-child>td:first-child{
+  padding-right:100px;
 }
 
-.reportal-hierarchy-table tr.level2>td:first-child {
-  padding-left: 50px;
+.reportal-hierarchy-table>tbody>tr>td.reportal-hierarchical-cell {padding-left:0}
+
+.reportal-hierarchy-table tr.level1>td.reportal-hierarchical-cell {
+  padding-left: 20px;
+}
+
+.reportal-hierarchy-table tr.level2>td.reportal-hierarchical-cell {
+  padding-left: 40px;
 }
 
 .reportal-collapse-button {
-  width: 15px;
-  height: 15px;
-  display: inline-table;
+  width: 24px;
+  height: 24px;
+  display: inline-block;
+  position: relative;
+  vertical-align: middle;
+}
+.reportal-collapsed-row .reportal-collapse-button:before,
+.reportal-uncollapsed-row .reportal-collapse-button:before{
+  content:'';
+  position: absolute;
+  border-color: #737B8E transparent transparent;
+  border-style: solid;
+  border-width: 5px 5px 0;
+  display: block;
+  height: 0;
+  width: 0;
+  left:30%;
+  top:33%;
+  transition: .25s transform ease-in-out;
 }
 
 .reportal-collapsed-row .reportal-collapse-button, .reportal-uncollapsed-row .reportal-collapse-button{
   cursor: pointer;
 }
 
-
-.reportal-collapsed-row .reportal-collapse-button>div{
-  width: 0;
-  height: 0;
-  border-top: 5px solid transparent;
-  border-bottom: 5px solid transparent;
-  border-left: 5px solid var(--neutral-color, #cdd1d9);
+.reportal-collapsed-row .reportal-collapse-button:before{
+  transform:rotate(-90deg);
 }
 
-.reportal-uncollapsed-row .reportal-collapse-button>div {
-  width: 0;
-  height: 0;
-  border-left: 5px solid transparent;
-  border-right: 5px solid transparent;
-  border-top: 5px solid var(--neutral-color, #cdd1d9);
-}
-
-.reportal-no-children .reportal-collapse-button>div {
-  width: 8px;
-  height: 8px;
+.reportal-no-children .reportal-collapse-button:before {
+  content:'';
+  width: 6px;
+  height: 6px;
   border: 1px solid var(--neutral-color, #cdd1d9);
   border-radius: 50%;
+  position:absolute;
+  top:33%;
+  left:30%;
 }
 
 .reportal-hidden-row{
   display: none;
 }
 
+.reportal-heirarchy-flat-view>tbody>tr{
+  display:table-row;
+  &>td.reportal-hierarchical-cell{
+    padding-left:8px !important;
+    &>.reportal-collapse-button{display:none}
+  }
+}
+.reportal-hierarchy-searching>tbody>tr{
+  display:none;
+  &.matched-search:not(.reportal-hidden-row){display:table-row}
+}

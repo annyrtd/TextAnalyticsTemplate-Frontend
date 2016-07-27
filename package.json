@@ -1,6 +1,6 @@
 {
   "name": "text-analytics-template",
-  "version": "0.0.7",
+  "version": "0.0.11",
   "description": "Text analytics template boilerplate",
   "main": "index.js",
   "scripts": {

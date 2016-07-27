@@ -4,12 +4,36 @@
 class FixedHeader {
   /**
    * @param {HTMLTableElement} source - source table that needs a cloned header
-   * @param {Boolean} hasListeners - if header cells have events on them
+   * @param {Boolean} [hasListeners=false] - if header cells have events on them //TODO: add hasListeners functionality
+   * @param {Boolean} [visible=false] - if the header is visible on init
    * */
-  constructor(source,hasListeners){
+  constructor({source,hasListeners=false, visible=false}={}){
+    this._visible = false;
     this.source = source;
     this.hasListeners = hasListeners;
+    this.clonedHeader = null;
     this.init();
+    this.visible = visible;
+  }
+  get visible(){return this._visible}
+  set visible(val){
+    this._visible=val;
+    if(val){
+      this.clonedHeader.style.display='table'
+      this.source.dispatchEvent(this.constructor.newEvent('reportal-fixed-header-visible'));
+    } else {
+      this.clonedHeader.style.display='none';
+      this.source.dispatchEvent(this.constructor.newEvent('reportal-fixed-header-hidden'));
+    }
+
+  }
+
+  static newEvent(name){
+    //TODO: refactor this code when event library is added
+    var event = document.createEvent('Event');
+    // Define that the event name is `name`.
+    event.initEvent(name, true, true);
+    return event;
   }
 
   /**
@@ -55,18 +79,25 @@ class FixedHeader {
     [].slice.call(clonedHeader).forEach((el,index) => {
       el.style.width=initialHeader[index].offsetWidth+'px';
     });
+    this.clonedHeader.style.width = this.source.offsetWidth+'px';
   }
+
 
   /**
    * Displays a fixed header when the table header is scrolled off the screen
    * */
   scrollFixed() {
-    var offset = window.scrollY,
-      tableOffsetTop = this.source.offsetTop,
+    var offset = window.pageYOffset,
+      tableOffsetTop = this.source.parentNode.offsetTop,
       tableOffsetBottom = tableOffsetTop + this.source.offsetHeight - this.source.querySelector('thead').offsetHeight;
-    if(offset < tableOffsetTop || offset > tableOffsetBottom){this.clonedHeader.style.display='none';}
-    else if(offset >= tableOffsetTop && offset <= tableOffsetBottom && this.clonedHeader.style.display == 'none'){this.clonedHeader.style.display='table';}
-
+    //console.log(offset,tableOffsetTop, tableOffsetBottom);
+    if((offset < tableOffsetTop || offset > tableOffsetBottom) && this.visible){
+      this.visible=false;
+    }
+    else if(offset >= tableOffsetTop && offset <= tableOffsetBottom){
+      if(!this.visible){this.visible=true;}
+      this.clonedHeader.style.top=offset-tableOffsetTop+'px';
+    }
   }
 
   /**
@@ -74,19 +105,18 @@ class FixedHeader {
    * */
   resizeThrottler() {
     // ignore resize events as long as an actualResizeHandler execution is in the queue
-      var resizeTimeout = setTimeout(()=>{
+    var resizeTimeout = setTimeout(()=>{
         resizeTimeout = null;
         this.resizeFixed();
         // The resizeFixed will execute at a rate of 15fps
       }, 66);
-
   }
 }
 
 // init this feature for all tables
-[].slice.call(document.querySelectorAll('table.reportal-fixed-header')).forEach((table)=>{
-  var table= new FixedHeader(table);
-});
+/*[].slice.call(document.querySelectorAll('table.reportal-fixed-header')).forEach((table)=>{
+  var table= new FixedHeader({source:table});
+});*/
 
 export default FixedHeader;
 

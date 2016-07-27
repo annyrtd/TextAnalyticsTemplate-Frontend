@@ -20,6 +20,17 @@ body, body.reportal-viewmode {
   font-weight: 500;
 }
 
+/** PageArea Title styles. Page Title must have a `.page-title` class configured in its properties */
+.pagearea-title {
+  padding: 0;
+  margin: 0 auto;
+  background-color: #fff;
+  display: block;
+  line-height: 30px;
+  font-size: 22px;
+  font-weight: 500;
+}
+
 .report-filters-horizontal{
   padding:10px 20px;
   background-color: #f0f2f5;
@@ -27,12 +38,13 @@ body, body.reportal-viewmode {
   & > * {display:inline-block}
 }
 
-/* styles for buttons and elements with class `.btn` */
 [class^=icon-] {
   fill: #3f3f3f;
   opacity:0.4;
+  width:24px;
+  height:24px;
+  margin-right:8px;
 }
-
 [class*=" icon-"], [class^=icon-] {
   display: inline-block;
   line-height: 1;
@@ -42,6 +54,8 @@ body, body.reportal-viewmode {
   top: 1px;
   transition: inherit;
 }
+
+/* styles for buttons and elements with class `.btn` */
 .btn, button {
   -webkit-appearance: button;
   display: inline-block;
@@ -62,31 +76,61 @@ body, body.reportal-viewmode {
   font-weight: 400;
 
   &.active, &:active{
-    box-shadow: none
+    box-shadow: none;
+    &>[class^=icon-]{opacity:1;}
   }
   &:hover>[class^=icon-]{opacity:1;}
 }
 
 .icon-export{
-  width:24px;
-  height:24px;
-  margin-right:8px;
   vertical-align:bottom;
   background:var(--icon-export);
+}
+.icon-hierarchy-tree,.icon-hierarchy-flat,.icon-search{
+  margin:0;
+  cursor:pointer;
+  pointer-events: all;
+}
+.icon-hierarchy-tree{
+  background:var(--icon-hierarchy-tree);
+}
+.icon-hierarchy-flat{
+  background:var(--icon-hierarchy-flat);
 }
 .icon-filter{
   width:20px;
   height:15px;
-  margin-right:8px;
   vertical-align:bottom;
   background:var(--icon-filter);
 }
 .icon-add{
   width:20px;
   height:20px;
-  margin-right:8px;
   vertical-align:bottom;
   background:var(--icon-add);
+}
+.icon-search{
+  background:var(--icon-search);
+}
+.icon-comment,
+.icon-face-positive,
+.icon-face-neutral,
+.icon-face-negative{
+  width:48px;
+  height:48px;
+  margin-right:8px;
+}
+.icon-comment{
+  background:var(--icon-comment);
+}
+.icon-face-positive{
+  background:var(--icon-face-positive);
+}
+.icon-face-neutral{
+  background:var(--icon-face-neutral);
+}
+.icon-face-negative{
+  background:var(--icon-face-negative);
 }
 
 /* styles for filter-bar which includes a filter button and filter summary + clear button */
@@ -115,8 +159,6 @@ body, body.reportal-viewmode {
       fill:#FFF;
     }
   }
-
-
     & .SelectorHeading,
     & .well-filter-summary{
       height: 30px;
@@ -138,4 +180,36 @@ body, body.reportal-viewmode {
     }
 }
 
+/* Legend styles */
+.legend {
+  position: absolute;
+  bottom: 14px;
+
+  & .cf_positive,
+  & .cf_negative,
+  & .cf_neutral{
+    margin-right: 20px;
+
+    &:before{
+      content: "";
+      display: inline-block;
+      margin-right: 5px;
+      width: 11px;
+      height: 11px;
+    }
+  }
+  & .cf_positive:before {
+    background: var(--positive-color,#7cc700);
+    border-radius: 50%;
+  }
+  & .cf_neutral:before {
+    background: var(--neutral-color,#cdd1d9);
+    transform: rotateZ(45deg);
+    width: 10px;
+    height: 10px;
+  }
+  & .cf_negative:before {
+    background: var(--negative-color,#fd9900);
+  }
+}
 
