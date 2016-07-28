@@ -271,13 +271,7 @@ class HierarchyTable{
       currentRowArray.meta.hidden=true;
       this.clearLink(row);
     }
-    if(item.children.length>0){
-      currentRowArray.meta.collapsed=true;
-      //currentRowArray.meta.hasChildren=true;
-    } else {
-      //currentRowArray.meta.hasChildren=false;
-      //currentRowArray.meta.collapsed=false;
-    }
+    if(item.children.length>0){currentRowArray.meta.collapsed=true;}
 
       // adds a toggle button
       this.addCollapseButton(currentRowArray.meta);

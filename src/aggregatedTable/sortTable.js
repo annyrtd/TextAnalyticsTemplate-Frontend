@@ -17,6 +17,10 @@ class SortTable{
    * @param {Array} data - data with information for rows to be sorted
    * */
   constructor({enabled=false,source,auxHeader,defaultHeaderRow=-1,columns,excludedColumns,defaultSorting=[],data=[]}={}){
+    let event = document.createEvent('Event');
+    event.initEvent('reportal-table-sort', true, true);
+    this._sortEvent = event;
+
     this.enabled=enabled;
     this.source=source;
     this.data = data;
@@ -31,6 +35,7 @@ class SortTable{
 
     // setup sort order and do initial default sorting
     this.sortOrder = this.setupSortOrder(defaultSorting);
+
     this.sort(); //initial sorting
   }
 
@@ -148,17 +153,18 @@ class SortTable{
 
   /**
    * Performs sorting. Can sort two columns if `sortOrder` has two items, the first of which has priority.
-   * @return {Array} - Sorted array
+   * @return {Event} - `reportal-table-sort` event
    * */
   sort(){
     if(this.sortOrder && this.sortOrder.length>0){
-      return this.data.sort((a, b)=>{ // sort rows
+      this.data.sort((a, b)=>{ // sort rows
         if(this.sortOrder.length>1){
           return this.constructor.sorter(a[this.sortOrder[0].column],b[this.sortOrder[0].column], this.sortOrder[0].direction === 'desc' ? -1 : 1) || this.constructor.sorter(a[this.sortOrder[1].column],b[this.sortOrder[1].column], this.sortOrder[1].direction === 'desc' ? -1 : 1)
         } else {
           return this.constructor.sorter(a[this.sortOrder[0].column],b[this.sortOrder[0].column], this.sortOrder[0].direction === 'desc' ? -1 : 1);
         }
       });
+      this.columns[this.sortOrder[0].column].cell.dispatchEvent(this._sortEvent);
     }
   }
 

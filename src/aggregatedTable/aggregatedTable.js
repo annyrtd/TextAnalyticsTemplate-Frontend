@@ -16,6 +16,7 @@ class AggregatedTable{
    * */
   constructor({table, hierarchy, fixedHeader,sorting}={}){
     this.hierarchy=this.sorting=null;
+    this.source=table;
     if(hierarchy && typeof hierarchy == 'object'){
       // initialize hierarchy column to be parsed and presented as tree
       hierarchy.source = hierarchy.source||table;
@@ -43,6 +44,7 @@ class AggregatedTable{
       }
     }
     if(sorting){
+      this.source.addEventListener('reportal-table-sort',()=>{this.onSort(this.data)});
       this.sorting = new SortTable({
         enabled:sorting.enabled,
         defaultHeaderRow:sorting.defaultHeaderRow,
@@ -53,9 +55,7 @@ class AggregatedTable{
         data:this.data,
         auxHeader: this.fixedHeader.clonedHeader // fixed header //TODO: add resize event when sorting happens, can be done after row reordering
       });
-      this.data = this.sorting.data; // we want to update this.data according to the initially sorted data.
     }
-    this.source=table;
     this.init();
 
   }
@@ -98,6 +98,14 @@ class AggregatedTable{
           }
         })
       });
+    }
+  }
+
+  onSort(data,level){
+    if(!this.flat){
+      level = level || 0;
+        let filtered = data.filter((row)=>{return row.meta.level == level});
+        //this.source.
     }
   }
 
