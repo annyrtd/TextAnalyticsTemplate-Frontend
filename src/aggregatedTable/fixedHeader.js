@@ -19,7 +19,7 @@ class FixedHeader {
   set visible(val){
     this._visible=val;
     if(val){
-      this.clonedHeader.style.display='table'
+      this.clonedHeader.style.display='table';
       this.source.dispatchEvent(this.constructor.newEvent('reportal-fixed-header-visible'));
     } else {
       this.clonedHeader.style.display='none';
@@ -74,7 +74,7 @@ class FixedHeader {
    * Calculates widths for all columns in the fixed header based on the `this.source`
    * */
   resizeFixed(){
-    var initialHeader = this.source.querySelectorAll('thead>tr>*');
+    var initialHeader = this.source.parentNode.querySelectorAll(`table#${this.source.id}>thead>tr>*`);
     var clonedHeader = this.clonedHeader.querySelectorAll('thead>tr>*');
     [].slice.call(clonedHeader).forEach((el,index) => {
       el.style.width=initialHeader[index].offsetWidth+'px';
