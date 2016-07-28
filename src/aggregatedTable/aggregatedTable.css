@@ -219,6 +219,10 @@
 .reportal-hierarchy-table tr.level0 {
   font-weight: bold;
 }
+.reportal-hierarchy-table>tbody>tr>td:first-child:not(.reportal-hierarchical-cell) {
+  width: 50px;
+  white-space: normal;
+}
 
 .reportal-hierarchy-table>thead>tr:first-child>td:first-child{
   padding-right:100px;
@@ -275,19 +279,19 @@
   left:30%;
 }
 
-.reportal-hidden-row{
+.reportal-hidden-row>td{
   display: none;
 }
 
-.reportal-heirarchy-flat-view>tbody>tr{
-  display:table-row;
+.reportal-heirarchy-flat-view>tbody>tr>td{
+  display:table-cell;
   &>td.reportal-hierarchical-cell{
     padding-left:8px !important;
     &>.reportal-collapse-button{display:none}
   }
 }
-.reportal-hierarchy-searching>tbody>tr{
+.reportal-hierarchy-searching>tbody>tr>td{
   display:none;
-  &.matched-search:not(.reportal-hidden-row){display:table-row}
+  &.matched-search:not(.reportal-hidden-row)>td{display:table-cell}
 }
 

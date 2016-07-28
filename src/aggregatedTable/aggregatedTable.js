@@ -23,14 +23,15 @@ class AggregatedTable{
       this.hierarchy = new HierarchyTable(hierarchy);
       this.data = this.hierarchy.data;
       //initialize buttons that will toggle between flat and tree view
-      let buttonHost = this.hierarchy.source.querySelector(`thead>tr>td:nth-child(${this.hierarchy.column+1})`);
+      let buttonHost = this.hierarchy.source.querySelector(`thead>tr>td:nth-child(${this.hierarchy.blocks.length>0?this.hierarchy.column:this.hierarchy.column+1})`);
       this.addToggleButton(buttonHost,'hierarchy-tree',false,'Tree View');
       this.addToggleButton(buttonHost,'hierarchy-flat',true,'Flat View');
       if(this.hierarchy.search.enabled){
         this.addSearchBox(buttonHost);
       }
     }
-    if(fixedHeader && typeof fixedHeader == 'object'){
+
+    /*if(fixedHeader && typeof fixedHeader == 'object'){
       fixedHeader.source = fixedHeader.source||table;
       this.fixedHeader = new FixedHeader(fixedHeader);
       //initialize buttons that will toggle between flat and tree view in the original table
@@ -57,7 +58,7 @@ class AggregatedTable{
       });
     }
     this.init();
-
+*/
   }
 
   /**

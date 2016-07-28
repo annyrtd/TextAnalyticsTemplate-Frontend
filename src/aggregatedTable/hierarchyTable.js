@@ -11,7 +11,7 @@ class HierarchyTable{
    * @param {HTMLTableElement} source - source table that needs a cloned header
    * @param {Array} hierarchy - array of hierarchy objects from Reportal
    * @param {Object} rowheaders - JSON object which contains all table rowheaders with category id and index of table row
-   * @param {Number} [hierColumn=0] - index of column in the table that contains hierarchy (increments from `0`)
+   * @param {Number} [column=0] - index of column in the table that contains hierarchy (increments from `0`)
    * @param {Boolean} [flat=false] - Should hierarchy be rendered flatly(`true`), or in a tree-fashion (`false`).
    *
    * @param {Object} search - config for searching functionality. See {@link HierarchyTable#setupSearch}
@@ -22,18 +22,21 @@ class HierarchyTable{
    * @param {String} [search.query=''] - search string
    * @param {HTMLInputElement} search.target - the input element that triggered the search.
    *
-   * @param {Array} [data=null] - array with data if it's passed from outside, rather than acquired from the `source` (HTML table)
+   * @param {Array} [data=[]] - array with data if it's passed from outside, rather than acquired from the `source` (HTML table)
+   * @param {Array} [blocks=[]] - array with block ids that split hierarchies
    * */
-  constructor({source,hierarchy,rowheaders,hierColumn = 0,flat = false,search={},data=null} = {}){
+  constructor({source,hierarchy,rowheaders,column = 0,flat = false,search={},data=[],blocks=[]} = {}){
     this.source = source;
     this.hierarchy = hierarchy;
     this.rowheaders = rowheaders;
-    this.data=data;
-    this.column = hierColumn;
+    this.column = column;
+    this.blocks = blocks;
+    this._rows = source.parentNode.querySelectorAll(`table#${source.id}>tbody>tr`);
     this._collapseEvent = this.constructor.newEvent('reportal-table-hierarchy-collapsed');
     this._uncollapseEvent = this.constructor.newEvent('reportal-table-hierarchy-uncollapsed');
     this._flatEvent = this.constructor.newEvent('reportal-table-hierarchy-flat-view');
     this._treeEvent = this.constructor.newEvent('reportal-table-hierarchy-tree-view');
+    this.data = this.setUpBlocks(data,blocks);
     this.flat = flat;
     this.search = this.setupSearch(search);
     this.init();
@@ -44,14 +47,12 @@ class HierarchyTable{
    * Initializes the hierarchical structure for a table by creating new set of table rows with correct order and additional information in attributes
    * */
   init(){
-    this.data = this.data || this.parseHierarchy();
     let tbody = this.source.querySelector("tbody");
-    this.source.querySelector(`thead>tr>td:nth-child(${this.column+1})`).classList.add('reportal-hierarchical-header');
+    this.source.querySelector(`thead>tr>td:nth-child(${this.blocks.length>0?this.column:this.column+1})`).classList.add('reportal-hierarchical-header');
 
     if(tbody.firstChild && tbody.firstChild.nodeType==3){
       tbody.removeChild(tbody.firstChild)
     }
-    this.data.forEach((item)=>{tbody.appendChild(item.meta.row);});
   }
 
   /**
@@ -115,13 +116,16 @@ class HierarchyTable{
    * @param {Boolean} [matches=false] - flag set to those rows which match `search.query`
    * @param {Boolean} [hasChildren=false] - flag set to rows which contain children
    * */
-  setupMeta({row,id,flatName,name,parent,level,hidden=true,collapsed,matches=false,hasChildren=false}={}){
+  setupMeta({row,nameCell,id,flatName,name,block,firstInBlock,parent,level,hidden=true,collapsed,matches=false,hasChildren=false}={}){
     let _hidden = hidden, _collapsed = collapsed, _hasChildren=hasChildren, _matches = matches, self=this;
     return {
       row,
       id,
+      nameCell,
       flatName,
       name,
+      block,
+      firstInBlock,
       parent,
       level,
       get hasChildren(){return _hasChildren},
@@ -179,8 +183,8 @@ class HierarchyTable{
     // we want to update labels to match the selected view
     if(this.search && this.search.searching && this.search.highlight){this.search.highlight.remove();} //clear highlighting
     if(this.data){
-      this.data.forEach((row)=> {
-        this.updateCategoryLabel(row);
+      this.data.forEach(block=> {
+        block.forEach(row=>this.updateCategoryLabel(row))
       });
     }
     //if the search is in progress, we need to model hierarchical/flat search which is basically redoing the search.
@@ -189,7 +193,7 @@ class HierarchyTable{
       this.search.searching = true; //reinit search
       this.searchRowheaders(this.search.query); //pass the same query
     } else if(this.search && !this.search.searching && !val){
-      this.data.forEach((row)=>{this.toggleHiddenRows(row.meta)});
+      this.data.forEach(block=>{block.forEach(row=>this.toggleHiddenRows(row.meta))});
     }
 
     val?this.source.dispatchEvent(this._flatEvent):this.source.dispatchEvent(this._treeEvent)
@@ -207,14 +211,34 @@ class HierarchyTable{
    * @param {Array} row - an item in the `this.data` Array
    * */
   updateCategoryLabel(row){
-    let cell = row.meta.row.children.item(this.column),
-      // we want to male sure if there is a link (drill-down content) then we populate the link with new title, else write to the last text node.
+    let cell = row.meta.nameCell,
+      // we want to make sure if there is a link (drill-down content) then we populate the link with new title, else write to the last text node.
       label = cell.querySelector('a')? cell.querySelector('a') : cell.childNodes.item(cell.childNodes.length-1),
       text = this.flat? row.meta.flatName: row.meta.name;
-    // update the label in the array
-    row[this.column] = text;
+    // update the label in the array. Since we didn't include the block label, we need to offset it by one from the column in all cases.
+    row[this.blocks.length>0? this.column-1:this.column] = text;
+
     // update the label in the table.
     label.nodeType==3? label.nodeValue=text : label.textContent = text;
+  }
+
+
+  setUpBlocks(data,blocks){
+    if(data.length>0){return data} //if data was already passed, use it, we assume it's ready prepared
+    var arr = [];
+    if(blocks.length>0){
+      var tdBlocks = this.source.parentNode.querySelectorAll(`table#${this.source.id}>tbody>tr>td:nth-child(${this.column})[rowspan]`);
+      if(tdBlocks.length>0){
+        for(let i=0;i<tdBlocks.length;i++){
+          let block = blocks[i].toLowerCase();
+          arr[block] = {data:[], name:block, cell:tdBlocks[i]};
+          arr.push(arr[block].data);
+          this.parseHierarchy({array: arr[block].data, block:arr[block]});
+        }
+      }
+    }
+    //this.parseHierarchy({array: arr});
+    return arr;
   }
 
   /**
@@ -239,31 +263,42 @@ class HierarchyTable{
    * @param {Array} array - changedTable for children level
    * @return {Array}
    */
-  parseHierarchy(hierarchy=this.hierarchy,level=0,array=[]){
-    return hierarchy.reduce((resultArray,item,index,array)=>{
-        if(this.rowheaders[item.id]){
-          var row = this.source.parentNode.querySelectorAll(`table#${this.source.id}>tbody>tr`)[this.rowheaders[item.id].index];
-          row.setAttribute("self-id", item.id);
-
-
-          if (item.parent) {
-            row.setAttribute("parent", item.parent);
-          }
+  parseHierarchy({hierarchy=this.hierarchy,level=0,block,array=[]}={}){
+    let rows = this.source.parentNode.querySelectorAll(`table#${this.source.id}>tbody>tr`),
+        blockName = block? block.name.toLowerCase() : null,
+        blockRowIndex = block? block.cell.parentNode.rowIndex : null;
+    return hierarchy.reduce((resultArray,item,index)=>{
+        let compoundID = block? `${item.id}_${blockName}` : item.id;
+        if(this.rowheaders[compoundID]){
+          let row = rows[this.rowheaders[compoundID].index];
+          let firstInBlock = block && row.rowIndex == blockRowIndex; //this row is first in the block, which means it contains the first cell as a block cell and we need to indent the cell index when changing names in hierarchical column
           //we need to push to the array before we add arrows/circles to labels so that we have clean labels in array and may sort them as strings
-          resultArray.push([].slice.call(row.children).map((td)=>{return td.children.length == 0 ? this.constructor._isNumber(td.textContent.trim()) : td.innerHTML}));
+          resultArray.push(
+            [].slice.call(row.children).reduce(
+              (rowArray,current)=>{
+                if(!(firstInBlock && current == block.cell)){
+                  rowArray.push(current.children.length == 0 ? this.constructor._isNumber(current.textContent.trim()) : current.innerHTML)
+                }
+                return rowArray;
+              },[])
+          );
 
           let currentRowArray = resultArray[resultArray.length - 1];
 
           //build a prototype for a row
           currentRowArray.meta = this.setupMeta({
-            row: row,
+            row,
             id: item.id,
+            block: this.rowheaders[compoundID].blockId,
+            firstInBlock,
             flatName: item.name,
             name: item.name.split('/').reverse()[0].trim(),
+            nameCell: row.children.item(block? (firstInBlock? this.column: this.column-1) : this.column ),
             parent: item.parent,
-            level: level,
+            level,
             hasChildren: item.children.length > 0
           });
+
 
           row.classList.add("level" + level.toString());
 
@@ -275,13 +310,15 @@ class HierarchyTable{
             currentRowArray.meta.collapsed = true;
           }
 
+
           // adds a toggle button
           this.addCollapseButton(currentRowArray.meta);
           // initializes row headers according to `this.flat`
           this.updateCategoryLabel(currentRowArray);
 
-          level < 2 ? resultArray = this.parseHierarchy(item.children, level + 1, resultArray) : null;
+          level < 2 ? resultArray = this.parseHierarchy({hierarchy:item.children, level:level + 1, array:resultArray, block}) : null;
         }
+
       return resultArray
     },array);
   }
@@ -319,8 +356,8 @@ class HierarchyTable{
 
     collapseButton.addEventListener('click', () => {meta.collapsed = !meta.collapsed;});
 
-    meta.row.children[this.column].insertBefore(collapseButton,meta.row.children[this.column].firstChild);
-    meta.row.children[this.column].classList.add('reportal-hierarchical-cell');
+    meta.nameCell.insertBefore(collapseButton,meta.nameCell.firstChild);
+    meta.nameCell.classList.add('reportal-hierarchical-cell');
   }
 
   static newEvent(name){
@@ -337,8 +374,9 @@ class HierarchyTable{
    */
   toggleHiddenRows(meta){
     if(meta.hasChildren && this.data){
-      let children = this.data.filter((row)=>{return row.meta.parent==meta.id});
-      children.forEach((childRow)=>{
+      let dataChunk = meta.block?this.data[meta.block].data:this.data[0];
+      let children = dataChunk.filter(row=>row.meta.parent==meta.id);
+      children.forEach(childRow=>{
         if(meta.collapsed){                                           // if parent (`meta.row`) is collapsed
           childRow.meta.hidden=true;                                  // hide all its children and
           if(childRow.meta.hasChildren && !childRow.meta.collapsed){  // if a child can be collapsed
@@ -355,7 +393,7 @@ class HierarchyTable{
   /**
    * This function runs through the data and looks for a match in `row.meta.flatName` (for flat view) or `row.meta.name` (for tree view) against the `str`.
    * @param {String} str - expression to match against (is contained in `this.search.query`)
-   * //TODO: add higlighting to the matched query in strings
+   * //TODO: this.data is a nested array, refactor
    * */
   searchRowheaders(str){
     let regexp = new RegExp('('+str+')','i');
@@ -390,6 +428,7 @@ class HierarchyTable{
 
   /*
   * Collapses all rows which were previously uncollapsed
+  * //TODO: this.data is a nested array, refactor
   * **/
   collapseAll(){
     this.data.forEach((row)=>{
@@ -403,6 +442,7 @@ class HierarchyTable{
   /**
    * Uncollapses the immediate parents of a row which `meta` is passed as an attribute. Utility function for serach to uncollapse all parents of a row that was matched during search
    * @param {Object} meta - `row.meta` object. See {@link HierarchyTable#setupMeta} for details
+   * //TODO: this.data is a nested array, refactor
    * */
   uncollapseParents(meta){
     if(meta.parent.length>0){ // if `parent` String is not empty - then it's not top level parent.
