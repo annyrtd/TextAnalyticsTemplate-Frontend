@@ -70,7 +70,7 @@ class HierarchyTable{
       self = this,
       _query = query,
       _visible=visible,
-      _highlight = highlight? new Highlight({element:[].slice.call(this.source.querySelectorAll(`tbody>tr>td:nth-child(${this.column+1})`)),type:'open'}):null;
+      _highlight = highlight? new Highlight({element:[].slice.call(this.source.parentNode.querySelectorAll(`table#${this.source.id}>tbody>tr>td:nth-child(${this.column+1})`)),type:'open'}):null;
 
     return {
       timeout,
@@ -241,44 +241,47 @@ class HierarchyTable{
    */
   parseHierarchy(hierarchy=this.hierarchy,level=0,array=[]){
     return hierarchy.reduce((resultArray,item,index,array)=>{
-      var row = this.source.querySelectorAll("tbody>tr")[this.rowheaders[item.id].index];
-      row.setAttribute("self-id",item.id);
+        if(this.rowheaders[item.id]){
+          var row = this.source.parentNode.querySelectorAll(`table#${this.source.id}>tbody>tr`)[this.rowheaders[item.id].index];
+          row.setAttribute("self-id", item.id);
 
 
-      if(item.parent){
-        row.setAttribute("parent",item.parent);
-      }
-      //we need to push to the array before we add arrows/circles to labels so that we have clean labels in array and may sort them as strings
-      resultArray.push([].slice.call(row.children).map((td)=>{
-          return td.children.length==0?this.constructor._isNumber(td.textContent.trim()):td.innerHTML
-        }));
-      let currentRowArray = resultArray[resultArray.length-1];
+          if (item.parent) {
+            row.setAttribute("parent", item.parent);
+          }
+          //we need to push to the array before we add arrows/circles to labels so that we have clean labels in array and may sort them as strings
+          resultArray.push([].slice.call(row.children).map((td)=>{return td.children.length == 0 ? this.constructor._isNumber(td.textContent.trim()) : td.innerHTML}));
 
-      //build a prototype for a row
-      currentRowArray.meta= this.setupMeta({
-        row:row,
-        id:item.id,
-        flatName: item.name,
-        name: item.name.split('/').reverse()[0].trim(),
-        parent:item.parent,
-        level:level,
-        hasChildren: item.children.length>0
-      });
+          let currentRowArray = resultArray[resultArray.length - 1];
 
-    row.classList.add("level"+level.toString());
+          //build a prototype for a row
+          currentRowArray.meta = this.setupMeta({
+            row: row,
+            id: item.id,
+            flatName: item.name,
+            name: item.name.split('/').reverse()[0].trim(),
+            parent: item.parent,
+            level: level,
+            hasChildren: item.children.length > 0
+          });
 
-    if(level>0){
-      currentRowArray.meta.hidden=true;
-      this.clearLink(row);
-    }
-    if(item.children.length>0){currentRowArray.meta.collapsed=true;}
+          row.classList.add("level" + level.toString());
 
-      // adds a toggle button
-      this.addCollapseButton(currentRowArray.meta);
-      // initializes row headers according to `this.flat`
-      this.updateCategoryLabel(currentRowArray);
+          if (level > 0) {
+            currentRowArray.meta.hidden = true;
+            this.clearLink(row);
+          }
+          if (item.children.length > 0) {
+            currentRowArray.meta.collapsed = true;
+          }
 
-      level < 2 ? resultArray = this.parseHierarchy(item.children, level + 1,resultArray) : null;
+          // adds a toggle button
+          this.addCollapseButton(currentRowArray.meta);
+          // initializes row headers according to `this.flat`
+          this.updateCategoryLabel(currentRowArray);
+
+          level < 2 ? resultArray = this.parseHierarchy(item.children, level + 1, resultArray) : null;
+        }
       return resultArray
     },array);
   }
