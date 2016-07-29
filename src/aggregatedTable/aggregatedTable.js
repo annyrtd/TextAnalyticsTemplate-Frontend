@@ -44,7 +44,7 @@ class AggregatedTable{
         this.addSearchBox(buttonHost);
       }
     }
-    if(sorting){
+    /*if(sorting){
       this.source.addEventListener('reportal-table-sort',()=>{this.onSort(this.data)});
       this.sorting = new SortTable({
         enabled:sorting.enabled,
@@ -56,7 +56,7 @@ class AggregatedTable{
         data:this.data,
         auxHeader: this.fixedHeader.clonedHeader // fixed header //TODO: add resize event when sorting happens, can be done after row reordering
       });
-    }
+    }*/
     this.init();
   }
 
@@ -127,7 +127,7 @@ class AggregatedTable{
       if(flat==this.hierarchy.flat){return;} else {
         this.hierarchy.flat = flat;
         // we want to get all hier. toggle buttons in both cloned header and the table itself
-        let hierColumnButtons = host.querySelectorAll('.reportal-hierarchical-header>.btn:not(.hierarchy-search)');
+        let hierColumnButtons = this.hierarchy.source.parentNode.querySelectorAll('.reportal-hierarchical-header>.btn:not(.hierarchy-search)');
         if(hierColumnButtons){[].slice.call(hierColumnButtons).forEach((item)=>{
           //By default one button is already `.active`, we need just to swap the `.active` class on them
           !item.classList.contains('active')?item.classList.add('active'):item.classList.remove('active');

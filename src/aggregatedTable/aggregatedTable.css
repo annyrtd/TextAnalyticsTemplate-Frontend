@@ -280,7 +280,7 @@
   left:30%;
 }
 
-.reportal-hidden-row>td{
+.reportal-hierarchy-table:not(.reportal-heirarchy-flat-view)>tbody>tr.reportal-hidden-row>td:not([rowspan]){
   display: none;
 }
 
@@ -292,7 +292,7 @@
   }
 }
 .reportal-hierarchy-searching>tbody>tr{
-  &>td{display:none;}
+  &>td:not([rowspan]){display:none;}
   &.matched-search:not(.reportal-hidden-row)>td{display:table-cell}
 }
 

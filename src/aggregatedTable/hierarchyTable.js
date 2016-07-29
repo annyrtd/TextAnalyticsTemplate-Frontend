@@ -31,6 +31,7 @@ class HierarchyTable{
     this.rowheaders = rowheaders;
     this.column = column;
     this.blocks = blocks;
+    console.log(source,hierarchy,rowheaders,column,blocks);
     this._rows = source.parentNode.querySelectorAll(`table#${source.id}>tbody>tr`);
     this._collapseEvent = this.constructor.newEvent('reportal-table-hierarchy-collapsed');
     this._uncollapseEvent = this.constructor.newEvent('reportal-table-hierarchy-uncollapsed');
@@ -109,6 +110,9 @@ class HierarchyTable{
    * @param {String} id - internal Reportal id for the row
    * @param {String} flatName - default string name ('/'-delimited) for hierarchy
    * @param {String} name - a trimmed version of `flatName` containing label for this item without parent suffices
+   * @param {HTMLTableCellElement} nameCell - reference to the `<td>` element that contains the rowheader hierarchical label/name
+   * @param {String} block - id of the block the row belongs to
+   * @param {Boolean} firstInBlock - whether the row is the first in this block, which meatns it has an extra cell at the beginning
    * @param {String} parent - internal Reportal id of parent row
    * @param {Number} level - level of hierarchy, increments form `0`
    * @param {Boolean} [hidden=true] - flag set to hidden rows (meaning their parent is in collapsed state)
@@ -116,7 +120,7 @@ class HierarchyTable{
    * @param {Boolean} [matches=false] - flag set to those rows which match `search.query`
    * @param {Boolean} [hasChildren=false] - flag set to rows which contain children
    * */
-  setupMeta({row,nameCell,id,flatName,name,block,firstInBlock,parent,level,hidden=true,collapsed,matches=false,hasChildren=false}={}){
+  setupMeta({row,id,flatName,name,nameCell,block,firstInBlock,parent,level,hidden=true,collapsed,matches=false,hasChildren=false}={}){
     let _hidden = hidden, _collapsed = collapsed, _hasChildren=hasChildren, _matches = matches, self=this;
     return {
       row,
@@ -236,6 +240,9 @@ class HierarchyTable{
           this.parseHierarchy({array: arr[block].data, block:arr[block]});
         }
       }
+    } else {
+      arr[0]=[];
+      this.parseHierarchy({array: arr[0], block:null});
     }
     //this.parseHierarchy({array: arr});
     return arr;
@@ -243,7 +250,7 @@ class HierarchyTable{
 
   /**
    * Recursive function taking rows according to `hierarchy` object, adding information to that row, retrieving data from the row, and adding this array to `this.data`
-   * Each item in the array has a `meta {Object}` property that has the following structure:
+   * Each item in the array has a `meta {Object}` (See {@link HierarchyTable#setupMeta}) property that has the following structure:
    *
    * ``` javascript
    * {
@@ -251,6 +258,9 @@ class HierarchyTable{
    *    hasChildren: Boolean, // if true, it has children
    *    flatName: String, // label for flat view ('/'-separated)
    *    name: String, // label for the current level (single-label without parent prefixes)
+   *    nameCell: HTMLTableCellElement, // reference to the `<td>` element that contains the rowheader hierarchical label/name,
+   *    block: String, // id of the block the row belongs to
+   *    firstInBlock: Boolean, // whether the row is the first in this block, which meatns it has an extra cell at the beginning
    *    id: String, // item id from Reportal table
    *    level: Number, // hierarchy level
    *    parent: String, // parent id of the nested level
@@ -258,12 +268,13 @@ class HierarchyTable{
    * }
    * ```
    *
-   * @param {Array} hierarchy - array of hierarchy objects from reportal
-   * @param {int} level - depth of the function
-   * @param {Array} array - changedTable for children level
+   * @param {Array} hierarchy=this.hierarchy - array of hierarchy objects from Reportal
+   * @param {int} level=0 - depth of the function
+   * @param {String} block=null - an item from `blocks` array
+   * @param {Array} array=[] - changedTable for children level
    * @return {Array}
    */
-  parseHierarchy({hierarchy=this.hierarchy,level=0,block,array=[]}={}){
+  parseHierarchy({hierarchy=this.hierarchy,level=0,block=null,array=[]}={}){
     let rows = this.source.parentNode.querySelectorAll(`table#${this.source.id}>tbody>tr`),
         blockName = block? block.name.toLowerCase() : null,
         blockRowIndex = block? block.cell.parentNode.rowIndex : null;
