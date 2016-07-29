@@ -71,7 +71,7 @@ class HierarchyTable{
       self = this,
       _query = query,
       _visible=visible,
-      _highlight = highlight? new Highlight({element:[].slice.call(this.source.parentNode.querySelectorAll(`table#${this.source.id}>tbody>tr>td:nth-child(${this.column+1})`)),type:'open'}):null;
+      _highlight = highlight? new Highlight({element:[].slice.call(this.source.querySelectorAll('.reportal-hierarchical-cell')),type:'open'}):null;
 
     return {
       timeout,
@@ -374,8 +374,8 @@ class HierarchyTable{
    */
   toggleHiddenRows(meta){
     if(meta.hasChildren && this.data){
-      let dataChunk = meta.block?this.data[meta.block].data:this.data[0];
-      let children = dataChunk.filter(row=>row.meta.parent==meta.id);
+      let dataSource = meta.block?this.data[meta.block].data:this.data[0];
+      let children = dataSource.filter(row=>row.meta.parent==meta.id);
       children.forEach(childRow=>{
         if(meta.collapsed){                                           // if parent (`meta.row`) is collapsed
           childRow.meta.hidden=true;                                  // hide all its children and
@@ -393,60 +393,63 @@ class HierarchyTable{
   /**
    * This function runs through the data and looks for a match in `row.meta.flatName` (for flat view) or `row.meta.name` (for tree view) against the `str`.
    * @param {String} str - expression to match against (is contained in `this.search.query`)
-   * //TODO: this.data is a nested array, refactor
    * */
   searchRowheaders(str){
     let regexp = new RegExp('('+str+')','i');
-    this.data.forEach((row)=>{
-      if(this.flat){
-        row.meta.matches = regexp.test(row.meta.flatName);
-        row.meta.hidden=false;
-      } else {
-        let parent; // we want to temporarily store the parent for recursion to be computationally effective and not to perform filtering of `data` on every sneeze
-       if(row.meta.parent.length>0 && this.__lastEffectiveParent!=null && this.__lastEffectiveParent.meta.id == row.meta.parent){
-         parent = this.__lastEffectiveParent;
-       } else {
-         parent = this.__lastEffectiveParent = this.data.find(parent=>parent.meta.id==row.meta.parent);
-       }
-      // if it has a parent and maybe not matches and the parent has match, then let it and its children be displayed
-      if(row.meta.parent.length>0 && !regexp.test(row.meta.name) && parent.meta.matches){
-          // just in case it's been covered in previous iteration
-          if(!row.meta.matches){row.meta.matches=true}
-          row.meta.hidden=parent.meta.collapsed;
+    this.data.forEach((block,blockIndex)=>{
+      block.forEach(row=>{
+        if(this.flat){
+          row.meta.matches = regexp.test(row.meta.flatName);
+          row.meta.hidden=false;
+        } else {
+          let parent; // we want to temporarily store the parent for recursion to be computationally effective and not to perform filtering of `data` on every sneeze
+         if(row.meta.parent.length>0 && this.__lastEffectiveParent!=null && this.__lastEffectiveParent.meta.id == row.meta.parent){
+           parent = this.__lastEffectiveParent;
+         } else {
+           //console.log(this.data[blockIndex]);
+           parent = this.__lastEffectiveParent = this.data[blockIndex].find((parentRow)=>{return parentRow.meta.id==row.meta.parent});
+         }
+        // if it has a parent and maybe not matches and the parent has match, then let it and its children be displayed
+        if(row.meta.parent.length>0 && !regexp.test(row.meta.name) && parent.meta.matches){
+            // just in case it's been covered in previous iteration
+            if(!row.meta.matches){row.meta.matches=true}
+            row.meta.hidden=parent.meta.collapsed;
 
-        } else { // if has no parent or parent not matched let's test it, maybe it can have a match, if so, display his parents and children
-          let matches = regexp.test(row.meta.name);
-          row.meta.matches = matches;
-            if(matches){
-              this.uncollapseParents(row.meta);
+          } else { // if has no parent or parent not matched let's test it, maybe it can have a match, if so, display his parents and children
+            let matches = regexp.test(row.meta.name);
+            row.meta.matches = matches;
+              if(matches){
+                this.uncollapseParents(row.meta);
+              }
             }
-          }
-      }
+        }
+      });
     });
     this.search.highlight.apply(str);
   }
 
   /*
   * Collapses all rows which were previously uncollapsed
-  * //TODO: this.data is a nested array, refactor
   * **/
   collapseAll(){
-    this.data.forEach((row)=>{
-      let collapsed = row.meta.collapsed;
-      if(typeof collapsed != undefined && !collapsed){
-        row.meta.collapsed=true;
-      }
+    this.data.forEach(block=>{
+      block.forEach(row=>{
+        let collapsed = row.meta.collapsed;
+        if(typeof collapsed != undefined && !collapsed){
+          row.meta.collapsed=true;
+        }
+      });
     });
   }
 
   /**
    * Uncollapses the immediate parents of a row which `meta` is passed as an attribute. Utility function for serach to uncollapse all parents of a row that was matched during search
    * @param {Object} meta - `row.meta` object. See {@link HierarchyTable#setupMeta} for details
-   * //TODO: this.data is a nested array, refactor
    * */
   uncollapseParents(meta){
     if(meta.parent.length>0){ // if `parent` String is not empty - then it's not top level parent.
-      let parent = this.data.find(row => row.meta.id==meta.parent);
+      let dataSource = meta.block?this.data[meta.block].data:this.data[0],
+          parent = dataSource.find(row => row.meta.id==meta.parent);
       if(parent.meta.collapsed){parent.meta.collapsed=false};
       parent.meta.row.classList.add('matched-search');
       this.uncollapseParents(parent.meta);

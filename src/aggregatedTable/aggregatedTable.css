@@ -55,7 +55,7 @@
       border-bottom: 1px solid #f0f2f5;
       white-space:nowrap;
 
-      &:first-child{
+      &.reportal-hierarchical-cell{
         white-space:nowrap;
       }
   }
@@ -72,8 +72,8 @@
       }
     }
   }
-  &.reportal-categories>thead>tr>td[class*="_cc"]{position:relative;}
-  &.reportal-categories>thead>tr>td[class*="_cc"]:before{
+  &.reportal-categories>thead>tr>td.reportal-hierarchical-header{position:relative;}
+  &.reportal-categories>thead>tr>td.reportal-hierarchical-header:before{
       /*cpecific class to set header for the first column*/
       content:"Categories";
   }
@@ -196,8 +196,7 @@
         bottom: -3px;
         position: relative;
         color:#424242;
-
-    }
+      }
     }
 }
 
@@ -220,15 +219,16 @@
   font-weight: bold;
 }
 .reportal-hierarchy-table>tbody>tr>td:first-child:not(.reportal-hierarchical-cell) {
+  /*dirty hack for breakdown first column to stay really narrow*/
   width: 50px;
   white-space: normal;
 }
 
-.reportal-hierarchy-table>thead>tr:first-child>td:first-child{
+.reportal-hierarchy-table .reportal-hierarchical-header{
   padding-right:100px;
 }
 
-.reportal-hierarchy-table>tbody>tr>td.reportal-hierarchical-cell {padding-left:0}
+.reportal-hierarchy-table td.reportal-hierarchical-cell {padding-left:0}
 
 .reportal-hierarchy-table tr.level1>td.reportal-hierarchical-cell {
   padding-left: 20px;
@@ -260,7 +260,8 @@
   transition: .25s transform ease-in-out;
 }
 
-.reportal-collapsed-row .reportal-collapse-button, .reportal-uncollapsed-row .reportal-collapse-button{
+.reportal-collapsed-row .reportal-collapse-button,
+.reportal-uncollapsed-row .reportal-collapse-button{
   cursor: pointer;
 }
 
@@ -285,13 +286,13 @@
 
 .reportal-heirarchy-flat-view>tbody>tr>td{
   display:table-cell;
-  &>td.reportal-hierarchical-cell{
+  &.reportal-hierarchical-cell{
     padding-left:8px !important;
     &>.reportal-collapse-button{display:none}
   }
 }
-.reportal-hierarchy-searching>tbody>tr>td{
-  display:none;
+.reportal-hierarchy-searching>tbody>tr{
+  &>td{display:none;}
   &.matched-search:not(.reportal-hidden-row)>td{display:table-cell}
 }
 

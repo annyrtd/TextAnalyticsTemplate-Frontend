@@ -23,7 +23,7 @@ class AggregatedTable{
       this.hierarchy = new HierarchyTable(hierarchy);
       this.data = this.hierarchy.data;
       //initialize buttons that will toggle between flat and tree view
-      let buttonHost = this.hierarchy.source.querySelector(`thead>tr>td:nth-child(${this.hierarchy.blocks.length>0?this.hierarchy.column:this.hierarchy.column+1})`);
+      let buttonHost = this.hierarchy.source.querySelector('.reportal-hierarchical-header');
       this.addToggleButton(buttonHost,'hierarchy-tree',false,'Tree View');
       this.addToggleButton(buttonHost,'hierarchy-flat',true,'Flat View');
       if(this.hierarchy.search.enabled){
@@ -31,11 +31,11 @@ class AggregatedTable{
       }
     }
 
-    /*if(fixedHeader && typeof fixedHeader == 'object'){
+    if(fixedHeader && typeof fixedHeader == 'object'){
       fixedHeader.source = fixedHeader.source||table;
       this.fixedHeader = new FixedHeader(fixedHeader);
       //initialize buttons that will toggle between flat and tree view in the original table
-      let buttonHost = this.fixedHeader.clonedHeader.querySelector(`thead>tr>td:nth-child(${this.hierarchy.column+1})`);
+      let buttonHost = this.fixedHeader.clonedHeader.querySelector('.reportal-hierarchical-header');
       [].slice.call(buttonHost.children).forEach((item)=>{item.parentNode.removeChild(item)}); //clears hierarchy toggle buttons cloned from original header
       this.addToggleButton(buttonHost,'hierarchy-tree',false,'Tree View');
       this.addToggleButton(buttonHost,'hierarchy-flat',true,'Flat View');
@@ -58,7 +58,6 @@ class AggregatedTable{
       });
     }
     this.init();
-*/
   }
 
   /**
@@ -84,7 +83,7 @@ class AggregatedTable{
    * */
   focusFollows(){
     if(this.fixedHeader){
-      var inputs = [].slice.call(this.source.parentNode.querySelectorAll(`table>thead>tr>td:nth-child(${this.hierarchy.column+1}) input`));
+      var inputs = [].slice.call(this.source.parentNode.querySelectorAll('.reportal-hierarchical-header input'));
       ['visible','hidden'].forEach(eventChunk=>{
         this.source.addEventListener(`reportal-fixed-header-${eventChunk}`,(e)=>{
           if(this.hierarchy.search.searching && document.activeElement && inputs.indexOf(document.activeElement)!=-1){
@@ -106,7 +105,6 @@ class AggregatedTable{
     if(!this.flat){
       level = level || 0;
         let filtered = data.filter((row)=>{return row.meta.level == level});
-        //this.source.
     }
   }
 
@@ -120,7 +118,7 @@ class AggregatedTable{
    * */
   addToggleButton(host,buttonClassChunk,flat,title){
     let button = document.createElement('span'),
-      buttonContainer = document.createElement('span');
+        buttonContainer = document.createElement('span');
     button.classList.add(`icon-${buttonClassChunk}`);
     buttonContainer.classList.add('btn', buttonClassChunk);
     buttonContainer.title=title;
@@ -129,13 +127,12 @@ class AggregatedTable{
       if(flat==this.hierarchy.flat){return;} else {
         this.hierarchy.flat = flat;
         // we want to get all hier. toggle buttons in both cloned header and the table itself
-        let hierColumnButtons = this.hierarchy.source.parentNode.querySelectorAll(`table>thead>tr>td:nth-child(${this.hierarchy.column+1})>.btn`);
+        let hierColumnButtons = host.querySelectorAll('.reportal-hierarchical-header>.btn:not(.hierarchy-search)');
         if(hierColumnButtons){[].slice.call(hierColumnButtons).forEach((item)=>{
           //By default one button is already `.active`, we need just to swap the `.active` class on them
           !item.classList.contains('active')?item.classList.add('active'):item.classList.remove('active');
         })}
       }
-      //this.scrollToElement(e.target);
     });
     buttonContainer.appendChild(button);
     host.appendChild(buttonContainer);
@@ -199,7 +196,7 @@ class AggregatedTable{
     this.hierarchy.search.query='';
     this.hierarchy.search.visible=false;
     this.hierarchy.search.searching=false;
-    var inputs = this.hierarchy.source.parentNode.querySelectorAll(`table>thead>tr>td:nth-child(${this.hierarchy.column+1}) input`);
+    var inputs = this.hierarchy.source.parentNode.querySelectorAll('.reportal-hierarchical-header input');
     if(inputs && inputs.length>1){inputs.forEach(input=>{input.value = '';})}
   }
 
@@ -210,7 +207,7 @@ class AggregatedTable{
   updateSearchTarget(e){
     this.hierarchy.search.target = e.target;
     this.hierarchy.search.query = e.target.value;
-    var inputs = this.hierarchy.source.parentNode.querySelectorAll(`table>thead>tr>td:nth-child(${this.hierarchy.column+1}) input`);
+    var inputs = this.hierarchy.source.parentNode.querySelectorAll('.reportal-hierarchical-header input');
     if(inputs && inputs.length>1){inputs.forEach(input=>{if(input!=e.target){input.value = e.target.value;return;}})}
   }
 
