@@ -247,7 +247,7 @@ class HierarchyTable{
   setUpBlocks(data,blocks){
     if(data.length>0){return data} //if data was already passed, use it, we assume it's ready prepared
     var arr = [];
-    if(blocks.length>0){
+    if(blocks && blocks.length>0){
       var tdBlocks = this.source.parentNode.querySelectorAll(`table#${this.source.id}>tbody>tr>td:nth-child(${this.column})[rowspan]`);
       if(tdBlocks.length>0){
         for(let i=0;i<tdBlocks.length;i++){
@@ -291,15 +291,15 @@ class HierarchyTable{
    * @param {Array} array=[] - changedTable for children level
    * @return {Array}
    */
-  parseHierarchy({hierarchy=this.hierarchy,level=0,block=null,array=[]}={}){
+  parseHierarchy({hierarchy=this.hierarchy,level=0,block,array=[]}={}){
     let rows = this.source.parentNode.querySelectorAll(`table#${this.source.id}>tbody>tr`),
-        blockName = block? block.name.toLowerCase() : null,
-        blockRowIndex = block? block.cell.parentNode.rowIndex : null;
+        blockName = block && block!==null? block.name.toLowerCase() : null,
+        blockRowIndex =  block && block!==null? block.cell.parentNode.rowIndex : null;
     return hierarchy.reduce((resultArray,item,index)=>{
-        let compoundID = block? `${item.id}_${blockName}` : item.id;
+        let compoundID =  block && block!==null? `${item.id}_${blockName}` : item.id;
         if(this.rowheaders[compoundID]){
           let row = rows[this.rowheaders[compoundID].index];
-          let firstInBlock = block && row.rowIndex == blockRowIndex; //this row is first in the block, which means it contains the first cell as a block cell and we need to indent the cell index when changing names in hierarchical column
+          let firstInBlock = block!==null && row.rowIndex === blockRowIndex; //this row is first in the block, which means it contains the first cell as a block cell and we need to indent the cell index when changing names in hierarchical column
           //we need to push to the array before we add arrows/circles to labels so that we have clean labels in array and may sort them as strings
           resultArray.push(
             [].slice.call(row.children).reduce(
@@ -321,7 +321,7 @@ class HierarchyTable{
             firstInBlock,
             flatName: item.name,
             name: item.name.split('/').reverse()[0].trim(),
-            nameCell: row.children.item(block? (firstInBlock? this.column: this.column-1) : this.column ),
+            nameCell: row.children.item(block!==null ? (firstInBlock? this.column: this.column-1) : this.column ),
             parent: item.parent,
             level,
             hasChildren: item.children.length > 0
