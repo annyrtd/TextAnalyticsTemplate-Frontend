@@ -31,7 +31,6 @@ class HierarchyTable{
     this.rowheaders = rowheaders;
     this.column = column;
     this.blocks = blocks;
-    console.log(source,hierarchy,rowheaders,column,blocks);
     this._rows = source.parentNode.querySelectorAll(`table#${source.id}>tbody>tr`);
     this._collapseEvent = this.constructor.newEvent('reportal-table-hierarchy-collapsed');
     this._uncollapseEvent = this.constructor.newEvent('reportal-table-hierarchy-uncollapsed');
@@ -40,8 +39,8 @@ class HierarchyTable{
     this.data = this.setUpBlocks(data,blocks);
     this.flat = flat;
     this.search = this.setupSearch(search);
-    this.init();
     this.__lastEffectiveParent = null;// we'll store row of parent when doing search for effectiveness of children recursion in `searchRowheaders`
+    this.init();
   }
 
   /**
@@ -54,6 +53,24 @@ class HierarchyTable{
     if(tbody.firstChild && tbody.firstChild.nodeType==3){
       tbody.removeChild(tbody.firstChild)
     }
+    this.reorderRows(this.data);
+  }
+
+  /**
+   * This function takes care of repositioning rows in the table to match the `data` array in the way it was sorted and if the data is separated into blocks, then move the block piece to the first row in each data block.
+   * */
+  reorderRows(data,tbody=this.source.querySelector('tbody')){
+    data.forEach(block=>{
+      block.forEach((row,index,array)=>{
+        if(row.meta.block && index==0 && !row.meta.firstInBlock){ //block is defined and this is the first row in block (and doesn't contain block header already), we need to move block header from whatever line into this row
+          let blockContainer = array.find(item=>item.meta.firstInBlock);
+          blockContainer.meta.firstInBlock = false;
+          row.meta.firstInBlock = true;
+          row.meta.row.insertBefore(data[row.meta.block].cell, row.meta.row.firstChild);
+        }
+        tbody.appendChild(row.meta.row);
+      })
+    });
   }
 
   /**
@@ -341,8 +358,9 @@ class HierarchyTable{
    * @return {Number|null|String}
    * */
   static _isNumber(str){
-    if(!isNaN(parseFloat(str)) && parseFloat(str).toString().length ==str.length){
-      return parseFloat(str)
+    if(!isNaN(parseFloat(str))){
+      str = str.replace(/,/i,'');// remove unnecessary comma as a delimiter for thousands from data.
+      return parseFloat(str);
     } else if(str.length==0){return null} else {return str}
   }
 

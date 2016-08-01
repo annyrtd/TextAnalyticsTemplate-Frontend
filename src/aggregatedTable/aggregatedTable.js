@@ -44,8 +44,8 @@ class AggregatedTable{
         this.addSearchBox(buttonHost);
       }
     }
-    /*if(sorting){
-      this.source.addEventListener('reportal-table-sort',()=>{this.onSort(this.data)});
+    if(sorting){
+      this.source.addEventListener('reportal-table-sort',()=>this.onSort());
       this.sorting = new SortTable({
         enabled:sorting.enabled,
         defaultHeaderRow:sorting.defaultHeaderRow,
@@ -56,7 +56,7 @@ class AggregatedTable{
         data:this.data,
         auxHeader: this.fixedHeader.clonedHeader // fixed header //TODO: add resize event when sorting happens, can be done after row reordering
       });
-    }*/
+    }
     this.init();
   }
 
@@ -68,11 +68,15 @@ class AggregatedTable{
     var _target;
     var resizeDebouncer = this.constructor.debounce(()=>this.fixedHeader.resizeFixed(),100);
     var scrollDebouncer = this.constructor.debounce(()=>this.scrollToElement(_target),50);
-    ['collapsed','uncollapsed','tree-view','flat-view'].forEach((eventNameChunk)=>{
-      this.source.addEventListener(`reportal-table-hierarchy-${eventNameChunk}`,(e)=>{
+    ['hierarchy-collapsed','hierarchy-uncollapsed','hierarchy-tree-view','hierarchy-flat-view','sort'].forEach((eventNameChunk)=>{
+      this.source.addEventListener(`reportal-table-${eventNameChunk}`,(e)=>{
       resizeDebouncer();
       _target = e.target;
       scrollDebouncer();
+      if(this.sorting && this.sorting.sortOrder.length>0 && (e.type=='reportal-table-hierarchy-tree-view'||e.type=='reportal-table-hierarchy-flat-view')){
+        console.log('external onsort');
+        setTimeout(()=>{this.sorting.sort()},0);
+      }
       });
     });
     this.focusFollows();
@@ -88,7 +92,7 @@ class AggregatedTable{
         this.source.addEventListener(`reportal-fixed-header-${eventChunk}`,(e)=>{
           if(this.hierarchy.search.searching && document.activeElement && inputs.indexOf(document.activeElement)!=-1){
             let current = this.hierarchy.search.target;
-            for(let i=0;i<inputs.length;i++ ){
+            for(let i=0;i<inputs.length;i++){
               if(inputs[i]!=document.activeElement){
                 inputs[i].focus();
                 this.hierarchy.search.target=inputs[i];
@@ -101,11 +105,58 @@ class AggregatedTable{
     }
   }
 
-  onSort(data,level){
-    if(!this.flat){
-      level = level || 0;
-        let filtered = data.filter((row)=>{return row.meta.level == level});
+  onSort(){
+    console.log('is flat',this.hierarchy.flat);
+    if(!this.hierarchy.flat){ // we want to perform hierarchical row reordering in the array before appending changes to the table
+      this.data.forEach((block,index)=>{
+        let dataLevels = this.constructor.spliceLevel(block),
+            sortedData=[];
+          dataLevels[0].forEach(row=>{
+            sortedData.push(row);
+            this.reorderSorted(dataLevels,row,sortedData);
+          });
+          this.data[index] = sortedData;
+      });
     }
+    this.hierarchy.reorderRows(this.data)
+  }
+
+  /**
+   * Separates a `data` array into arrays dedicated to each level at index of the level
+   * */
+  static spliceLevel(source,level=0){
+    let a = [];
+    source.forEach((row,index)=>{
+      let lvl = row.meta.level;
+      if(!a[lvl]){a[lvl]=[];}
+        a[lvl].push(row);
+    });
+    return a;
+  }
+
+  /**
+   * Reorders rows in the sorted arrays so that the children rows follow their parent ones
+   * @param {Object} source - source array,
+   * @param {Array} row - parent row
+   * @param {Array} output - an array the rows will be appended which is a result array
+   * */
+  reorderSorted(source,row,output,insertAtIndex = output.length){
+      if(row.meta.hasChildren){
+        let parent = row.meta.id,
+            childLevel = source[row.meta.level+1],
+            childLevelLength = childLevel.length;
+        while(childLevelLength--){
+          if(childLevel[childLevelLength].meta.parent==parent){
+            //since we go backwards (to reduce array for the next iteration), we'll always want to add the row at `output.length`,
+            // which technically is right after the parent insertion point
+            output.splice(insertAtIndex,0,childLevel[childLevelLength]);
+            if(childLevel[childLevelLength].meta.hasChildren){
+              this.reorderSorted(source,childLevel[childLevelLength],output,insertAtIndex+1);
+            }
+            childLevel.splice(childLevelLength,1);
+          }
+        }
+      }
   }
 
   /**
