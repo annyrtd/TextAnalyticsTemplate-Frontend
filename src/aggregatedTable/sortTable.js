@@ -156,12 +156,8 @@ class SortTable{
    * @return {Event} - `reportal-table-sort` event
    * */
   sort(){
-    console.log(this.sortOrder);
     if(this.sortOrder && this.sortOrder.length>0){
       this.data.forEach((block,index,array)=>{
-        if(array.length>1){ //we have blocks
-          console.log('we have blocks');
-        }
         block.sort((a, b)=>{ // sort rows
           if(this.sortOrder.length>1){
             return this.constructor.sorter(a[this.sortOrder[0].column],b[this.sortOrder[0].column], this.sortOrder[0].direction === 'desc' ? -1 : 1) || this.constructor.sorter(a[this.sortOrder[1].column],b[this.sortOrder[1].column], this.sortOrder[1].direction === 'desc' ? -1 : 1)
@@ -169,7 +165,6 @@ class SortTable{
             return this.constructor.sorter(a[this.sortOrder[0].column],b[this.sortOrder[0].column], this.sortOrder[0].direction === 'desc' ? -1 : 1);
           }
         });
-      //console.log(block);
       });
       this.columns[this.sortOrder[0].column].cell.dispatchEvent(this._sortEvent);
     }

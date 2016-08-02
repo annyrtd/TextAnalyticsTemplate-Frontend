@@ -180,7 +180,7 @@
 
       }
     }
-  &>thead td.sortable{
+  &>thead td.sortable:not(.hierarchy-search-visible){
       cursor:pointer;
       &.sorted.asc:after{
         content: var(--icon-arrow-up);

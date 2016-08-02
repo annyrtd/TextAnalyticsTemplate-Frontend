@@ -107,7 +107,14 @@ class HierarchyTable{
       set visible(val){
         _visible = val;
         [].slice.call(self.source.parentNode.querySelectorAll('.hierarchy-search')).forEach(button=>{
-        val?button.classList.add('visible'):button.classList.remove('visible');});
+          if(val){
+            button.classList.add('visible');
+            button.parentNode.classList.add('hierarchy-search-visible'); //to hide sorting arrow because it overlaps the search field
+          }else{
+            button.classList.remove('visible');
+            button.parentNode.classList.remove('hierarchy-search-visible');
+          }
+        });
       },
 
       get searching(){return _searching},
@@ -243,7 +250,11 @@ class HierarchyTable{
     label.nodeType==3? label.nodeValue=text : label.textContent = text;
   }
 
-
+  /**
+   * If `blocks` array is not empty, then we have blocks that rowspan across hierarchy instances. This function creates meta for blocks, and makes them accessible as properties in the array. Then it launches `parseHierarchy` per each block.
+   * @param {Array} data - initial data if passed
+   * @param {Array} blocks - array of `blocks` passed in constructor
+   * */
   setUpBlocks(data,blocks){
     if(data.length>0){return data} //if data was already passed, use it, we assume it's ready prepared
     var arr = [];
@@ -261,7 +272,6 @@ class HierarchyTable{
       arr[0]=[];
       this.parseHierarchy({array: arr[0], block:null});
     }
-    //this.parseHierarchy({array: arr});
     return arr;
   }
 
@@ -332,15 +342,14 @@ class HierarchyTable{
 
           if (level > 0) {
             currentRowArray.meta.hidden = true;
-            this.clearLink(row);
+            this.constructor.clearLink(row);
           }
           if (item.children.length > 0) {
             currentRowArray.meta.collapsed = true;
           }
 
-
           // adds a toggle button
-          this.addCollapseButton(currentRowArray.meta);
+          this.constructor.addCollapseButton(currentRowArray.meta);
           // initializes row headers according to `this.flat`
           this.updateCategoryLabel(currentRowArray);
 
@@ -368,7 +377,7 @@ class HierarchyTable{
    * Removes a drilldown link from elements that are the lowest level of hierarchy and don't need it
    * @param {HTMLTableRowElement} row - row element in the table
    * */
-    clearLink(row){
+    static clearLink(row){
     var link = row.querySelector("a");
     if(link) {
       link.parentElement.textContent = link.textContent;
@@ -379,7 +388,7 @@ class HierarchyTable{
    * function to add button to the left of the rowheader
    * @param {Object} meta - meta for the row element in the table
    */
-  addCollapseButton(meta){
+  static addCollapseButton(meta){
     var collapseButton = document.createElement("div");
     collapseButton.classList.add("reportal-collapse-button");
 
@@ -479,7 +488,7 @@ class HierarchyTable{
     if(meta.parent.length>0){ // if `parent` String is not empty - then it's not top level parent.
       let dataSource = meta.block?this.data[meta.block].data:this.data[0],
           parent = dataSource.find(row => row.meta.id==meta.parent);
-      if(parent.meta.collapsed){parent.meta.collapsed=false};
+      if(parent.meta.collapsed){parent.meta.collapsed=false}
       parent.meta.row.classList.add('matched-search');
       this.uncollapseParents(parent.meta);
     }

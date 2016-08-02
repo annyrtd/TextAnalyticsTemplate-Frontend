@@ -54,33 +54,27 @@ class AggregatedTable{
         defaultSorting:sorting.defaultSorting,
         source:table,
         data:this.data,
-        auxHeader: this.fixedHeader.clonedHeader // fixed header //TODO: add resize event when sorting happens, can be done after row reordering
+        auxHeader: this.fixedHeader.clonedHeader // fixed header
       });
     }
-    this.init();
-  }
 
-  /**
-   * Initializes the app
-   * */
-  init(){
-    // for collapsable hierarchy we want to update cells in the fixed(floating) header.
+    // for collapsable and sortable hierarchy we want to update cells in the fixed(floating) header.
     var _target;
     var resizeDebouncer = this.constructor.debounce(()=>this.fixedHeader.resizeFixed(),100);
     var scrollDebouncer = this.constructor.debounce(()=>this.scrollToElement(_target),50);
     ['hierarchy-collapsed','hierarchy-uncollapsed','hierarchy-tree-view','hierarchy-flat-view','sort'].forEach((eventNameChunk)=>{
-      this.source.addEventListener(`reportal-table-${eventNameChunk}`,(e)=>{
-      resizeDebouncer();
-      _target = e.target;
-      scrollDebouncer();
-      if(this.sorting && this.sorting.sortOrder.length>0 && (e.type=='reportal-table-hierarchy-tree-view'||e.type=='reportal-table-hierarchy-flat-view')){
-        console.log('external onsort');
-        setTimeout(()=>{this.sorting.sort()},0);
-      }
+       this.source.addEventListener(`reportal-table-${eventNameChunk}`,(e)=>{
+        resizeDebouncer();
+        _target = e.target;
+        scrollDebouncer();
+        if(this.sorting && this.sorting.sortOrder.length>0 && (e.type=='reportal-table-hierarchy-tree-view'||e.type=='reportal-table-hierarchy-flat-view')){
+          setTimeout(()=>{this.sorting.sort()},0);
+        }
       });
     });
-    this.focusFollows();
+    this.focusFollows(); // for search field to setup following focus
   }
+
 
   /**
    * Allows focus to follow from a search field into floating header and back when header disappears.
@@ -105,8 +99,10 @@ class AggregatedTable{
     }
   }
 
+  /**
+   * Method evoked when sorting happened. If mode is hierarchical, we want to perform hierarchical row reordering in the array before appending changes to the table. After array is ready, table rows are reordered.
+   * */
   onSort(){
-    console.log('is flat',this.hierarchy.flat);
     if(!this.hierarchy.flat){ // we want to perform hierarchical row reordering in the array before appending changes to the table
       this.data.forEach((block,index)=>{
         let dataLevels = this.constructor.spliceLevel(block),
@@ -118,15 +114,16 @@ class AggregatedTable{
           this.data[index] = sortedData;
       });
     }
-    this.hierarchy.reorderRows(this.data)
+    this.hierarchy.reorderRows(this.data);// finally reposition sorted rows
   }
 
   /**
    * Separates a `data` array into arrays dedicated to each level at index of the level
+   * @param {Object} dataSource - initial `data`
    * */
-  static spliceLevel(source,level=0){
+  static spliceLevel(dataSource){
     let a = [];
-    source.forEach((row,index)=>{
+    dataSource.forEach((row,index)=>{
       let lvl = row.meta.level;
       if(!a[lvl]){a[lvl]=[];}
         a[lvl].push(row);
@@ -206,9 +203,9 @@ class AggregatedTable{
 
     //listener to display search field on search-icon click
     button.addEventListener('click',e=>{
-    if(!this.hierarchy.search.visible){this.hierarchy.search.visible = true;}
-    e.target.parentNode.querySelector('input').focus();
-  });
+      if(!this.hierarchy.search.visible){this.hierarchy.search.visible = true;}
+      e.target.parentNode.querySelector('input').focus();
+    });
 
     //listener to display search field on search-icon click
     clearButton.addEventListener('click',e=>{
@@ -222,21 +219,16 @@ class AggregatedTable{
     searchfield.addEventListener('keyup',e=>{
       this.updateSearchTarget(e); //update search parameters
       efficientSearch();          // call search less frequently
-
     });
-
 
     searchfield.addEventListener('blur',e=>{
       if(e.target.value.length==0)this.clearSearch(); //update search parameters
   });
 
-
-
     buttonContainer.appendChild(button);
     buttonContainer.appendChild(searchfield);
     buttonContainer.appendChild(clearButton);
     host.appendChild(buttonContainer);
-
   }
 
   /**
@@ -281,6 +273,11 @@ class AggregatedTable{
 
   }
 
+  /**
+   * Implements smooth srolling
+   * @param {Number} to - offset from top of the page the window needs to be scrolled to
+   * @param {Number} duration - auxiliary parameter to specify scroll duration and implement easing
+   * */
   scrollTo(to, duration) {
   var start = window.pageYOffset || document.documentElement.scrollTop,
     change = to - start,
