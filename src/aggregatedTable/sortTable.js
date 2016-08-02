@@ -36,7 +36,7 @@ class SortTable{
     // setup sort order and do initial default sorting
     this.sortOrder = this.setupSortOrder(defaultSorting);
 
-    this.sort(); //initial sorting
+    this.sort(); //initial sorting if any
   }
 
   /**
@@ -157,12 +157,14 @@ class SortTable{
    * */
   sort(){
     if(this.sortOrder && this.sortOrder.length>0){
-      this.data.sort((a, b)=>{ // sort rows
-        if(this.sortOrder.length>1){
-          return this.constructor.sorter(a[this.sortOrder[0].column],b[this.sortOrder[0].column], this.sortOrder[0].direction === 'desc' ? -1 : 1) || this.constructor.sorter(a[this.sortOrder[1].column],b[this.sortOrder[1].column], this.sortOrder[1].direction === 'desc' ? -1 : 1)
-        } else {
-          return this.constructor.sorter(a[this.sortOrder[0].column],b[this.sortOrder[0].column], this.sortOrder[0].direction === 'desc' ? -1 : 1);
-        }
+      this.data.forEach((block,index,array)=>{
+        block.sort((a, b)=>{ // sort rows
+          if(this.sortOrder.length>1){
+            return this.constructor.sorter(a[this.sortOrder[0].column],b[this.sortOrder[0].column], this.sortOrder[0].direction === 'desc' ? -1 : 1) || this.constructor.sorter(a[this.sortOrder[1].column],b[this.sortOrder[1].column], this.sortOrder[1].direction === 'desc' ? -1 : 1)
+          } else {
+            return this.constructor.sorter(a[this.sortOrder[0].column],b[this.sortOrder[0].column], this.sortOrder[0].direction === 'desc' ? -1 : 1);
+          }
+        });
       });
       this.columns[this.sortOrder[0].column].cell.dispatchEvent(this._sortEvent);
     }
@@ -192,7 +194,10 @@ class SortTable{
       let tempEl2 = document.createElement('span'); tempEl2.innerHTML = b;
       b=tempEl2.textContent.trim();
     }
-    if(!isNaN(a) && !isNaN(b)){} //they might be numbers or null
+    if(!isNaN(a) && !isNaN(b)){//they might be numbers or null
+      if(a===null){return 1} else if(b===null){return -1}
+      return a <  b ? lesser :  a >  b ? -lesser : 0;
+    }
     else if(!isNaN(parseFloat(a)) && !isNaN(parseFloat(b))){ // they might be number strings
       return parseFloat(a) <  parseFloat(b) ? lesser :  parseFloat(a) >  parseFloat(b) ? -lesser : 0;
     } else { //they might be simple strings
