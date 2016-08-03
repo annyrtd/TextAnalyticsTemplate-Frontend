@@ -168,7 +168,8 @@ class AggregatedTable{
     let button = document.createElement('span'),
         buttonContainer = document.createElement('span');
     button.classList.add(`icon-${buttonClassChunk}`);
-    buttonContainer.classList.add('btn', buttonClassChunk);
+    buttonContainer.classList.add('btn');
+    buttonContainer.classList.add(buttonClassChunk);
     buttonContainer.title=title;
     if(flat==this.hierarchy.flat){buttonContainer.classList.add('active');}
     buttonContainer.addEventListener('click',(e)=>{
@@ -198,8 +199,10 @@ class AggregatedTable{
 
     searchfield.type='text';
     button.classList.add('icon-search');
-    clearButton.classList.add('icon-add', 'clear-button');
-    buttonContainer.classList.add('btn', 'hierarchy-search');
+    clearButton.classList.add('icon-add');
+    clearButton.classList.add('clear-button');
+    buttonContainer.classList.add('btn');
+    buttonContainer.classList.add('hierarchy-search');
 
     //listener to display search field on search-icon click
     button.addEventListener('click',e=>{
@@ -240,7 +243,7 @@ class AggregatedTable{
     this.hierarchy.search.visible=false;
     this.hierarchy.search.searching=false;
     var inputs = this.hierarchy.source.parentNode.querySelectorAll('.reportal-hierarchical-header input');
-    if(inputs && inputs.length>1){inputs.forEach(input=>{input.value = '';})}
+    if(inputs && inputs.length>1){for(let i=0;i<inputs.length;i++){inputs[i].value = '';}}
   }
 
   /**
