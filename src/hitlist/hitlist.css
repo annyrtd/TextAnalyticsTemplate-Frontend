@@ -1,0 +1,112 @@
+.reportal-hitlist-container
+
+.reportal-hitlist-container .hitlist .yui3-datatable-table {
+  border: none !important;
+}
+
+.reportal-hitlist-container .yui3-datatable-columns, .reportal-hitlist-container th.utilityCol, .reportal-hitlist-container .yui3-datatable-cheader {
+  background-image: none !important;
+  background-color: #FFF !important;
+  border-top: 1px solid #dfdfdf !important;
+  font-weight: normal !important;
+}
+
+.reportal-hitlist-container .yui3-datatable-header {
+  font-weight: normal !important;
+}
+
+.reportal-hitlist-container .yui3-datatable-header:not(.reportal-hitlist-verbatim):not(.reportal-hitlist-satisfaction) {
+  min-width: 90px;
+  max-width: 90px;
+  white-space: normal;
+  text-align: center !important;
+}
+
+.reportal-hitlist-container .yui3-datatable-cell:not(.reportal-hitlist-verbatim) {
+  text-align: center !important;
+}
+
+.reportal-hitlist-container .yui3-datatable-cell, .yui3-datatable-cell:hover {
+  background-color: #FFF !important;
+  background-image: none !important;
+}
+
+.reportal-hitlist-container td.utilityCol, .sent_icon {
+  border-bottom: none !important;
+}
+
+.reportal-hitlist-container .reportal-hitlist-satisfaction {
+  font-size: 0 !important;
+}
+
+.reportal-hitlist-container .yui3-datatable-cell.reportal-hitlist-verbatim, .card {
+  color: #000 !important;
+  font-size: 14px !important;
+}
+
+.reportal-hitlist-container .yui3-datatable-cell.reportal-hitlist-verbatim {
+  padding-bottom: 15px !important;
+}
+
+.reportal-hitlist-container .count {
+  margin-left: 5px;
+}
+
+.reportal-hitlist-container .date-field {
+  color: #888;
+  font-size: 12px;
+  margin: 10px 0;
+}
+
+.reportal-hitlist-container .sortable {
+  float: right;
+  cursor: pointer;
+}
+
+.reportal-hitlist-container .date-sort:after {
+  margin-left: 5px;
+  font-size: 16px;
+}
+.reportal-hitlist-container .sortable.sorted.desc{
+  padding-right: 8px;
+}
+
+.reportal-hitlist-container .sortable.sorted.desc:after {
+  content: --icon-sorting-arrow;
+  -webkit-transform: rotate(180deg);
+  -ms-transform: rotate(180deg);
+  -o-transform: rotate(180deg);
+  transform: rotate(180deg);
+  padding-right: 8px;
+}
+
+.reportal-hitlist-container .date-sort.down:after {
+  content: '\2193';
+}
+
+.reportal-hitlist-container .date-sort.up:after {
+  content: '\2191';
+}
+
+.reportal-hitlist-container .nps, .osat {
+  font-size: 22px !important;
+}
+
+.reportal-hitlist-container .cats-field {
+  margin: 10px 0;
+}
+
+.reportal-hitlist-container .tag {
+  margin-right: 5px;
+  margin-top: 5px;
+  padding: 2px 5px;
+  border: solid 1px #ccc;
+  background-color: #f1f1f1;
+  font-size: 12px;
+  display: inline-block;
+}
+
+.reportal-hitlist-container .date, .cat, .hitlist-pagination-count {
+  display: none
+}
+
