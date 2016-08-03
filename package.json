@@ -1,6 +1,6 @@
 {
   "name": "text-analytics-template",
-  "version": "0.0.11",
+  "version": "0.1.2",
   "description": "Text analytics template boilerplate",
   "main": "index.js",
   "scripts": {
@@ -29,7 +29,8 @@
     "postcss-inline-svg": "trysound/postcss-inline-svg",
     "postcss-loader": "^0.9.1",
     "style-loader": "^0.13.1",
-    "webpack": "^1.13.1"
+    "webpack": "^1.13.1",
+    "jsdoc": "^3.4.0"
   },
   "dependencies": {}
 }
