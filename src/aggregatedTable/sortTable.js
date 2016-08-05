@@ -72,8 +72,10 @@ class SortTable{
      * @param {String} obj.direction - sort direction (`asc`|`desc`)
      * */
     sortOrder.add = function(obj){
-      self.columns[obj.column].cell.classList.add('sorted',obj.direction);
-      if(self.columns[obj.column].auxCell)self.columns[obj.column].auxCell.classList.add('sorted',obj.direction);
+      ['sorted',obj.direction].forEach(cssClass=>self.columns[obj.column].cell.classList.add(cssClass));
+      if(self.columns[obj.column].auxCell){
+        ['sorted',obj.direction].forEach(cssClass=>self.columns[obj.column].auxCell.classList.add(cssClass));
+      }
       sortOrder.push(obj);
     };
 
@@ -83,8 +85,10 @@ class SortTable{
      * @param {Number} column - column index as reference to the item to be removed.
      * */
     sortOrder.remove = function(index,column){
-      self.columns[column].cell.classList.remove('sorted','asc','desc');
-      if(self.columns[column].auxCell)self.columns[column].auxCell.classList.remove('sorted','asc','desc');
+      ['sorted','asc','desc'].forEach(cssClass=>self.columns[column].cell.classList.remove(cssClass));
+      if(self.columns[column].auxCell){
+        ['sorted','asc','desc'].forEach(cssClass=>self.columns[column].auxCell.classList.remove(cssClass));
+      }
       this.splice(index,1);
     };
 
@@ -140,8 +144,8 @@ class SortTable{
              this.cell.classList.add('sorted');
              this.auxCell?this.auxCell.classList.add('sorted'):null;
            } else {
-             this.cell.classList.remove('sorted','asc','desc');
-             this.auxCell?this.auxCell.classList.remove('sorted','asc','desc'):null;
+             ['sorted','asc','desc'].forEach(cssClass=>this.cell.classList.remove(cssClass));
+             this.auxCell?['sorted','asc','desc'].forEach(cssClass=>this.auxCell.classList.remove(cssClass)):null;
            }
          },
          index,

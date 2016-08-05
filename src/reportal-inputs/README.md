@@ -14,12 +14,14 @@ Example:
 
       <span class="reportal-select">
         <label>Fancy label</label>
-        <select>
-          <option>Apples</option>
-          <option selected>Pineapples</option>
-          <option>Chocolate</option>
-          <option>Pancakes</option>
-        </select>
+        <span class="reportal_hide_print">
+          <select>
+            <option>Apples</option>
+            <option selected>Pineapples</option>
+            <option>Chocolate</option>
+            <option>Pancakes</option>
+          </select>
+        <span>
       </span>
 
 In Reportal Page editor it looks like this:

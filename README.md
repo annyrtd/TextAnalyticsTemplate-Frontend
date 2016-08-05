@@ -444,7 +444,7 @@ body.fullbleed {
 
 ## Overview
 
-The `layout` provides simple ways to use [CSS flexible box layout](https://developer.mozilla.org/en-US/docs/Web/Guide/CSS/Flexible_boxes), also known as _flexbox_. It provides two different ways to use flexbox:
+The `layout` provides simple ways to use [CSS flexible box layout](https://developer.mozilla.org/en-US/docs/Web/Guide/CSS/Flexible_boxes), also known as _flexbox_ (compatibility: __IE10+__). It provides two different ways to use flexbox:
                                                                                                                                                                        
 *   Layout classes. The layout class stylesheet provides a simple set of class-based flexbox rules. Layout classes let you specify layout properties directly in markup.
                                                                                                                                                                        
