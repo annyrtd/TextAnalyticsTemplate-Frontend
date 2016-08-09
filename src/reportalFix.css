@@ -80,6 +80,17 @@ body, body.reportal-viewmode {
     &>[class^=icon-]{opacity:1;}
   }
   &:hover>[class^=icon-]{opacity:1;}
+  &.btn-primary {
+     color: #fff;
+     background-color: #00aaf7;
+     border-color: transparent;
+      &:hover,
+      &:active,
+      &:focus{
+         color: #fff;
+         background-color: #0087c4;
+      }
+   }
 }
 
 .icon-export{

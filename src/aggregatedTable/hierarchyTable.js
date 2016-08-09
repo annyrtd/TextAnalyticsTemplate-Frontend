@@ -65,9 +65,14 @@ class HierarchyTable{
         if(row.meta.block && index==0 && !row.meta.firstInBlock){ //block is defined and this is the first row in block (and doesn't contain block header already), we need to move block header from whatever line into this row
           let blockContainer = array.find(item=>item.meta.firstInBlock);
           blockContainer.meta.firstInBlock = false;
+          if(blockContainer.meta.row.classList.contains('firstInBlock'))blockContainer.meta.row.classList.remove('firstInBlock');
           row.meta.firstInBlock = true;
+          row.meta.row.classList.add('firstInBlock');
           row.meta.row.insertBefore(data[row.meta.block].cell, row.meta.row.firstChild);
+        } else if(row.meta.block && row.meta.firstInBlock && !row.meta.row.classList.contains('firstInBlock')){ // if it's a block header we need to add a class for block offset
+          row.meta.row.classList.add('firstInBlock');
         }
+
         tbody.appendChild(row.meta.row);
       })
     });
@@ -262,7 +267,8 @@ class HierarchyTable{
       var tdBlocks = this.source.parentNode.querySelectorAll(`table#${this.source.id}>tbody>tr>td:nth-child(${this.column})[rowspan]`);
       if(tdBlocks.length>0){
         for(let i=0;i<tdBlocks.length;i++){
-          let block = blocks[i].toLowerCase();
+          let block = blocks[i];
+          //tdBlocks[i].innerHTML=`<div>${tdBlocks[i].textContent}</div>`;
           arr[block] = {data:[], name:block, cell:tdBlocks[i]};
           arr.push(arr[block].data);
           this.parseHierarchy({array: arr[block].data, block:arr[block]});
@@ -302,13 +308,13 @@ class HierarchyTable{
    * @return {Array}
    */
   parseHierarchy({hierarchy=this.hierarchy,level=0,block,array=[]}={}){
-    let rows = this.source.parentNode.querySelectorAll(`table#${this.source.id}>tbody>tr`),
-        blockName = block && block!==null? block.name.toLowerCase() : null,
+    let blockName = block && block!==null? block.name : null,
         blockRowIndex =  block && block!==null? block.cell.parentNode.rowIndex : null;
+
     return hierarchy.reduce((resultArray,item,index)=>{
         let compoundID =  block && block!==null? `${item.id}_${blockName}` : item.id;
         if(this.rowheaders[compoundID]){
-          let row = rows[this.rowheaders[compoundID].index];
+          let row = this._rows[this.rowheaders[compoundID].index];
           let firstInBlock = block!==null && row.rowIndex === blockRowIndex; //this row is first in the block, which means it contains the first cell as a block cell and we need to indent the cell index when changing names in hierarchical column
           //we need to push to the array before we add arrows/circles to labels so that we have clean labels in array and may sort them as strings
           resultArray.push(
