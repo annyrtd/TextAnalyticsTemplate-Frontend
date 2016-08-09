@@ -2,6 +2,8 @@
 .vp-collapsible{
   border-radius: var(--border-radius,3px);
   text-align:left;
+  z-index: 1;
+  position: relative;
 
   & .vp-header{
       border-radius: var(--border-radius,3px) var(--border-radius,3px) 0 0 !important;

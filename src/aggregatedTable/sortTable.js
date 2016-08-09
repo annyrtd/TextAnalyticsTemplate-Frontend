@@ -26,8 +26,8 @@ class SortTable{
     this.data = data;
     // calculate default header row
     let headerRows = source.querySelector('thead').children,
-        auxHeaderRows = auxHeader?auxHeader.querySelector('thead').children:null,
-        headerRowIndex = defaultHeaderRow==-1?headerRows.length+defaultHeaderRow:defaultHeaderRow;
+      auxHeaderRows = auxHeader?auxHeader.querySelector('thead').children:null,
+      headerRowIndex = defaultHeaderRow==-1?headerRows.length+defaultHeaderRow:defaultHeaderRow;
     this.defaultHeaderRow={index:headerRowIndex, row:headerRows.item(headerRowIndex), auxRow:auxHeaderRows?auxHeaderRows.item(headerRowIndex):null};
 
     this.sortOrder = [];//necessary for proper initialization of `columns`
@@ -59,7 +59,7 @@ class SortTable{
       if(this.length>0){
         this.forEach((item,index)=>{
           this.remove(index,item.column);
-        });
+      });
       }
       this.add(obj);
       self.sort();
@@ -72,10 +72,8 @@ class SortTable{
      * @param {String} obj.direction - sort direction (`asc`|`desc`)
      * */
     sortOrder.add = function(obj){
-      ['sorted',obj.direction].forEach(cssClass=>self.columns[obj.column].cell.classList.add(cssClass));
-      if(self.columns[obj.column].auxCell){
-        ['sorted',obj.direction].forEach(cssClass=>self.columns[obj.column].auxCell.classList.add(cssClass));
-      }
+      self.columns[obj.column].cell.classList.add('sorted',obj.direction);
+      if(self.columns[obj.column].auxCell)self.columns[obj.column].auxCell.classList.add('sorted',obj.direction);
       sortOrder.push(obj);
     };
 
@@ -85,10 +83,8 @@ class SortTable{
      * @param {Number} column - column index as reference to the item to be removed.
      * */
     sortOrder.remove = function(index,column){
-      ['sorted','asc','desc'].forEach(cssClass=>self.columns[column].cell.classList.remove(cssClass));
-      if(self.columns[column].auxCell){
-        ['sorted','asc','desc'].forEach(cssClass=>self.columns[column].auxCell.classList.remove(cssClass));
-      }
+      self.columns[column].cell.classList.remove('sorted','asc','desc');
+      if(self.columns[column].auxCell)self.columns[column].auxCell.classList.remove('sorted','asc','desc');
       this.splice(index,1);
     };
 
@@ -117,42 +113,47 @@ class SortTable{
         auxHeaderColumns.unshift(auxHeaderRows.item(0));
       }
     }
+    var realColumnIndex=0;
     return headerColumns.map((cell,index)=>{
-        let sortable = (!(columns && columns.indexOf(td.cellIndex)==-1) || (excluded && excluded.indexOf(index)==-1)); // is in columns and not in excluded,
-        if(sortable){
-          cell.addEventListener('click',(el)=>{
-            if(el.target.localName =='td'||el.target.localName =='th'){this.updateSorting(el.target);} //we want to capture click on the cell and not buttons in it
-          });
-          cell.classList.add('sortable');
-          if(auxHeaderColumns){
-            var auxCell = auxHeaderColumns[index];
-            auxCell.addEventListener('click',(el)=>{
-              if(el.target.localName =='td'||el.target.localName =='th'){this.updateSorting(el.target);} //we want to capture click on the cell and not buttons in it
-            });
-            auxCell.classList.add('sortable');
-          }
-
-        }
-        let _sorted = null,
-          self = this;
-       return {
-         sortable:sortable,
-         get sorted(){return _sorted},
-         set sorted(val){
-           _sorted = val;
-           if(val){
-             this.cell.classList.add('sorted');
-             this.auxCell?this.auxCell.classList.add('sorted'):null;
-           } else {
-             ['sorted','asc','desc'].forEach(cssClass=>this.cell.classList.remove(cssClass));
-             this.auxCell?['sorted','asc','desc'].forEach(cssClass=>this.auxCell.classList.remove(cssClass)):null;
-           }
-         },
-         index,
-         cell: cell,
-         auxCell: auxCell
-       }
+        let sortable = (!(columns && columns.indexOf(cell.cellIndex)==-1) || (excluded && excluded.indexOf(index)==-1)); // is in columns and not in excluded,
+    if(sortable){
+      cell.addEventListener('click',(el)=>{
+        if(el.target.localName =='td'||el.target.localName =='th'){this.updateSorting(el.target);} //we want to capture click on the cell and not buttons in it
     });
+      cell.classList.add('sortable');
+      if(auxHeaderColumns){
+        var auxCell = auxHeaderColumns[index];
+        auxCell.addEventListener('click',(el)=>{
+          if(el.target.localName =='td'||el.target.localName =='th'){this.updateSorting(el.target);} //we want to capture click on the cell and not buttons in it
+      });
+        auxCell.classList.add('sortable');
+      }
+
+    }
+    let _sorted = null,
+      self = this;
+    var obj = {
+      sortable:sortable,
+      get sorted(){return _sorted},
+      set sorted(val){
+        _sorted = val;
+        if(val){
+          this.cell.classList.add('sorted');
+          this.auxCell?this.auxCell.classList.add('sorted'):null;
+        } else {
+          this.cell.classList.remove('sorted','asc','desc');
+          this.auxCell?this.auxCell.classList.remove('sorted','asc','desc'):null;
+        }
+      },
+      index: realColumnIndex,
+      cell: cell,
+      auxCell: auxCell
+    };
+    if(cell.colSpan>1){
+      realColumnIndex= realColumnIndex + cell.colSpan;
+    } else {realColumnIndex++}
+    return obj;
+  });
   }
 
   /**
@@ -162,14 +163,14 @@ class SortTable{
   sort(){
     if(this.sortOrder && this.sortOrder.length>0){
       this.data.forEach((block,index,array)=>{
-        block.sort((a, b)=>{ // sort rows
-          if(this.sortOrder.length>1){
-            return this.constructor.sorter(a[this.sortOrder[0].column],b[this.sortOrder[0].column], this.sortOrder[0].direction === 'desc' ? -1 : 1) || this.constructor.sorter(a[this.sortOrder[1].column],b[this.sortOrder[1].column], this.sortOrder[1].direction === 'desc' ? -1 : 1)
-          } else {
-            return this.constructor.sorter(a[this.sortOrder[0].column],b[this.sortOrder[0].column], this.sortOrder[0].direction === 'desc' ? -1 : 1);
-          }
-        });
-      });
+      block.sort((a, b)=>{ // sort rows
+        if(this.sortOrder.length>1){
+        return this.constructor.sorter(a[this.columns[this.sortOrder[0].column].index],b[this.columns[this.sortOrder[0].column].index], this.sortOrder[0].direction === 'desc' ? -1 : 1) || this.constructor.sorter(a[this.columns[this.sortOrder[1].column].index],b[this.columns[this.sortOrder[1].column].index], this.sortOrder[1].direction === 'desc' ? -1 : 1)
+      } else {
+        return this.constructor.sorter(a[this.columns[this.sortOrder[0].column].index],b[this.columns[this.sortOrder[0].column].index], this.sortOrder[0].direction === 'desc' ? -1 : 1);
+      }
+    });
+    });
       this.columns[this.sortOrder[0].column].cell.dispatchEvent(this._sortEvent);
     }
   }

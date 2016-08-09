@@ -31,7 +31,7 @@
   &.reportal-barchart.reportal-barchart-header>thead>tr:last-child>th:last-child{
     /*dirty hack to move content of the header to the left*/
      position:relative;
-     left:-59px;
+     left:-35px;
      width:200px;
      border-left:0;
   }
@@ -39,7 +39,7 @@
   &.reportal-barchart.reportal-barchart-header>thead>tr:last-child>th:nth-last-child(2) {
      /*dirty hack to move content of the header to the left*/
     color: transparent !important;
-    width:60px !important;
+    width:36px !important;
   }
   &.reportal-barchart>tbody>tr>td:nth-last-child(2),
   &.reportal-barchart>tbody>tr>th:nth-last-child(2) {
@@ -74,6 +74,10 @@
   }
   &.reportal-categories>thead>tr>td.reportal-hierarchical-header{position:relative;}
   &.reportal-categories>thead>tr>td.reportal-hierarchical-header:before{
+      /*cpecific class to set header for the first column*/
+      content:"Categories";
+  }
+  &.reportal-categories:not(.reportal-hierarchy-table)>thead>tr>td[class*="_cc"]:before{
       /*cpecific class to set header for the first column*/
       content:"Categories";
   }
@@ -214,14 +218,32 @@
   overflow-x: auto;
 }
 
+
 /*Hierarchycal styles*/
+/*coloring for even columns from end of tablу to compensate for uneven td count because of block headers*/
+.reportal-hierarchy-table>tbody>tr>td[class*=_dc]:nth-last-child(even){background: #f6f6f6}
+.reportal-hierarchy-table tr.firstInBlock>td{
+  border-top:10px #fff solid !important;
+  padding-top:2px !important;
+  /*&:first-child>div{
+
+    transform: rotate(90deg);
+    text-align: left;
+    padding-left: 8px;
+    word-wrap: normal;
+
+  }*/
+}
 .reportal-hierarchy-table tr.level0 {
   font-weight: bold;
 }
-.reportal-hierarchy-table>tbody>tr>td:first-child:not(.reportal-hierarchical-cell) {
+.reportal-hierarchy-table tr.firstInBlock>td:first-child {
   /*dirty hack for breakdown first column to stay really narrow*/
-  width: 50px;
+
   white-space: normal;
+  background: #f0f2f5 ;
+  vertical-align: top;
+  width:30px;
 }
 
 .reportal-hierarchy-table .reportal-hierarchical-header{
