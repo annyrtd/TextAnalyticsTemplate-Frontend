@@ -1,6 +1,4 @@
-/**
- * Created by IvanP on 04.07.2016.
- */
+
 
 import HierarchyTable from './hierarchyTable.js';
 import FixedHeader from './FixedHeader.js';
