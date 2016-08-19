@@ -2,7 +2,7 @@
  * Created by IvanP on 04.07.2016.
  */
 
-import HierarchyTable from './hierarchyTable.js';
+import TAHierarchyTable from './TAHierarchyTable.js';
 import FixedHeader from './FixedHeader.js';
 import SortTable from './SortTable.js';
 
@@ -20,7 +20,7 @@ class AggregatedTable{
     if(hierarchy && typeof hierarchy == 'object'){
       // initialize hierarchy column to be parsed and presented as tree
       hierarchy.source = hierarchy.source||table;
-      this.hierarchy = new HierarchyTable(hierarchy);
+      this.hierarchy = new TAHierarchyTable(hierarchy);
       this.data = this.hierarchy.data;
       //initialize buttons that will toggle between flat and tree view
       let buttonHost = this.hierarchy.source.querySelector('.reportal-hierarchical-header');
@@ -139,11 +139,10 @@ class AggregatedTable{
    * */
   reorderSorted(source,row,output,insertAtIndex = output.length){
       if(row.meta.hasChildren){
-        let parent = row.meta.id,
-            childLevel = source[row.meta.level+1],
+        let childLevel = source[row.meta.level+1],
             childLevelLength = childLevel.length;
         while(childLevelLength--){
-          if(childLevel[childLevelLength].meta.parent==parent){
+          if(childLevel[childLevelLength].meta.parent==row){
             //since we go backwards (to reduce array for the next iteration), we'll always want to add the row at `output.length`,
             // which technically is right after the parent insertion point
             output.splice(insertAtIndex,0,childLevel[childLevelLength]);

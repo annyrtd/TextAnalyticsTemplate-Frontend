@@ -117,18 +117,18 @@ class HierarchyRowMeta extends AggregatedTableRowMeta{
    * @param {Object} meta - meta in the row
    */
   toggleHiddenRows(meta=this){
-    if(meta.hasChildren){
+    if(meta.hasChildren && meta.children){
       meta.children.forEach(childRow=>{
         if(meta.collapsed){                                           // if parent (`meta.row`) is collapsed
-        childRow.meta.hidden=true;                                  // hide all its children and
-        if(childRow.meta.hasChildren && !childRow.meta.collapsed){  // if a child can be collapsed
-          childRow.meta.collapsed=true;                             // collapse it and
-          meta.toggleHiddenRows(childRow.meta);                     // repeat for its children
+          childRow.meta.hidden=true;                                  // hide all its children and
+          if(childRow.meta.hasChildren && !childRow.meta.collapsed){  // if a child can be collapsed
+            childRow.meta.collapsed=true;                             // collapse it and
+            meta.toggleHiddenRows(childRow.meta);                     // repeat for its children
+          }
+        } else {                                                      // otherwise make sure we show all children of an expanded row
+          childRow.meta.hidden=false;
         }
-      } else {                                                      // otherwise make sure we show all children of an expanded row
-        childRow.meta.hidden=false;
-      }
-    });
+      });
     }
   }
 
@@ -198,13 +198,15 @@ class HierarchyBase extends ReportalBase {
    * @param {Boolean} [isBlockRow=false] - if table contains block cells that rowspan across several rows, we need to exclude those from actual data
    * @return {Array} Returns array of normalized cell values
    * */
-  stripRowData(row, isBlockRow=false){
+  stripRowData(row,firstInBlock,block){
+    let willPass;
     return [].slice.call(row.children).reduce((childRows,current)=>{
-        if(!isBlockRow){
-      childRows.push(current.children.length == 0 ? this.constructor._isNumber(current.textContent.trim()) : (current.innerHTML).trim())
-    }
-    return childRows;
-  },[]);
+        willPass = (firstInBlock && (block!==null && current === block.cell));
+      if(!willPass){
+        childRows.push(current.children.length == 0 ? this.constructor._isNumber(current.textContent.trim()) : (current.innerHTML).trim())
+      }
+      return childRows;
+    },[]);
   }
 
 
@@ -214,12 +216,12 @@ class HierarchyBase extends ReportalBase {
   collapseAll(){
     this.data.forEach(block=>{
       block.forEach(row=>{
-      let collapsed = row.meta.collapsed;
-    if(typeof collapsed != undefined && !collapsed){
-      row.meta.collapsed=true;
-    }
-  });
-  });
+        let collapsed = row.meta.collapsed;
+        if(typeof collapsed != undefined && !collapsed){
+          row.meta.collapsed=true;
+        }
+      });
+    });
   }
 
   /**
@@ -247,6 +249,33 @@ class HierarchyBase extends ReportalBase {
     }
     return newName
   }
+
+  /**
+   * If `blocks` array is not empty, then we have blocks that rowspan across hierarchy instances. This function creates meta for blocks, and makes them accessible as properties in the array. Then it launches `parseHierarchy` per each block.
+   * @param {Array} data - initial data if passed
+   * @param {Array} blocks - array of `blocks` passed in constructor
+   * */
+  setUpBlocks(data,blocks){
+    if(data.length>0){return data} //if data was already passed, use it, we assume it's ready prepared
+    var arr = [];
+    let rows = [].slice.call(this.source.parentNode.querySelectorAll(`table#${this.source.id}>tbody>tr`));
+    if(blocks && blocks.length>0){
+      var tdBlocks = this.source.parentNode.querySelectorAll(`table#${this.source.id}>tbody>tr>td:nth-child(${this.column})[rowspan]`);
+      if(tdBlocks.length>0){
+        for(let i=0;i<tdBlocks.length;i++){
+          let block = blocks[i];
+          arr[block] = {data:[], name:block, cell:tdBlocks[i]};
+          arr.push(arr[block].data);
+          this.parseHierarchy({array: arr[block].data, block:arr[block], rows});
+        }
+      }
+    } else {
+      arr[0]=[];
+      this.parseHierarchy({array: arr[0], rows});
+    }
+    return arr;
+  }
+
   /**
    * This function initializes a prototype for search functionality for hierarchical column
    * @param {Boolean} enabled=false - flag to be set when enabling the search
@@ -258,7 +287,7 @@ class HierarchyBase extends ReportalBase {
    * @param {Boolean} [visible=false] - search box is visible
    * @param {Boolean} [highlight=true] - search matches will be highlighted
    * */
-  setupSearch({enabled = false, immediate = false, timeout=300, searching=false, query='', target, visible=false,highlight = true}={}){
+  setupSearch({enabled = false, immediate = false, timeout=300, searching=false, query='', target, visible=false,highlight=true}={}){
     var _searching = searching,
       self = this,
       _query = query,
@@ -302,6 +331,40 @@ class HierarchyBase extends ReportalBase {
     }
   }
 
+  /**
+   * This function runs through the data and looks for a match in `row.meta.flatName` (for flat view) or `row.meta.name` (for tree view) against the `str`.
+   * @param {String} str - expression to match against (is contained in `this.search.query`)
+   * */
+  searchRowheaders(str){
+    let regexp = new RegExp('('+str+')','i');
+    this.data.forEach((block,blockIndex)=>{
+      block.forEach(row=>{
+        if(this.flat){
+          row.meta.matches = regexp.test(row.meta.flatName);
+          row.meta.hidden=false;
+        } else {
+          // if it has a parent and maybe not matches and the parent has match, then let it and its children be displayed
+          let matches = regexp.test(row.meta.name);
+          if(row.meta.parent!=null && !matches && row.meta.parent.meta.matches){
+            // just in case it's been covered in previous iteration
+            if(!row.meta.matches){row.meta.matches=true}
+            else if(row.meta.hasChildren && !row.meta.collapsed){
+              row.meta.collapsed = true; //if a parent row is uncollapsed and has a match, but the current item used to be a match and was uncollapsed but now is not a match
+            }
+            row.meta.hidden=row.meta.parent.meta.collapsed;
+          } else { // if has no parent or parent not matched let's test it, maybe it can have a match, if so, display his parents and children
+            row.meta.matches = matches;
+            if(matches){
+              this.uncollapseParents(row.meta);
+            }
+          }
+        }
+      });
+    });
+    this.search.highlight.apply(str);
+  }
+
+
 
   /**
    * Sets `this.flat`, adds/removes `.reportal-heirarchy-flat-view` to the table and updates labels for hierarchy column to flat/hierarchical view
@@ -315,7 +378,7 @@ class HierarchyBase extends ReportalBase {
     if(this.data){
       this.data.forEach(block=> {
         block.forEach(row=>this.updateCategoryLabel(row))
-    });
+      });
     }
     //if the search is in progress, we need to model hierarchical/flat search which is basically redoing the search.
     if(this.search && this.search.searching){
@@ -342,10 +405,8 @@ class HierarchyBase extends ReportalBase {
         // we want to make sure if there is a link (drill-down content) then we populate the link with new title, else write to the last text node.
         label = cell.querySelector('a')? cell.querySelector('a') : cell.childNodes.item(cell.childNodes.length-1),
         text = this.flat? row.meta.flatName: row.meta.name;
-
       // update the label in the array. Since we didn't include the block label, we need to offset it by one from the column in all cases.
       row[this.blocks.length>0? this.column-1:this.column] = text;
-
       // update the label in the table.
       label.nodeType==3? label.nodeValue=text : label.textContent = text;
     }
@@ -357,19 +418,18 @@ class HierarchyBase extends ReportalBase {
   reorderRows(data,tbody=this.source.querySelector('tbody')){
     data.forEach(block=>{
       block.forEach((row,index,array)=>{
-      if(row.meta ){
-      if( row.meta.block!=null && index==0 && !row.meta.firstInBlock){ //block is defined and this is the first row in block (and doesn't contain block header already), we need to move block header from whatever line into this row
-        let blockContainer = array.find(item=>item.meta.firstInBlock);
-        blockContainer.meta.firstInBlock = false;
-        row.meta.firstInBlock = true;
-        row.meta.row.insertBefore(row.meta.block.cell, row.meta.row.firstChild);
-      }
-      tbody.appendChild(row.meta.row);
-    }
-  });
-  });
+        if(row.meta){
+          if(row.meta.block!=null && index==0 && !row.meta.firstInBlock){ //block is defined and this is the first row in block (and doesn't contain block header already), we need to move block header from whatever line into this row
+            let blockContainer = array.find(item=>item.meta.firstInBlock);
+            blockContainer.meta.firstInBlock = false;
+            row.meta.firstInBlock = true;
+            row.meta.row.insertBefore(row.meta.block.cell, row.meta.row.firstChild);
+          }
+          tbody.appendChild(row.meta.row);
+        }
+      });
+    });
   }
-
 }
 
 export default HierarchyBase

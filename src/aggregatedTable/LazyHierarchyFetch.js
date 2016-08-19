@@ -30,10 +30,10 @@ class LazyHierarchyFetch extends HierarchyBase{
    * */
   constructor({source, rowheaders, hierarchyID, hierarchyControlID, languageCode=9, column=0, flat = false,search={},data=[],blocks=[],excludedRows=[], pageStateID=document.getElementById('PageStateId').value}={}){
     super();
-    if(source){this.source=source;} else { throw new ReferenceError('`source` table is not specified for DynamicDrilldownFetch')}
-    if(rowheaders){this.rowheaders = rowheaders;} else { throw new ReferenceError('`rowheaders` are not specified for DynamicDrilldownFetch')}
-    if(hierarchyID){this.hierarchyID=hierarchyID;} else { throw new ReferenceError('`hierarchyID` is not specified for DynamicDrilldownFetch')}
-    if(hierarchyControlID){this.hierarchyControlID = hierarchyControlID;} else { throw new ReferenceError('`hierarchyControlID` is not specified for DynamicDrilldownFetch')}
+    if(source){this.source=source;} else { throw new ReferenceError('`source` table is not specified for LazyHierarchyFetch')}
+    if(rowheaders){this.rowheaders = rowheaders;} else { throw new ReferenceError('`rowheaders` are not specified for LazyHierarchyFetch')}
+    if(hierarchyID){this.hierarchyID=hierarchyID;} else { throw new ReferenceError('`hierarchyID` is not specified for LazyHierarchyFetch')}
+    if(hierarchyControlID){this.hierarchyControlID = hierarchyControlID;} else { throw new ReferenceError('`hierarchyControlID` is not specified for LazyHierarchyFetch')}
     this.blocks = blocks;
     this.languageCode = languageCode;
     if(excludedRows && Array.isArray(excludedRows)){this.excludedRows=excludedRows;} else {throw new ReferenceError('`excludedRows` must be an `Array`')}
@@ -48,33 +48,6 @@ class LazyHierarchyFetch extends HierarchyBase{
 
     this.hierarchy = {};
   }
-
-  /**
-   * If `blocks` array is not empty, then we have blocks that rowspan across hierarchy instances. This function creates meta for blocks, and makes them accessible as properties in the array. Then it launches `parseHierarchy` per each block.
-   * @param {Array} data - initial data if passed
-   * @param {Array} blocks - array of `blocks` passed in constructor
-   * */
-  setUpBlocks(data,blocks){
-    if(data.length>0){return data} //if data was already passed, use it, we assume it's ready prepared
-    var arr = [];
-    if(blocks && blocks.length>0){
-      var tdBlocks = this.source.parentNode.querySelectorAll(`table#${this.source.id}>tbody>tr>td:nth-child(${this.column})[rowspan]`);
-      if(tdBlocks.length>0){
-        for(let i=0;i<tdBlocks.length;i++){
-          let block = blocks[i].toLowerCase();
-          arr[block] = {data:[], name:block, cell:tdBlocks[i]};
-          arr.push(arr[block].data);
-          this.parseHierarchy({array: arr[block].data, block:arr[block]});
-        }
-      }
-    } else {
-      arr[0]=[];
-      let rows = [].slice.call(this.source.parentNode.querySelectorAll(`table#${this.source.id}>tbody>tr`));
-      this.parseHierarchy({array: arr[0], block:null, rows, parent:null});
-    }
-    return arr;
-  }
-
 
   /**
    * Recursive function taking rows from each `block` and adding information to that row, retrieving data from the row, and adding this array to `this.data[block]`
@@ -99,21 +72,20 @@ class LazyHierarchyFetch extends HierarchyBase{
    * @param {Array} hierarchy=this.hierarchy - array of hierarchy objects from Reportal
    * @param {int} level=0 - depth of the function
    * @param {String} block=null - an item from `blocks` array
-   * @param {Array} array=[] - changedTable for children level
+   * @param {!Array} array - changed table for children levels
    * @return {Array}
    *
    */
 
-  parseHierarchy({level=0,rows,block,array=[],parent=null}={}){
+  parseHierarchy({level=0,rows,block=null,array,parent=null}={}){
     [].slice.call(this.source.parentNode.querySelectorAll(`table#${this.source.id}>tbody>tr`)).forEach((row,index)=>{
-      var data = this.stripRowData(row, block && block!==null && row.rowIndex === block.cell.parentNode.rowIndex);
-    array.push(data);
-    var id = this.rowheaders[index][0],
-      parentID = parent;
-    if(this.excludedRows.indexOf(index)==-1){
-      this.parseHierarchyRow({row, id, parentID, data, array, level, block, parent}, true);
-    }
-  });
+      var data = this.stripRowData(row,(block!==null && row.rowIndex == block.cell.parentNode.rowIndex), block);
+      array.push(data);
+      var id = this.rowheaders[index][0];
+      if(this.excludedRows.indexOf(index)==-1){
+        this.parseHierarchyRow({row, id,  data, array, level, block, parent}, true);
+      }
+    });
 
   }
 
@@ -121,7 +93,6 @@ class LazyHierarchyFetch extends HierarchyBase{
    * Parses a row in the hierarchy, sets up its meta and fetches childrent of the row if necessary
    * @param {HTMLTableRowElement} row  - table row to be parsed
    * @param {String} id - id of the row
-   * @param {!String} parentID - parent ID of the parent row
    * @param {Array} data - row data
    * @param {Array} array - array of row datas within a block
    * @param {Number} level=0 - level in hierarchy
@@ -130,7 +101,7 @@ class LazyHierarchyFetch extends HierarchyBase{
    * @param {Boolean=} [getChildren=false] - flag to fetch children of a row in question
    * @param {Boolean=} [isSecondFetch=false] - flag denoting that it's the second time this function is run on the row and there's no need to construct meta for it
    * */
-  parseHierarchyRow({row, id, parentID=null, data, array, level=0, block,parent=null}={}, getChildren=false, isSecondFetch = false){
+  parseHierarchyRow({row, id,  data, array, level=0, block,parent=null}={}, getChildren=false, isSecondFetch = false){
     let blockName = null, firstInBlock = false;
     if(block!==null){
       blockName = block.name.toLowerCase();
@@ -190,14 +161,14 @@ class LazyHierarchyFetch extends HierarchyBase{
         childRows.forEach((childRow, index) => {
           let currentRowData = this.stripRowData(childRow, firstInBlock);
 
-        //data.meta.children.push(currentRowData);
+          //data.meta.children.push(currentRowData);
 
-        array.splice(array.indexOf(data)+1+index, 0, currentRowData);
-        // TODO: add row processing as above
-        // append rows after parent row
-        this.source.querySelector('tbody').insertBefore(childRow, nextRow);
-        this.parseHierarchyRow({row: childRow, id: childHierarchy[index].id, parentID:data.meta.id, data:currentRowData, array, level: data.meta.level+1, block, parent: data});
-      });
+          array.splice(array.indexOf(data)+1+index, 0, currentRowData);
+          // TODO: add row processing as above
+          // append rows after parent row
+          this.source.querySelector('tbody').insertBefore(childRow, nextRow);
+          this.parseHierarchyRow({row: childRow, id: childHierarchy[index].id,  data:currentRowData, array, level: data.meta.level+1, block, parent: data});
+        });
         data.meta.collapsed = true;
         this.constructor.rowIsLoading(data.meta, false);
       });
