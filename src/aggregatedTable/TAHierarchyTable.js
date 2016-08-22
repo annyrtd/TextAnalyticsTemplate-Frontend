@@ -100,12 +100,13 @@ class TAHierarchyTable extends HierarchyBase{
           }
 
           //build a prototype for a row
+          let flatName = item.name.split(this.flatNameDelimiter).reverse()[0].trim();
           currentRowArray.meta = new this.setupMeta({
             row,
             id: item.id,
             block: block,
             flatName: item.name,
-            name: item.name.split('|').reverse()[0].trim(),
+            name: flatName,
             nameCell: row.children.item(block!==null ? (firstInBlock? this.column: this.column-1) : this.column ),
             parent: parent,
             level,
