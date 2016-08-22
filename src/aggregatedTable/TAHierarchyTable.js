@@ -100,18 +100,18 @@ class TAHierarchyTable extends HierarchyBase{
           }
 
           //build a prototype for a row
-          let flatName = item.name.split(this.flatNameDelimiter).reverse()[0].trim();
+          //let flatName = item.name.split(this.flatNameDelimiter).reverse()[0].trim();
           currentRowArray.meta = new this.setupMeta({
             row,
             id: item.id,
             block: block,
-            flatName: item.name,
-            name: flatName,
-            nameCell: row.children.item(block!==null ? (firstInBlock? this.column: this.column-1) : this.column ),
+            flatName: item.text.trim(),
+            name: item.name.trim(),//flatName,
+            nameCell: row.children.item(block!==null ? (firstInBlock? this.column: this.column-1) : this.column),
             parent: parent,
             level,
-            collapsed: item.children.length > 0,
-            hasChildren: item.children.length > 0,
+            collapsed: item.subcells.length > 0,
+            hasChildren: item.subcells.length > 0,
             hidden: level > 0
           });
 
@@ -126,7 +126,7 @@ class TAHierarchyTable extends HierarchyBase{
           // initializes row headers according to `this.flat`
           this.updateCategoryLabel(currentRowArray);
 
-          if(level < 2)resultArray = this.parseHierarchy({hierarchy:item.children, level:level + 1, block, array:resultArray, rows, parent:currentRowArray });
+          if(level < 2)resultArray = this.parseHierarchy({hierarchy:item.subcells, level:level + 1, block, array:resultArray, rows, parent:currentRowArray });
         }
 
       return resultArray
