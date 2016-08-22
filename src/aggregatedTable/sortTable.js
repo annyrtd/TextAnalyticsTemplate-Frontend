@@ -149,7 +149,7 @@ class SortTable{
         auxCell: auxCell
       };
       // we need to increment the colspan only for columns that follow rowheader because the block is not in data.
-      realColumnIndex= realColumnIndex + cell.colSpan;
+      realColumnIndex= realColumnIndex>0?(realColumnIndex + cell.colSpan):realColumnIndex+1;
       return obj;
     });
   }
