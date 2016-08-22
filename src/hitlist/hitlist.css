@@ -60,7 +60,6 @@
 
 .reportal-hitlist-container .sortable {
   display: inline-flex;
-  float: right;
   cursor: pointer;
 }
 
@@ -91,7 +90,7 @@
   padding-right: 8px;
 }
 
-.reportal-hitlist-container .utilityCol, .reportal-hitlist-container .reportal-hitlist-date, .reportal-hitlist-container .reportal-hitlist-categories, .reportal-hitlist-container .hitlist-pagination-count {
+.reportal-hitlist-container .utilityCol, .reportal-hitlist-container .reportal-hitlist-categories, .reportal-hitlist-container .hitlist-pagination-count {
   display: none;
 }
 
