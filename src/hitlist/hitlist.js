@@ -50,7 +50,8 @@ class Hitlist {
     this.addClassesToHitlist();
     this.clearCommentsHeader();
     this.movePaginationToTheCommentsHeader();
-    this.addDateSortingToTheCommentsHeader();
+    this.addDateSorting();
+    this.processDates();
     this.processComments();
     this.addIconsForSentiment();
   }
@@ -82,17 +83,18 @@ class Hitlist {
     this.source.querySelector(".yui3-datatable-header.reportal-hitlist-verbatim").appendChild(paginationElement);
   }
 
-  addDateSortingToTheCommentsHeader(){
+  addDateSorting(){
     var dateSortingElement = document.createElement("span");
     dateSortingElement.innerText = "Date";
     dateSortingElement.classList.add("sortable");
     dateSortingElement.classList.remove("waiting");
     this.toggleSorting(dateSortingElement, this.source.querySelector(".yui3-datatable-header.reportal-hitlist-date"));
-    this.source.querySelector(".yui3-datatable-header.reportal-hitlist-verbatim").appendChild(dateSortingElement);
+    this.source.querySelector(".yui3-datatable-header.reportal-hitlist-date").innerHTML = "";
+    this.source.querySelector(".yui3-datatable-header.reportal-hitlist-date").appendChild(dateSortingElement);
     dateSortingElement.addEventListener("click",(event)=>{
       dateSortingElement.classList.add("waiting");
       dateSortingElement.classList.remove("sorted");
-      this.source.querySelector(".yui3-datatable-header.reportal-hitlist-date").click();
+      //this.source.querySelector(".yui3-datatable-header.reportal-hitlist-date").click();
     });
   }
 
@@ -125,8 +127,14 @@ class Hitlist {
   processComments(){
     this.source.querySelectorAll(".yui3-datatable-cell.reportal-hitlist-verbatim").forEach((cell, index)=>{
       this.wrapComment(cell);
-      this.addDateToComment(cell, index);
+      //this.addDateToComment(cell, index);
       this.addCategoriesToComment(cell,index);
+    });
+  }
+
+  processDates(){
+    this.source.querySelectorAll(".yui3-datatable-cell.reportal-hitlist-date").forEach((cell, index)=>{
+      this.addDateToComment(cell, index);
     });
   }
 
@@ -139,9 +147,10 @@ class Hitlist {
 
   addDateToComment(cell, index){
     var date = this.source.querySelectorAll(".yui3-datatable-cell.reportal-hitlist-date")[index].innerText;
+    this.source.querySelectorAll(".yui3-datatable-cell.reportal-hitlist-date")[index].innerHTML = "";
     var dateElement = document.createElement("div");
     dateElement.innerText = date;
-    dateElement.classList.add("hitlist-date-info")
+    dateElement.classList.add("hitlist-date-info");
     cell.insertBefore(dateElement,cell.firstChild);
   }
 
