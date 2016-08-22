@@ -1,47 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <title>aggregatedTable/aggregatedTable.js - Documentation</title>
-
-    <script src="scripts/prettify/prettify.js"></script>
-    <script src="scripts/prettify/lang-css.js"></script>
-    <!--[if lt IE 9]>
-      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
-    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
-</head>
-<body>
-
-<input type="checkbox" id="nav-trigger" class="nav-trigger" />
-<label for="nav-trigger" class="navicon-button x">
-  <div class="navicon"></div>
-</label>
-
-<label for="nav-trigger" class="overlay"></label>
-
-<nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AggregatedTable.html">AggregatedTable</a><ul class='methods'><li data-type='method'><a href="AggregatedTable.html#.debounce">debounce</a></li><li data-type='method'><a href="AggregatedTable.html#.spliceLevel">spliceLevel</a></li><li data-type='method'><a href="AggregatedTable.html#addSearchBox">addSearchBox</a></li><li data-type='method'><a href="AggregatedTable.html#addToggleButton">addToggleButton</a></li><li data-type='method'><a href="AggregatedTable.html#clearSearch">clearSearch</a></li><li data-type='method'><a href="AggregatedTable.html#focusFollows">focusFollows</a></li><li data-type='method'><a href="AggregatedTable.html#onSort">onSort</a></li><li data-type='method'><a href="AggregatedTable.html#reorderSorted">reorderSorted</a></li><li data-type='method'><a href="AggregatedTable.html#scrollTo">scrollTo</a></li><li data-type='method'><a href="AggregatedTable.html#scrollToElement">scrollToElement</a></li><li data-type='method'><a href="AggregatedTable.html#search">search</a></li><li data-type='method'><a href="AggregatedTable.html#updateSearchTarget">updateSearchTarget</a></li></ul></li><li><a href="ConfirmitBase.html">ConfirmitBase</a></li><li><a href="FixedHeader.html">FixedHeader</a><ul class='methods'><li data-type='method'><a href="FixedHeader.html#cloneHeader">cloneHeader</a></li><li data-type='method'><a href="FixedHeader.html#init">init</a></li><li data-type='method'><a href="FixedHeader.html#resizeFixed">resizeFixed</a></li><li data-type='method'><a href="FixedHeader.html#resizeThrottler">resizeThrottler</a></li><li data-type='method'><a href="FixedHeader.html#scrollFixed">scrollFixed</a></li><li data-type='method'><a href="FixedHeader.html#wrapTable">wrapTable</a></li></ul></li><li><a href="HierarchyTable.html">HierarchyTable</a><ul class='methods'><li data-type='method'><a href="HierarchyTable.html#._isNumber">_isNumber</a></li><li data-type='method'><a href="HierarchyTable.html#.addCollapseButton">addCollapseButton</a></li><li data-type='method'><a href="HierarchyTable.html#.clearLink">clearLink</a></li><li data-type='method'><a href="HierarchyTable.html#init">init</a></li><li data-type='method'><a href="HierarchyTable.html#parseHierarchy">parseHierarchy</a></li><li data-type='method'><a href="HierarchyTable.html#reorderRows">reorderRows</a></li><li data-type='method'><a href="HierarchyTable.html#searchRowheaders">searchRowheaders</a></li><li data-type='method'><a href="HierarchyTable.html#setUpBlocks">setUpBlocks</a></li><li data-type='method'><a href="HierarchyTable.html#setupMeta">setupMeta</a></li><li data-type='method'><a href="HierarchyTable.html#setupSearch">setupSearch</a></li><li data-type='method'><a href="HierarchyTable.html#toggleHiddenRows">toggleHiddenRows</a></li><li data-type='method'><a href="HierarchyTable.html#uncollapseParents">uncollapseParents</a></li><li data-type='method'><a href="HierarchyTable.html#updateCategoryLabel">updateCategoryLabel</a></li></ul></li><li><a href="Highlight.html">Highlight</a><ul class='methods'><li data-type='method'><a href="Highlight.html#apply">apply</a></li><li data-type='method'><a href="Highlight.html#getRegex">getRegex</a></li><li data-type='method'><a href="Highlight.html#remove">remove</a></li><li data-type='method'><a href="Highlight.html#setMatchType">setMatchType</a></li><li data-type='method'><a href="Highlight.html#setRegex">setRegex</a></li></ul></li><li><a href="SortTable.html">SortTable</a><ul class='methods'><li data-type='method'><a href="SortTable.html#.sorter">sorter</a></li><li data-type='method'><a href="SortTable.html#setupColumns">setupColumns</a></li><li data-type='method'><a href="SortTable.html#setupSortOrder">setupSortOrder</a></li><li data-type='method'><a href="SortTable.html#sort">sort</a></li><li data-type='method'><a href="SortTable.html#updateSorting">updateSorting</a></li></ul></li></ul><h3>Global</h3><ul><li><a href="global.html#mixin">mixin</a></li></ul>
-</nav>
-
-<div id="main">
-    
-    <h1 class="page-title">aggregatedTable/aggregatedTable.js</h1>
-    
-
-    
 
 
-
-    
-    <section>
-        <article>
-            <pre class="prettyprint source linenums"><code>/**
- * Created by IvanP on 04.07.2016.
- */
-
-import HierarchyTable from './hierarchyTable.js';
+import TAHierarchyTable from './TAHierarchyTable.js';
 import FixedHeader from './FixedHeader.js';
 import SortTable from './SortTable.js';
 
@@ -56,10 +15,10 @@ class AggregatedTable{
   constructor({table, hierarchy, fixedHeader,sorting}={}){
     this.hierarchy=this.sorting=null;
     this.source=table;
-    if(hierarchy &amp;&amp; typeof hierarchy == 'object'){
+    if(hierarchy && typeof hierarchy == 'object'){
       // initialize hierarchy column to be parsed and presented as tree
       hierarchy.source = hierarchy.source||table;
-      this.hierarchy = new HierarchyTable(hierarchy);
+      this.hierarchy = new TAHierarchyTable(hierarchy);
       this.data = this.hierarchy.data;
       //initialize buttons that will toggle between flat and tree view
       let buttonHost = this.hierarchy.source.querySelector('.reportal-hierarchical-header');
@@ -70,7 +29,7 @@ class AggregatedTable{
       }
     }
 
-    if(fixedHeader &amp;&amp; typeof fixedHeader == 'object'){
+    if(fixedHeader && typeof fixedHeader == 'object'){
       fixedHeader.source = fixedHeader.source||table;
       this.fixedHeader = new FixedHeader(fixedHeader);
       //initialize buttons that will toggle between flat and tree view in the original table
@@ -106,7 +65,7 @@ class AggregatedTable{
         resizeDebouncer();
         _target = e.target;
         scrollDebouncer();
-        if(this.sorting &amp;&amp; this.sorting.sortOrder.length>0 &amp;&amp; (e.type=='reportal-table-hierarchy-tree-view'||e.type=='reportal-table-hierarchy-flat-view')){
+        if(this.sorting && this.sorting.sortOrder.length>0 && (e.type=='reportal-table-hierarchy-tree-view'||e.type=='reportal-table-hierarchy-flat-view')){
           setTimeout(()=>{this.sorting.sort()},0);
         }
       });
@@ -123,9 +82,9 @@ class AggregatedTable{
       var inputs = [].slice.call(this.source.parentNode.querySelectorAll('.reportal-hierarchical-header input'));
       ['visible','hidden'].forEach(eventChunk=>{
         this.source.addEventListener(`reportal-fixed-header-${eventChunk}`,(e)=>{
-          if(this.hierarchy.search.searching &amp;&amp; document.activeElement &amp;&amp; inputs.indexOf(document.activeElement)!=-1){
+          if(this.hierarchy.search.searching && document.activeElement && inputs.indexOf(document.activeElement)!=-1){
             let current = this.hierarchy.search.target;
-            for(let i=0;i&lt;inputs.length;i++){
+            for(let i=0;i<inputs.length;i++){
               if(inputs[i]!=document.activeElement){
                 inputs[i].focus();
                 this.hierarchy.search.target=inputs[i];
@@ -178,11 +137,10 @@ class AggregatedTable{
    * */
   reorderSorted(source,row,output,insertAtIndex = output.length){
       if(row.meta.hasChildren){
-        let parent = row.meta.id,
-            childLevel = source[row.meta.level+1],
+        let childLevel = source[row.meta.level+1],
             childLevelLength = childLevel.length;
         while(childLevelLength--){
-          if(childLevel[childLevelLength].meta.parent==parent){
+          if(childLevel[childLevelLength].meta.parent==row){
             //since we go backwards (to reduce array for the next iteration), we'll always want to add the row at `output.length`,
             // which technically is right after the parent insertion point
             output.splice(insertAtIndex,0,childLevel[childLevelLength]);
@@ -207,7 +165,8 @@ class AggregatedTable{
     let button = document.createElement('span'),
         buttonContainer = document.createElement('span');
     button.classList.add(`icon-${buttonClassChunk}`);
-    buttonContainer.classList.add('btn', buttonClassChunk);
+    buttonContainer.classList.add('btn');
+    buttonContainer.classList.add(buttonClassChunk);
     buttonContainer.title=title;
     if(flat==this.hierarchy.flat){buttonContainer.classList.add('active');}
     buttonContainer.addEventListener('click',(e)=>{
@@ -237,8 +196,10 @@ class AggregatedTable{
 
     searchfield.type='text';
     button.classList.add('icon-search');
-    clearButton.classList.add('icon-add', 'clear-button');
-    buttonContainer.classList.add('btn', 'hierarchy-search');
+    clearButton.classList.add('icon-add');
+    clearButton.classList.add('clear-button');
+    buttonContainer.classList.add('btn');
+    buttonContainer.classList.add('hierarchy-search');
 
     //listener to display search field on search-icon click
     button.addEventListener('click',e=>{
@@ -279,18 +240,18 @@ class AggregatedTable{
     this.hierarchy.search.visible=false;
     this.hierarchy.search.searching=false;
     var inputs = this.hierarchy.source.parentNode.querySelectorAll('.reportal-hierarchical-header input');
-    if(inputs &amp;&amp; inputs.length>1){inputs.forEach(input=>{input.value = '';})}
+    if(inputs && inputs.length>1){for(let i=0;i<inputs.length;i++){inputs[i].value = '';}}
   }
 
   /**
-   * Updates `search.target` &amp;&amp; `search.query` in `hierarchy.search` to know which input triggered the search and update the `search.query` in the other
+   * Updates `search.target` && `search.query` in `hierarchy.search` to know which input triggered the search and update the `search.query` in the other
    * @param {Event} e - a debounced event triggered by input field when a person enters text
    * */
   updateSearchTarget(e){
     this.hierarchy.search.target = e.target;
     this.hierarchy.search.query = e.target.value;
     var inputs = this.hierarchy.source.parentNode.querySelectorAll('.reportal-hierarchical-header input');
-    if(inputs &amp;&amp; inputs.length>1){inputs.forEach(input=>{if(input!=e.target){input.value = e.target.value;return;}})}
+    if(inputs && inputs.length>1){inputs.forEach(input=>{if(input!=e.target){input.value = e.target.value;return;}})}
   }
 
   /**
@@ -327,7 +288,7 @@ class AggregatedTable{
     currentTime += increment;
     var val = easeInOutQuad(currentTime, start, change, duration);
     window.scrollTo(0,val);
-    if(currentTime &lt; duration) {
+    if(currentTime < duration) {
       setTimeout(animateScroll, increment);
     }
   };
@@ -339,7 +300,7 @@ class AggregatedTable{
   //d = duration
     function easeInOutQuad (t, b, c, d) {
       t /= d/2;
-      if (t &lt; 1) return c/2*t*t + b;
+      if (t < 1) return c/2*t*t + b;
       t--;
       return -c/2 * (t*(t-2) - 1) + b;
     }
@@ -381,7 +342,7 @@ class AggregatedTable{
         timeout = null;
         if (!immediate) func.apply(context, args);
       };
-      var callNow = immediate &amp;&amp; !timeout;
+      var callNow = immediate && !timeout;
       clearTimeout(timeout);
       timeout = setTimeout(later, wait);
       if (callNow) func.apply(context, args);
@@ -392,22 +353,3 @@ class AggregatedTable{
 }
 
 export default AggregatedTable;
-</code></pre>
-        </article>
-    </section>
-
-
-
-
-</div>
-
-<br class="clear">
-
-<footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Tue Aug 02 2016 12:33:26 GMT+0300 (Russia TZ 2 Standard Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
-</footer>
-
-<script>prettyPrint();</script>
-<script src="scripts/linenumber.js"></script>
-</body>
-</html>

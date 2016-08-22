@@ -30,6 +30,8 @@ The following imports of classes files are available:
 /** Styles to override or fix default Reportal visuals */
 @import "reportalFix.css";
 
+@import "loading-animation/loading-animation.css";
+
 /*Viewer presentation styles fixes*/
 @import "viewerPresentation/viewerPresentation.css";
 
@@ -48,3 +50,6 @@ The following imports of classes files are available:
 @import "aggregatedTable/aggregatedTable.css";
 
 @import "hitlist/hitlist.css";
+
+/** Styles that are project specific to override generic styles and to be able to transfer them easily into any cloned report */
+@import "project-specific-stuff/project-specific-styles.css";

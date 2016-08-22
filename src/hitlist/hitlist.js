@@ -172,6 +172,4 @@ class Hitlist {
   }
 }
 
-
-
 export default Hitlist;
