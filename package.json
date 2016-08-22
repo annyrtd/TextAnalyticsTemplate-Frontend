@@ -1,11 +1,12 @@
 {
   "name": "text-analytics-template",
-  "version": "0.1.2",
-  "description": "Text analytics template boilerplate",
+  "version": "0.2.1",
+  "description": "Text Analytics template",
   "main": "index.js",
   "scripts": {
     "test": "",
-    "docs": "node_modules/.bin/jsdoc --configure jsdoc.conf --verbose && git subtree push --prefix docs/text-analytics-template origin gh-pages",
+    "docs": "node_modules/.bin/jsdoc --configure jsdoc.conf --verbose",
+    "docs-commit": "git subtree push --prefix docs/text-analytics-template origin gh-pages",
     "build": "node_modules/.bin/webpack --progress --colors"
   },
   "repository": {
