@@ -3,8 +3,8 @@
 body, body.reportal-viewmode {
   font-size: 15px;
   line-height: 20px;
-  color: #3F454C;
-  background-color: #E1E4E9;
+  color: var(--primary-text-color);
+  background-color: var(--default-primary-color);
   font-family: "Helvetica Neue", Roboto, sans-serif;
   min-width:initial;
 }
@@ -33,13 +33,13 @@ body, body.reportal-viewmode {
 
 .report-filters-horizontal{
   padding:10px 20px;
-  background-color: #f0f2f5;
+  background-color: var(--light-primary-color);
 
   & > * {display:inline-block}
 }
 
 [class^=icon-] {
-  fill: #3f3f3f;
+  fill: var(--primary-text-color);
   opacity:0.4;
   width:24px;
   height:24px;
@@ -81,14 +81,14 @@ body, body.reportal-viewmode {
   }
   &:hover>[class^=icon-]{opacity:1;}
   &.btn-primary {
-     color: #fff;
-     background-color: #00aaf7;
+     color: var(--text-primary-color);
+     background-color: var(--default-accent-color);
      border-color: transparent;
       &:hover,
       &:active,
       &:focus{
-         color: #fff;
-         background-color: #0087c4;
+         color: var(--text-primary-color);
+         background-color: var(--dark-accent-color);
       }
    }
 }
@@ -152,8 +152,8 @@ body, body.reportal-viewmode {
   margin:16px 24px;
 
   & .filter-button{
-    background-color: #FFF;
-    fill:#3f3f3f;
+    background-color: var(--text-primary-color);
+    fill: var(--dark-primary-color);
     transition: .25s background-color ease-in-out;
     margin-right:8px;
 
@@ -166,8 +166,8 @@ body, body.reportal-viewmode {
     &:hover,
     &:active,
     &:focus{
-      background-color: #3f3f3f;
-      fill:#FFF;
+      background-color: var(--dark-primary-color);
+      fill:var(--text-primary-color);
     }
   }
     & .SelectorHeading,
@@ -186,7 +186,7 @@ body, body.reportal-viewmode {
       transition: .25s background-color ease-in-out;
       color: #fff;
       &:hover{
-        background-color: #6a737d
+        background-color: var(--dark-primary-color);
       }
     }
 }

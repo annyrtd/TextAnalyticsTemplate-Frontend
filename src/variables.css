@@ -1,5 +1,24 @@
 /* Config to define variables */
 :root {
+  /* theme colors defined */
+  --dark-primary-color:       #3f3f3f;
+  --default-primary-color:    #e1e4e9;
+  --light-primary-color:      #f0f2f5;
+  --text-primary-color:       #FFFFFF;
+  --dark-accent-color:        #0087c4;
+  --default-accent-color:     #30b8f1;
+  --light-accent-color:       #e6f5fc;
+  --primary-background-color: #f6f6f6;
+  --primary-text-color:       #3F454C;
+  --secondary-text-color:     #808182;
+  --disabled-text-color:      #ccc;
+  --divider-color:            #ccc;
+
+  /* conditional formatting colors */
+  --positive-color:#7cc700;
+  --neutral-color:#cdd1d9;
+  --negative-color:#fd9900;
+
   /* `container` gives a contained effect by setting a padding on sides to push contents from edges of the screen */
   --container:{
     padding: 0 15px;
@@ -41,11 +60,17 @@
   --icon-arrow-up:url(data:image/svg+xml,%3Csvg%20fill%3D%22%2334393f%22%20height%3D%2220%22%20viewBox%3D%220%200%2024%2024%22%20width%3D%2220%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%3Cpath%20d%3D%22M4%2012l1.41%201.41L11%207.83V20h2V7.83l5.58%205.59L20%2012l-8-8-8%208z%22/%3E%3C/svg%3E);
   --icon-hourglass:url(data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20fill%3D%22%23a4a7ac%22%20height%3D%2220%22%20viewBox%3D%220%200%2024%2024%22%20width%3D%2224%22%3E%0A%20%20%20%20%3Cpath%20d%3D%22M6%202v6h.01L6%208.01%2010%2012l-4%204%20.01.01H6V22h12v-5.99h-.01L18%2016l-4-4%204-3.99-.01-.01H18V2H6zm10%2014.5V20H8v-3.5l4-4%204%204zm-4-5l-4-4V4h8v3.5l-4%204z%22/%3E%0A%20%20%20%20%3Cpath%20d%3D%22M0%200h24v24H0V0z%22%20fill%3D%22none%22/%3E%0A%3C/svg%3E);
 
-  /* conditional formatting colors */
-  --positive-color:#7cc700;
-  --neutral-color:#cdd1d9;
-  --negative-color:#fd9900;
 
   /* margin-unit around list elements */
   --reportal-list-margin:8px;
+
+  --reportal-input:{
+    background: transparent;
+    font-size: 16px;
+    border: 1px solid var(--divider-color);
+    border-radius: var(--border-radius,3px);
+    position:relative;
+    z-index:1;
+    padding: 5px;
+  }
 }
