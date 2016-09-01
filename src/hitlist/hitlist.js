@@ -63,12 +63,14 @@ class Hitlist {
       {type: "overallSentiment", postfix: "sentiment"},
       {type: "categories", postfix: "categories"},
       {type: "categorySentiment", postfix: "sentiment"},
-      {type: "date", postfix: "date"}
+      {type: "date", postfix: "date"},
+      {type: "sentiment", postfix: "sentiment"}
     ];
 
-    types.forEach(type=>(
-      this.headers[type.type] ? this.source.querySelectorAll(".yui3-datatable-col-" + this.headers[type.type]).forEach(item=>item.classList.add("reportal-hitlist-" + type.postfix)) : null
-    ));
+    types.forEach( type => {
+      if (this.headers[type.type])
+        this.source.querySelectorAll(".yui3-datatable-col-" + this.headers[type.type]).forEach(item => item.classList.add("reportal-hitlist-" + type.postfix))
+    })
   }
 
   clearCommentsHeader(){
@@ -128,7 +130,8 @@ class Hitlist {
     this.source.querySelectorAll(".yui3-datatable-cell.reportal-hitlist-verbatim").forEach((cell, index)=>{
       this.wrapComment(cell);
       //this.addDateToComment(cell, index);
-      this.addCategoriesToComment(cell,index);
+      if(this.headers["categories"])
+        this.addCategoriesToComment(cell,index);
     });
   }
 
