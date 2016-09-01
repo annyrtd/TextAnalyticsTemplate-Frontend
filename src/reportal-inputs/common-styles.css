@@ -11,7 +11,7 @@
 
     & > label {
       font-size: inherit;
-      color:inherit;
+      color:var(--secondary-text-color);
       padding: 7px 0;
       font-family:inherit;
     }

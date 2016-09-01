@@ -46,18 +46,18 @@ body:not(.masked)>#wait_c {left:0 !important}
 
 @keyframes pulse {
   from {
-    background-color:transparent;
+    background-color:var(--light-primary-color);
   }
   to {
-    background-color:rgba(0,0,0,.5);
+    background-color:var(--dark-primary-color);
   }
 }
 
 @-webkit-keyframes pulse {
   from {
-    background-color:transparent;
+    background-color:var(--light-primary-color);
   }
   to {
-    background-color:rgba(0,0,0,.5);
+    background-color:var(--dark-primary-color);
   }
 }
