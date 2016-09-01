@@ -1,11 +1,14 @@
-*{box-sizing:border-box}
+*{
+  box-sizing:border-box;
+  outline-color: var(--dark-accent-color);
+}
 
 body, body.reportal-viewmode {
   font-size: 15px;
   line-height: 20px;
   color: var(--primary-text-color);
   background-color: var(--default-primary-color);
-  font-family: "Helvetica Neue", Roboto, sans-serif;
+  font-family: var(--font-family);
   min-width:initial;
 }
 
@@ -38,6 +41,17 @@ body, body.reportal-viewmode {
   & > * {display:inline-block}
 }
 
+a, .link{
+  color: var(--default-accent-color) !important;
+  &:active,
+  &:visited{
+    color: var(--default-accent-color);
+  }
+  &:hover{
+    color: var(--dark-accent-color);
+  }
+}
+
 [class^=icon-] {
   fill: var(--primary-text-color);
   opacity:0.4;
@@ -57,24 +71,7 @@ body, body.reportal-viewmode {
 
 /* styles for buttons and elements with class `.btn` */
 .btn, button {
-  -webkit-appearance: button;
-  display: inline-block;
-  margin-bottom: 0;
-  text-align: center;
-  cursor: pointer;
-  border: 1px solid transparent;
-  -webkit-user-select: none;
-  user-select: none;
-@apply --transition;
-  background-color: transparent;
-  height: 30px;
-  line-height: 20px;
-  position: relative;
-  padding: 4px 10px;
-  font-size: 14px;
-  border-radius: var(--border-radius,3px);
-  font-weight: 400;
-
+  @apply --reportal-button;
   &.active, &:active{
     box-shadow: none;
     &>[class^=icon-]{opacity:1;}
@@ -136,12 +133,15 @@ body, body.reportal-viewmode {
 }
 .icon-face-positive{
   background:var(--icon-face-positive);
+  fill: var(--positive-color);
 }
 .icon-face-neutral{
   background:var(--icon-face-neutral);
+  fill: var(--neutral-color);
 }
 .icon-face-negative{
   background:var(--icon-face-negative);
+  fill: var(--negative-color);
 }
 
 /* styles for filter-bar which includes a filter button and filter summary + clear button */
@@ -182,15 +182,27 @@ body, body.reportal-viewmode {
       pointer-events: painted;
     }
     & .well-filter-summary{
-      background: #8F97A2;
+      background: var(--secondary-text-color);
       transition: .25s background-color ease-in-out;
-      color: #fff;
+      color: var(--text-primary-color);
       &:hover{
         background-color: var(--dark-primary-color);
       }
     }
 }
 
+.cf_positive {
+  color:var(--positive-color);
+  fill: var(--positive-color);
+}
+.cf_neutral {
+  color:var(--neutral-color);
+  fill: var(--neutral-color);
+}
+.cf_negative {
+  color:var(--negative-color);
+  fill: var(--negative-color);
+}
 /* Legend styles */
 .legend {
   position: absolute;
@@ -200,6 +212,7 @@ body, body.reportal-viewmode {
   & .cf_negative,
   & .cf_neutral{
     margin-right: 20px;
+    color:inherit;
 
     &:before{
       content: "";

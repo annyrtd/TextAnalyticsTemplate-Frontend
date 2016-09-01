@@ -10,14 +10,17 @@
   --light-accent-color:       #e6f5fc;
   --primary-background-color: #f6f6f6;
   --primary-text-color:       #3F454C;
-  --secondary-text-color:     #808182;
+  --secondary-text-color:     #737B8E;
   --disabled-text-color:      #ccc;
   --divider-color:            #ccc;
+  --light-divider-color:      #e1e4e9;
 
   /* conditional formatting colors */
   --positive-color:#7cc700;
   --neutral-color:#cdd1d9;
   --negative-color:#fd9900;
+
+  --font-family: "Helvetica Neue", Roboto, sans-serif;
 
   /* `container` gives a contained effect by setting a padding on sides to push contents from edges of the screen */
   --container:{
@@ -28,7 +31,7 @@
   --arrow-down:{
     content: " ";
     position: absolute;
-    border-color: #737B8E transparent transparent;
+    border-color: var(--secondary-text-color) transparent transparent;
     border-style: solid;
     border-width: 5px 5px 0;
     display: block;
@@ -41,9 +44,9 @@
 
   --transition:{
     transition-delay: 0s;
-    transition-duration: .25s;
-    transition-property: opacity,background-color,color,fill;
-    transition-timing-function: ease-in-out;
+    transition-duration: .25s !important;
+    transition-property: opacity,background-color,color,fill !important;
+    transition-timing-function: ease-in-out !important;
   };
 
   /* icons */
@@ -72,5 +75,25 @@
     position:relative;
     z-index:1;
     padding: 5px;
-  }
+  };
+  --reportal-button:{
+    -webkit-appearance: button;
+    display: inline-block;
+    margin-bottom: 0;
+    text-align: center;
+    cursor: pointer;
+    border: 1px solid transparent;
+    -webkit-user-select: none;
+    user-select: none;
+    @apply --transition;
+    background-color: transparent;
+    height: 30px;
+    line-height: 20px;
+    position: relative;
+    padding: 4px 10px;
+    font-size: 14px;
+    border-radius: var(--border-radius,3px);
+    font-weight: 400;
+
+  };
 }

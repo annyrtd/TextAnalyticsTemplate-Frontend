@@ -1,7 +1,149 @@
 .reportal-hitlist-container .hitlist .yui3-datatable-table {
   border: none !important;
-
   width: 100%;
+}
+
+.hitlist-dropdown-button{
+  /*styles for filter toggle on hitlist*/
+  background: var(--light-primary-color) !important;
+  border:0 !important;
+  width:50px;
+  position:relative;
+  padding:4px 10px !important;
+  transition:background 0.3s ease-in-out;
+  &:after{
+     @apply --arrow-down;
+      right:10px;
+      bottom:11px;
+      border-color: var(--dark-primary-color) transparent transparent;
+  }
+
+  &:hover{
+    background: var(--default-primary-color) !important;
+  }
+
+  &>.hitlist-dropdown-arrow{
+    width:16px;
+    height:12px;
+    vertical-align:middle;
+    background:var(--icon-filter);
+  }
+}
+
+.yui-ac-bd>ul>li{
+  /*lookup dropdowns in filter select*/
+  font-family:var(--font-family) !important;
+  font-size:15px !important;
+  &.yui-ac-highlight{
+    background-color: var(--default-accent-color) !important;
+    color: var(--text-primary-color) !important;
+  }
+}
+
+.hitlist-filter{
+  border-color: var(--default-accent-color) !important;
+  background: var(--light-accent-color) !important;
+  margin:1px 3px !important;
+  &>.hitlist-filter-name{font-family:var(--font-family) !important;}
+  &>.hitlist-filter-remove{top:3px !important;}
+}
+
+.hitlist-dropdown-panel{
+  /*styles for opened filter dropdown on hitlist*/
+  border-color: var(--divider-color) !important;
+  border-radius: var(--border-radius) !important;
+  box-shadow: 0 2px 8px var(--light-divider-color) !important;
+  background-color: var(--primary-background-color) !important;
+  background-image: none !important;
+  & .hitlist-filter-item{
+    height:auto;
+    margin-bottom:8px;
+    &>label{
+      font-family: var(--font-family) !important;
+      font-weight: normal !important;
+      color: var(--secondary-text-color) !important;
+      font-size:15px !important;
+    }
+    &>img{
+      width: 0;
+      height: 0;
+      padding: 15px;
+      position: relative;
+      background: url(/cf_clientutil/images/arrow-collapsed.gif) no-repeat center !important;
+      transform: rotate(90deg);
+      margin-left: -30px;
+    }
+    &>input.hitlist-opentext-field,
+    &>input.ac,
+    &>.hitlist-toggle-field>input.hitlist-filter-text-field,
+    &>select{
+      @apply --reportal-input;
+      height: auto;
+      width: 100%;
+      background:#fff;
+      padding-right:30px;
+      font-size:15px;
+      font-family: var(--font-family) !important;
+    }
+    &>select{
+      display:block;
+      margin-bottom:8px;
+    }
+    &>.hitlist-toggle-field{
+      position:relative;
+      &>input.hitlist-filter-text-field{
+        display:inline-block;
+        width:125px;
+        padding-right:25px;
+        z-index:0;
+        margin:0;
+        margin-right:-25px;
+      }
+      &>img{
+          position: relative;
+          bottom: 4px;
+          -webkit-filter:grayscale(100%);
+      }
+      &.val2{
+         padding-left:6px;
+      }
+    }
+  }
+  & .hitlist-dropdown-panel-buttons{
+    &>*{
+      background-image:none !important;
+      box-shadow:none !important;
+      border-radius: var(--border-radius) !important;
+      font-family:var(--font-family) !important;
+      font-size:15px !important;
+    }
+    &>.hitlist-dropdown-filter-apply{
+       background: var(--default-accent-color) !important;
+       color: var(--text-primary-color) !important;
+       &:hover{
+          background:var(--dark-accent-color) !important;
+       }
+    }
+    &>.hitlist-dropdown-clear{
+       background: var(--default-primary-color) !important;
+       color: var(--primary-text-color) !important;
+       &:hover{
+          background:var(--secondary-text-color) !important;
+          color:var(--text-primary-color) !important;
+       }
+    }
+    &>.hitlist-dropdown-cancel{
+      @apply --reportal-button;
+      -webkit-appearance:none;
+      background: transparent !important;
+      color: var(--primary-text-color) !important;
+      border:0 !important;
+      &:hover{
+         background:var(--default-primary-color) !important;
+         text-decoration:none;
+      }
+    }
+  }
 }
 
 .reportal-hitlist-container .hitlist td.yui3-datatable-cell {
@@ -9,18 +151,20 @@
   font-size: 14px;
 }
 
-.reportal-hitlist-container .reportal-hitlist-container,.reportal-hitlist-container .hitlist thead tr th:last-child{
-  border-radius: 0px !important;
+.reportal-hitlist-container .reportal-hitlist-container,
+.reportal-hitlist-container .hitlist thead tr th:last-child{
+  border-radius: 0 !important;
 }
 
 .reportal-hitlist-container td.yui3-datatable-cell.reportal-hitlist-sentiment {
   width: 55px;
 }
 
-.reportal-hitlist-container .yui3-datatable-columns,  .reportal-hitlist-container .yui3-datatable-header {
+.reportal-hitlist-container .yui3-datatable-columns,
+.reportal-hitlist-container .yui3-datatable-header {
   background-image: none !important;
   background-color: #FFF !important;
-  border-top: 1px solid #dfdfdf !important;
+  border-top: 1px solid var(--divider-color) !important;
   font-weight: normal !important;
 }
 
@@ -35,7 +179,8 @@
   text-align: center !important;
 }
 
-.reportal-hitlist-container .yui3-datatable-cell:not(.reportal-hitlist-verbatim), .reportal-hitlist-container .yui3-datatable-header:not(.reportal-hitlist-verbatim){
+.reportal-hitlist-container .yui3-datatable-cell:not(.reportal-hitlist-verbatim),
+.reportal-hitlist-container .yui3-datatable-header:not(.reportal-hitlist-verbatim){
   text-align: center !important;
 }
 
@@ -44,7 +189,8 @@
   min-width: 700px;
 }
 
-.reportal-hitlist-container .yui3-datatable-cell,.reportal-hitlist-container .yui3-datatable-cell:hover {
+.reportal-hitlist-container .yui3-datatable-cell,
+.reportal-hitlist-container .yui3-datatable-cell:hover {
   background-color: #FFF !important;
   background-image: none !important;
 }
@@ -68,9 +214,6 @@
   width: 20px;
   display: inline-block;
   content: var(--icon-arrow-up);
-  -webkit-transform: rotate(180deg);
-  -ms-transform: rotate(180deg);
-  -o-transform: rotate(180deg);
   transform: rotate(180deg);
   padding-right: 8px;
 }
@@ -90,7 +233,9 @@
   padding-right: 8px;
 }
 
-.reportal-hitlist-container .utilityCol, .reportal-hitlist-container .reportal-hitlist-categories, .reportal-hitlist-container .hitlist-pagination-count {
+.reportal-hitlist-container .utilityCol,
+.reportal-hitlist-container .reportal-hitlist-categories,
+.reportal-hitlist-container .hitlist-pagination-count {
   display: none;
 }
 
@@ -98,7 +243,7 @@
   display: block;
   margin-bottom: 5px;
   font-size: 12px;
-  color: var(--neutral-color, #cdd1d9);
+  color: var(--secondary-text-color, #cdd1d9);
 }
 
 .reportal-hitlist-container .hitlist-tags-container {
@@ -109,23 +254,29 @@
   margin-right: 5px;
   margin-top: 5px;
   padding: 2px 5px;
-  border: solid 1px #ccc;
-  background-color: #f1f1f1;
+  border: solid 1px var(--divider-color);
+  background-color: var(--primary-background-color);
   font-size: 12px;
   display: inline-block;
 }
 
-.reportal-hitlist-container .hitlist-nav-prev.disabled, .reportal-hitlist-container .hitlist-nav-next.disabled {
+.reportal-hitlist-container .hitlist-nav-prev.disabled,
+.reportal-hitlist-container .hitlist-nav-next.disabled {
   display: none;
-  color: #AAA !important;
+  color: var(--disabled-text-color) !important;
 }
 
-.reportal-hitlist-container .hitlist-nav-prev, .reportal-hitlist-container .hitlist-nav-next, .reportal-hitlist-container .hitlist-nav-page,.reportal-hitlist-container .hitlist-nav-prev:hover, .reportal-hitlist-container .hitlist-nav-next:hover, .reportal-hitlist-container .hitlist-nav-page:hover{
+.reportal-hitlist-container .hitlist-nav-prev,
+.reportal-hitlist-container .hitlist-nav-next,
+.reportal-hitlist-container .hitlist-nav-page,
+.reportal-hitlist-container .hitlist-nav-prev:hover,
+.reportal-hitlist-container .hitlist-nav-next:hover,
+.reportal-hitlist-container .hitlist-nav-page:hover{
   border: none !important;
   background-image: none !important;
   background-color: #FFF !important;
   font-size: 14px;
-  color: #00A9F5;
+  color: var(--default-accent-color);
 }
 
 

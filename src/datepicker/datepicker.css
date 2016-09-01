@@ -5,6 +5,7 @@
     padding-right:25px;
     z-index:0;
     width:120px !important;
+    background: #fff !important;
   }
   &>img{
      position: absolute;
@@ -85,17 +86,17 @@
         opacity:0.3;
       }
       &.today{
-        background-color:transparent !important;
+        background:transparent !important;
         line-height:26px !important;
 
         &>a{
           /*border:1px solid var(--divider-color) !important;*/
-          background-color: var(--light-accent-color) !important;
+          background: var(--light-accent-color) !important;
         }
       }
-      &.calcellhover>a{background-color:var(--dark-primary-color) !important;}
+      &.calcellhover>a{background:var(--dark-primary-color) !important;}
       &.selected>a{
-         background-color:var(--default-accent-color) !important;
+         background:var(--default-accent-color) !important;
          color: var(--text-primary-color) !important;
       }
     }
@@ -103,7 +104,7 @@
     & .calnav{
       border:none !important;
       border-radius: 16px;
-      background-color: var(--light-primary-color) !important;
+      background: var(--light-primary-color) !important;
       transition: background 0.3s ease-in-out;
       padding: 6px 8px !important;
       color: var(--secondary-text-color) !important;
