@@ -20,21 +20,21 @@
 &:checked:focus + label:before,
 &:not(:checked):focus + label:before{
    /* accessibility */
-   border: 1px solid #737B8E;
+   border: 1px solid var(--secondary-text-color);
  }
 
 &:disabled:not(:checked) + label:before,
 &:disabled:checked + label:before {
    /* disabled control */
    box-shadow: none;
-   border-color: #bbb;
-   background-color: #ddd;
+   border-color: var(--divider-color);
+   background-color: var(--light-divider-color);
  }
 &:disabled:checked + label:after {
-   color: #999;
+   color: var(--secondary-text-color);
  }
 &:disabled + label {
-   color: #aaa;
+   color: var(--disabled-text-color);
  }
 }
 
@@ -46,7 +46,7 @@
        position: absolute;
        left:1px; top: 2px;
        width: 14px; height: 14px;
-       border: 1px solid #aaa;
+       border: 1px solid var(--disabled-text-color);
        background: #FFF;
     }
     &:after{
@@ -56,7 +56,7 @@
        top: -2px; left: 3px;
        font-size: 20px;
        line-height: 0.8;
-       color: #737B8E;
+       color: var(--secondary-text-color);
        transition: all .2s;
     }
   }
@@ -79,14 +79,14 @@
        margin-right: 10px;
        left: 0;
        bottom: 0;
-       border: 1px solid #aaa;
+       border: 1px solid var(--disabled-text-color);
     }
     &:after{
         width:9px;
         height:9px;
         left:4px;
         bottom:4px;
-        background-color:#737B8E;
+        background-color:var(--secondary-text-color);
     }
   }
 }

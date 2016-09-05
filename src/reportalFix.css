@@ -1,11 +1,14 @@
-*{box-sizing:border-box}
+*{
+  box-sizing:border-box;
+  outline-color: var(--dark-accent-color);
+}
 
 body, body.reportal-viewmode {
   font-size: 15px;
   line-height: 20px;
-  color: #3F454C;
-  background-color: #E1E4E9;
-  font-family: "Helvetica Neue", Roboto, sans-serif;
+  color: var(--primary-text-color);
+  background-color: var(--default-primary-color);
+  font-family: var(--font-family);
   min-width:initial;
 }
 
@@ -33,13 +36,24 @@ body, body.reportal-viewmode {
 
 .report-filters-horizontal{
   padding:10px 20px;
-  background-color: #f0f2f5;
+  background-color: var(--light-primary-color);
 
   & > * {display:inline-block}
 }
 
+a, .link{
+  color: var(--default-accent-color) !important;
+  &:active,
+  &:visited{
+    color: var(--default-accent-color);
+  }
+  &:hover{
+    color: var(--dark-accent-color);
+  }
+}
+
 [class^=icon-] {
-  fill: #3f3f3f;
+  fill: var(--primary-text-color);
   opacity:0.4;
   width:24px;
   height:24px;
@@ -57,38 +71,21 @@ body, body.reportal-viewmode {
 
 /* styles for buttons and elements with class `.btn` */
 .btn, button {
-  -webkit-appearance: button;
-  display: inline-block;
-  margin-bottom: 0;
-  text-align: center;
-  cursor: pointer;
-  border: 1px solid transparent;
-  -webkit-user-select: none;
-  user-select: none;
-@apply --transition;
-  background-color: transparent;
-  height: 30px;
-  line-height: 20px;
-  position: relative;
-  padding: 4px 10px;
-  font-size: 14px;
-  border-radius: var(--border-radius,3px);
-  font-weight: 400;
-
+  @apply --reportal-button;
   &.active, &:active{
     box-shadow: none;
     &>[class^=icon-]{opacity:1;}
   }
   &:hover>[class^=icon-]{opacity:1;}
   &.btn-primary {
-     color: #fff;
-     background-color: #00aaf7;
+     color: var(--text-primary-color);
+     background-color: var(--default-accent-color);
      border-color: transparent;
       &:hover,
       &:active,
       &:focus{
-         color: #fff;
-         background-color: #0087c4;
+         color: var(--text-primary-color);
+         background-color: var(--dark-accent-color);
       }
    }
 }
@@ -136,12 +133,15 @@ body, body.reportal-viewmode {
 }
 .icon-face-positive{
   background:var(--icon-face-positive);
+  fill: var(--positive-color);
 }
 .icon-face-neutral{
   background:var(--icon-face-neutral);
+  fill: var(--neutral-color);
 }
 .icon-face-negative{
   background:var(--icon-face-negative);
+  fill: var(--negative-color);
 }
 
 /* styles for filter-bar which includes a filter button and filter summary + clear button */
@@ -152,8 +152,8 @@ body, body.reportal-viewmode {
   margin:16px 24px;
 
   & .filter-button{
-    background-color: #FFF;
-    fill:#3f3f3f;
+    background-color: var(--text-primary-color);
+    fill: var(--dark-primary-color);
     transition: .25s background-color ease-in-out;
     margin-right:8px;
 
@@ -166,8 +166,8 @@ body, body.reportal-viewmode {
     &:hover,
     &:active,
     &:focus{
-      background-color: #3f3f3f;
-      fill:#FFF;
+      background-color: var(--dark-primary-color);
+      fill:var(--text-primary-color);
     }
   }
     & .SelectorHeading,
@@ -182,15 +182,27 @@ body, body.reportal-viewmode {
       pointer-events: painted;
     }
     & .well-filter-summary{
-      background: #8F97A2;
+      background: var(--secondary-text-color);
       transition: .25s background-color ease-in-out;
-      color: #fff;
+      color: var(--text-primary-color);
       &:hover{
-        background-color: #6a737d
+        background-color: var(--dark-primary-color);
       }
     }
 }
 
+.cf_positive {
+  color:var(--positive-color);
+  fill: var(--positive-color);
+}
+.cf_neutral {
+  color:var(--neutral-color);
+  fill: var(--neutral-color);
+}
+.cf_negative {
+  color:var(--negative-color);
+  fill: var(--negative-color);
+}
 /* Legend styles */
 .legend {
   position: absolute;
@@ -200,6 +212,7 @@ body, body.reportal-viewmode {
   & .cf_negative,
   & .cf_neutral{
     margin-right: 20px;
+    color:inherit;
 
     &:before{
       content: "";

@@ -3,7 +3,7 @@
   & label {
     display: inline-block;
     min-width: 60px;
-    border: solid 1px #ccc;
+    border: solid 1px var(--divider-color);
     background: transparent;
     padding: 4px 10px;
     font-weight: bold;
@@ -21,13 +21,13 @@
     }
   }
   & input:checked + label {
-    background: #484F59;
-    color: #fff;
-    border-color: #484F59;
+    background: var(--dark-primary-color);
+    color: var(--text-primary-color);
+    border-color: var(--dark-primary-color);
   }
   & input:not(checked) + label {
     background: transparent;
-    color: #484F59;
+    color: var(--dark-primary-color);
   }
   & [type=radio] + label:before,
   & [type=radio] + label:after { display: none; } /* override styled checkboxes */
