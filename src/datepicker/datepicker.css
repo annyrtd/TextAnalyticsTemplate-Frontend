@@ -11,6 +11,7 @@
      position: absolute;
      right: 5px;
      bottom: 8px;
+     filter: grayscale(100%);
   }
 }
 .yui-calcontainer{
