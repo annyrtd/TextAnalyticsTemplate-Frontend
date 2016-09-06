@@ -26,8 +26,8 @@ class SortTable{
     this.data = data;
     // calculate default header row
     let headerRows = source.querySelector('thead').children,
-      auxHeaderRows = auxHeader?auxHeader.querySelector('thead').children:null,
-      headerRowIndex = defaultHeaderRow==-1?headerRows.length+defaultHeaderRow:defaultHeaderRow;
+        auxHeaderRows = auxHeader?auxHeader.querySelector('thead').children:null,
+        headerRowIndex = defaultHeaderRow==-1?headerRows.length+defaultHeaderRow:defaultHeaderRow;
     this.defaultHeaderRow={index:headerRowIndex, row:headerRows.item(headerRowIndex), auxRow:auxHeaderRows?auxHeaderRows.item(headerRowIndex):null};
 
     this.sortOrder = [];//necessary for proper initialization of `columns`
