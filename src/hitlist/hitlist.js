@@ -1,3 +1,4 @@
+import FixedHeader from "../aggregatedTable/FixedHeader.js"
 
 class Hitlist {
 
@@ -54,7 +55,48 @@ class Hitlist {
     this.processDates();
     this.processComments();
     this.addIconsForSentiment();
+    if(!this.source.querySelector('.aggregatedTableContainer')){
+      this.fixedHeader = new FixedHeader({source: this.source.querySelector('table')});
+    } else { // hack to get pagination text and update an already initialised header since we'd need that new text on hitlist update
+      this.source.querySelector('table.fixed>thead').innerHTML = this.source.querySelector('table:not(.fixed)>thead').innerHTML;
+      var offset = this.source.querySelector('table:not(.fixed)').parentNode.offsetTop;
+      this.scrollTo(offset,200);
+    }
   }
+  //TODO: make scrollTO reusable across scripts
+  /**
+   * Implements smooth srolling
+   * @param {Number} to - offset from top of the page the window needs to be scrolled to
+   * @param {Number} duration - auxiliary parameter to specify scroll duration and implement easing
+   * */
+  scrollTo(to, duration) {
+    var start = window.pageYOffset || document.documentElement.scrollTop,
+      change = to - start,
+      currentTime = 0,
+      increment = 20;
+
+    var animateScroll = function(){
+      currentTime += increment;
+      var val = easeInOutQuad(currentTime, start, change, duration);
+      window.scrollTo(0,val);
+      if(currentTime < duration) {
+        setTimeout(animateScroll, increment);
+      }
+    };
+    animateScroll();
+
+    //t = current time
+    //b = start value
+    //c = change in value
+    //d = duration
+    function easeInOutQuad (t, b, c, d) {
+      t /= d/2;
+      if (t < 1) return c/2*t*t + b;
+      t--;
+      return -c/2 * (t*(t-2) - 1) + b;
+    }
+  }
+
 
   addClassesToHitlist() {
 
