@@ -185,8 +185,19 @@
 }
 
 .reportal-hitlist-container .reportal-hitlist-verbatim{
-  width: auto;
-  min-width: 700px;
+  width: 100%;
+}
+.yui3-datatable-table.fixed{
+  position:absolute;
+  top:0;
+  width:auto;
+  display:none;
+  border:none;
+  & tbody{display:none !important;}
+}
+
+.hitlist .yui3-datatable-header:not(.reportal-hitlist-verbatim)/*:not(.reportal-hitlist-sentiment)*/{
+  white-space: normal !important;
 }
 
 .reportal-hitlist-container .yui3-datatable-cell,

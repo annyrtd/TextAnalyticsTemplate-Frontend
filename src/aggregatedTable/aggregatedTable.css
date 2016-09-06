@@ -214,6 +214,7 @@
   width:auto;
   display:none;
   border:none;
+  & tbody{display:none !important;}
 }
 .aggregatedTableContainer{
   position: relative;
