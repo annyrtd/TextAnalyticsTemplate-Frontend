@@ -33,5 +33,7 @@
     "webpack": "^1.13.1",
     "jsdoc": "^3.4.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "r-reporal-base": "github:confirmitasa/r-reportal-base"
+  }
 }

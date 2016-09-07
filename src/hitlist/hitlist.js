@@ -60,7 +60,7 @@ class Hitlist {
     } else { // hack to get pagination text and update an already initialised header since we'd need that new text on hitlist update
       this.source.querySelector('table.fixed>thead').innerHTML = this.source.querySelector('table:not(.fixed)>thead').innerHTML;
       var offset = this.source.querySelector('table:not(.fixed)').parentNode.offsetTop;
-      this.scrollTo(offset,200);
+      this.scrollTo(offset,200);// add smooth scroll to first line in the hitlist when paginated
     }
   }
   //TODO: make scrollTO reusable across scripts

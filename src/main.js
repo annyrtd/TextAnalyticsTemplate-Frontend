@@ -3,6 +3,7 @@ import TAHierarchyTable from './aggregatedTable/TAHierarchyTable.js'
 import FixedHeader from './aggregatedTable/FixedHeader.js';
 import AggregatedTable from './aggregatedTable/AggregatedTable.js';
 import LazyHierarchyFetch from './aggregatedTable/LazyHierarchyFetch.js'
+import HierarchyBase from './aggregatedTable/HierarchyBase.js'
 
 import DefaultConfig from './hitlist/hitlist.js';
 import Hitlist from './hitlist/hitlist.js';
@@ -12,5 +13,6 @@ window.Reportal = {
   TAHierarchyTable,
   AggregatedTable,
   LazyHierarchyFetch,
-  Hitlist
+  Hitlist,
+  HierarchyBase
 };

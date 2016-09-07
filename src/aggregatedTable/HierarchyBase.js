@@ -2,7 +2,7 @@
  * Created by IvanP on 15.08.2016.
  */
 import Highlight from '../lib/Highlight.js';
-import ReportalBase from '../lib/ReportalBase.js';
+import ReportalBase from '../../node_modules/r-reporal-base/src/main.js';
 import AggregatedTableRowMeta from './AggregatedTableRowMeta.js';
 /**
  * @namespace AggregatedTable.Hierarchy
@@ -198,12 +198,12 @@ class HierarchyBase extends ReportalBase {
    * @param {Boolean} [isBlockRow=false] - if table contains block cells that rowspan across several rows, we need to exclude those from actual data
    * @return {Array} Returns array of normalized cell values
    * */
-  stripRowData(row,firstInBlock,block){
+  static stripRowData(row,firstInBlock,block){
     let willPass;
     return [].slice.call(row.children).reduce((childRows,current)=>{
         willPass = (firstInBlock && (block!==null && current === block.cell));
       if(!willPass){
-        childRows.push(current.children.length == 0 ? this.constructor._isNumber(current.textContent.trim()) : (current.innerHTML).trim())
+        childRows.push(current.children.length == 0 ? ReportalBase._isNumber(current.textContent.trim()) : (current.innerHTML).trim())
       }
       return childRows;
     },[]);
