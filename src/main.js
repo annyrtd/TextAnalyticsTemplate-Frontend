@@ -8,6 +8,9 @@ import HierarchyBase from './aggregatedTable/HierarchyBase.js'
 import DefaultConfig from './hitlist/hitlist.js';
 import Hitlist from './hitlist/hitlist.js';
 
+
+
+
 window.Reportal = {
   FixedHeader,
   TAHierarchyTable,
