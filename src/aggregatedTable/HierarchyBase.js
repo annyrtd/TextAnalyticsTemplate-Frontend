@@ -2,7 +2,7 @@
  * Created by IvanP on 15.08.2016.
  */
 import Highlight from '../lib/Highlight.js';
-import ReportalBase from '../../node_modules/r-reporal-base/src/main.js';
+import ReportalBase from '../../node_modules/r-reporal-base/src/reportal-base.js';
 import AggregatedTableRowMeta from './AggregatedTableRowMeta.js';
 /**
  * @namespace AggregatedTable.Hierarchy
@@ -203,7 +203,7 @@ class HierarchyBase extends ReportalBase {
     return [].slice.call(row.children).reduce((childRows,current)=>{
         willPass = (firstInBlock && (block!==null && current === block.cell));
       if(!willPass){
-        childRows.push(current.children.length == 0 ? ReportalBase._isNumber(current.textContent.trim()) : (current.innerHTML).trim())
+        childRows.push(current.children.length == 0 ? ReportalBase.isNumber(current.textContent.trim()) : (current.innerHTML).trim())
       }
       return childRows;
     },[]);

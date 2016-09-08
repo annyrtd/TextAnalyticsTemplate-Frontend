@@ -21,17 +21,17 @@ module.exports = {
     path: "./dist",
     filename: "bundle.js"
   },
-  devtool: "eval-source-map",
+  devtool: "source-map",
   module: {
     loaders: [
       {
         test: /\.js$/,
-        exclude: /node_modules/,
+        //exclude: /node_modules/,
         loader: "babel-loader"
       },
       {
         test:   /\.css$/,
-        exclude: /node_modules/,
+        //exclude: /node_modules/,
         loader:  ExtractTextPlugin.extract("style","css!postcss")
       }
     ]
