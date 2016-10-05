@@ -68,6 +68,7 @@
         height:24px !important;
        & td{
         border-left:0 !important;
+        border-right: 0 !important;
         height:24px !important;
       }
     }
