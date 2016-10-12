@@ -48,12 +48,11 @@ class Hitlist {
   }
 
   init() {
-    this.addClassesToHitlist();
-    this.clearCommentsHeader();
-    this.movePaginationToTheCommentsHeader();
-    this.addDateSorting();
+    this.processHeadersConfig();
+    this.movePaginationToTheMainHeader();
+    this.processSortableColumns();
     this.processDates();
-    this.processComments();
+    this.processMainColumn();
     this.addIconsForSentiment();
     if(!this.source.querySelector('.aggregatedTableContainer')){
       this.fixedHeader = new FixedHeader({source: this.source.querySelector('table')});
@@ -98,47 +97,62 @@ class Hitlist {
   }
 
 
-  addClassesToHitlist() {
+  addClassesToHitlist(question,type) {
+    this.source.querySelectorAll(".yui3-datatable-col-" + question.name).forEach(item => {
+        item.classList.add("reportal-hitlist-" + type.postfix);
+        if (question.main)
+          item.classList.add("reportal-hitlist-main");
+      }
+    )
+  }
 
+  changeTitles(question){
+    if(question.title){
+      this.source.querySelector(".yui3-datatable-header.yui3-datatable-col-" + question.name).innerHTML = question.title;
+    }
+  }
+
+  processHeadersConfig(){
     const types = [
       {type: "verbatim", postfix: "verbatim"},
-      {type: "overallSentiment", postfix: "sentiment"},
       {type: "categories", postfix: "categories"},
-      {type: "categorySentiment", postfix: "sentiment"},
       {type: "date", postfix: "date"},
       {type: "sentiment", postfix: "sentiment"}
     ];
 
     types.forEach( type => {
-      if (this.headers[type.type])
-        this.source.querySelectorAll(".yui3-datatable-col-" + this.headers[type.type]).forEach(item => item.classList.add("reportal-hitlist-" + type.postfix))
+      if (this.headers[type.type] && this.headers[type.type].length > 0)
+        this.headers[type.type].forEach( question =>{
+          this.addClassesToHitlist(question,type);
+          this.changeTitles(question);
+        })
     })
   }
 
-  clearCommentsHeader(){
-    this.source.querySelector(".yui3-datatable-header.reportal-hitlist-verbatim").innerHTML="";
+  movePaginationToTheMainHeader(){
+    var title = this.source.querySelector(".yui3-datatable-header.reportal-hitlist-main").innerText;
+    this.source.querySelector(".yui3-datatable-header.reportal-hitlist-main").innerHTML="";
+    var paginationText =title+" "+this.source.getElementsByClassName("hitlist-pagination-count")[0].innerText.replace("(","of ").slice(0,-1);
+    var paginationElement = document.createElement("span");
+    paginationElement.innerText = paginationText;
+    this.source.querySelector(".yui3-datatable-header.reportal-hitlist-main").appendChild(paginationElement);
   }
 
-  movePaginationToTheCommentsHeader(){
-
-      var paginationText ="Comments "+this.source.getElementsByClassName("hitlist-pagination-count")[0].innerText.replace("(","of ").slice(0,-1);
-      var paginationElement = document.createElement("span");
-      paginationElement.innerText = paginationText;
-    this.source.querySelector(".yui3-datatable-header.reportal-hitlist-verbatim").appendChild(paginationElement);
+  processSortableColumns(){
+    this.source.querySelectorAll(".yui3-datatable-header.yui3-datatable-sortable-column").forEach( header => this.addSorting( header ))
   }
 
-  addDateSorting(){
+  addSorting(header){
     var dateSortingElement = document.createElement("span");
-    dateSortingElement.innerText = "Date";
+    dateSortingElement.innerText = header.innerText;
     dateSortingElement.classList.add("sortable");
     dateSortingElement.classList.remove("waiting");
-    this.toggleSorting(dateSortingElement, this.source.querySelector(".yui3-datatable-header.reportal-hitlist-date"));
-    this.source.querySelector(".yui3-datatable-header.reportal-hitlist-date").innerHTML = "";
-    this.source.querySelector(".yui3-datatable-header.reportal-hitlist-date").appendChild(dateSortingElement);
+    this.toggleSorting(dateSortingElement, header);
+    header.innerHTML = "";
+    header.appendChild(dateSortingElement);
     dateSortingElement.addEventListener("click",(event)=>{
       dateSortingElement.classList.add("waiting");
       dateSortingElement.classList.remove("sorted");
-      //this.source.querySelector(".yui3-datatable-header.reportal-hitlist-date").click();
     });
   }
 
@@ -168,8 +182,8 @@ class Hitlist {
     }
   }
 
-  processComments(){
-    this.source.querySelectorAll(".yui3-datatable-cell.reportal-hitlist-verbatim").forEach((cell, index)=>{
+  processMainColumn(){
+    this.source.querySelectorAll(".yui3-datatable-cell.reportal-hitlist-main").forEach((cell, index)=>{
       this.wrapComment(cell);
       //this.addDateToComment(cell, index);
       if(this.headers["categories"])
@@ -179,7 +193,12 @@ class Hitlist {
 
   processDates(){
     this.source.querySelectorAll(".yui3-datatable-cell.reportal-hitlist-date").forEach((cell, index)=>{
-      this.addDateToComment(cell, index);
+      var date = cell.innerText;
+      cell.innerHTML = "";
+      var dateElement = document.createElement("div");
+      dateElement.innerText = date;
+      dateElement.classList.add("hitlist-date-info");
+      cell.insertBefore(dateElement,cell.firstChild);
     });
   }
 
@@ -188,15 +207,6 @@ class Hitlist {
     comment.innerText = cell.innerText;
     cell.innerHTML = "";
     cell.appendChild(comment)
-  }
-
-  addDateToComment(cell, index){
-    var date = this.source.querySelectorAll(".yui3-datatable-cell.reportal-hitlist-date")[index].innerText;
-    this.source.querySelectorAll(".yui3-datatable-cell.reportal-hitlist-date")[index].innerHTML = "";
-    var dateElement = document.createElement("div");
-    dateElement.innerText = date;
-    dateElement.classList.add("hitlist-date-info");
-    cell.insertBefore(dateElement,cell.firstChild);
   }
 
   addCategoriesToComment(cell, index){

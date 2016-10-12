@@ -189,6 +189,33 @@ a, .link{
         background-color: var(--dark-primary-color);
       }
     }
+
+    & div {
+      background: #8F97A2;
+      transition: .25s background-color ease-in-out;
+      color: #fff;
+      margin: 0 5px;
+      height: 30px;
+      border-radius: 3px;
+      padding: 0 8px;
+      vertical-align: top;
+      line-height: 30px;
+      font-size: 13px;
+      cursor: default;
+      pointer-events: painted;
+    }
+
+    & span{
+      height: 30px;
+      border-radius: 3px;
+      padding: 0 8px;
+      vertical-align: top;
+      line-height: 30px;
+      font-size: 13px;
+      cursor: default;
+      pointer-events: painted;
+    }
+
 }
 
 .cf_positive {
@@ -236,4 +263,19 @@ a, .link{
     background: var(--negative-color,#fd9900);
   }
 }
+
+.reportal-branding-panel{
+  background: #fff;
+
+  & .page-title{
+    display: inline;
+  }
+
+  & .customer-logo{
+    float: right
+  }
+}
+
+
+
 
