@@ -28,7 +28,7 @@ class TAHierarchyTable extends HierarchyBase{
    * @param {Array} [data=[]] - array with data if it's passed from outside, rather than acquired from the `source` (HTML table)
    * @param {Array} [blocks=[]] - array with block ids that split hierarchies
    * */
-  constructor({source,hierarchy,rowheaders,column = 0,flat = false, flatNameDelimiter = '|',search={},data=[],blocks=[]} = {}){
+  constructor({source,hierarchy,rowheaders,column = 0,flat = false, flatNameDelimiter = '|',search={},data=[],blocks=[], clearLinks = true} = {}){
     super();
     if(source){this.source=source;} else { throw new ReferenceError('`source` table is not specified for TAHierarchyTable')}
     if(hierarchy){this.hierarchy=hierarchy;} else { throw new ReferenceError('`hierarchy` is not specified for TAHierarchyTable')}
@@ -39,6 +39,7 @@ class TAHierarchyTable extends HierarchyBase{
     this.data = this.setUpBlocks(data,blocks);
     this.flat = flat;
     this.search = this.setupSearch(search);
+    this.clearLinks = clearLinks;
     this.init();
   }
 
@@ -117,7 +118,7 @@ class TAHierarchyTable extends HierarchyBase{
 
           row.classList.add("level" + level.toString());
 
-          if (level > 0) {
+          if (level > 0 && this.clearLinks) {
             this.constructor.clearLink(row);
           }
 
