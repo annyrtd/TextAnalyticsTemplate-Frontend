@@ -2,7 +2,7 @@
 
 import TAHierarchyTable from './TAHierarchyTable.js';
 import FixedHeader from './FixedHeader.js';
-import SortTable from './SortTable.js';
+import SortTable from 'r-sort-table/src/sort-table';
 
 class AggregatedTable{
   /**
@@ -44,16 +44,11 @@ class AggregatedTable{
     }
     if(sorting){
       this.source.addEventListener('reportal-table-sort',()=>this.onSort());
-      this.sorting = new SortTable({
-        enabled:sorting.enabled,
-        defaultHeaderRow:sorting.defaultHeaderRow,
-        columns: sorting.columns,
-        excludedColumns:sorting.excludedColumns,
-        defaultSorting:sorting.defaultSorting,
-        source:table,
-        data:this.data,
-        auxHeader: this.fixedHeader.clonedHeader // fixed header
-      });
+      sorting.source = table;
+      sorting.refSource = this.fixedHeader.clonedHeader;
+      sorting.data = this.data;
+      sorting.multidimensional = true;
+      this.sorting = new SortTable(sorting);
     }
 
     // for collapsable and sortable hierarchy we want to update cells in the fixed(floating) header.
@@ -65,7 +60,7 @@ class AggregatedTable{
          resizeDebouncer();
         _target = e.target;
         scrollDebouncer();
-        if(this.sorting && this.sorting.sortOrder.length>0 && (e.type=='reportal-table-hierarchy-tree-view'||e.type=='reportal-table-hierarchy-flat-view')){
+        if(this.sorting && this.sorting.sortOrder.sortOrder.length>0 && (e.type=='reportal-table-hierarchy-tree-view'||e.type=='reportal-table-hierarchy-flat-view')){
           setTimeout(()=>{this.sorting.sort()},0);
         }
        });

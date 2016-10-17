@@ -1,3 +1,5 @@
+@import "../../node_modules/r-sort-table/src/sort-table-styles.css";
+
 .reportal-table{
   width:100%;
   font-size:14px;
@@ -143,7 +145,6 @@
       left:auto;
       transition:  width,background-color,left,transform,opacity .25s ease-in-out;
 
-
       &>input{
         display:none;
         background-color: transparent;
@@ -191,7 +192,7 @@
 
       }
     }
-  &>thead td.sortable:not(.hierarchy-search-visible){
+  /*&>thead td.sortable:not(.hierarchy-search-visible){
       cursor:pointer;
       &.sorted.asc:after{
         content: var(--icon-arrow-up);
@@ -208,7 +209,7 @@
         position: relative;
         color: var(--primary-text-color);
       }
-    }
+  }*/
 
 }
 
