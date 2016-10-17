@@ -62,13 +62,13 @@ class AggregatedTable{
     var scrollDebouncer = this.constructor.debounce(()=>this.scrollToElement(_target),50);
     ['hierarchy-collapsed','hierarchy-uncollapsed','hierarchy-tree-view','hierarchy-flat-view','sort'].forEach((eventNameChunk)=>{
        this.source.addEventListener(`reportal-table-${eventNameChunk}`,(e)=>{
-        resizeDebouncer();
+         resizeDebouncer();
         _target = e.target;
         scrollDebouncer();
         if(this.sorting && this.sorting.sortOrder.length>0 && (e.type=='reportal-table-hierarchy-tree-view'||e.type=='reportal-table-hierarchy-flat-view')){
           setTimeout(()=>{this.sorting.sort()},0);
         }
-      });
+       });
     });
     this.focusFollows(); // for search field to setup following focus
   }
@@ -239,7 +239,8 @@ class AggregatedTable{
     this.hierarchy.search.query='';
     this.hierarchy.search.visible=false;
     this.hierarchy.search.searching=false;
-    var inputs = this.hierarchy.source.parentNode.querySelectorAll('.reportal-hierarchical-header input');
+    //TODO: optimise by storing links to search fields in this.search
+    let inputs = this.hierarchy.source.parentNode.querySelectorAll('.reportal-hierarchical-header input');
     if(inputs && inputs.length>1){for(let i=0;i<inputs.length;i++){inputs[i].value = '';}}
   }
 
@@ -250,8 +251,15 @@ class AggregatedTable{
   updateSearchTarget(e){
     this.hierarchy.search.target = e.target;
     this.hierarchy.search.query = e.target.value;
-    var inputs = this.hierarchy.source.parentNode.querySelectorAll('.reportal-hierarchical-header input');
-    if(inputs && inputs.length>1){inputs.forEach(input=>{if(input!=e.target){input.value = e.target.value;return;}})}
+    let inputs = this.hierarchy.source.parentNode.querySelectorAll('.reportal-hierarchical-header input');
+    if(inputs && inputs.length>1){
+      [].slice.call(inputs).forEach(input=>{
+        if(input!=e.target){
+          input.value = e.target.value;
+          return;
+        }
+      });
+    }
   }
 
   /**
@@ -284,15 +292,15 @@ class AggregatedTable{
     currentTime = 0,
     increment = 20;
 
-  var animateScroll = function(){
+  function animateScroll(){
     currentTime += increment;
     var val = easeInOutQuad(currentTime, start, change, duration);
     window.scrollTo(0,val);
     if(currentTime < duration) {
-      setTimeout(animateScroll, increment);
+      requestAnimationFrame(animateScroll);
     }
-  };
-  animateScroll();
+  }
+    requestAnimationFrame(animateScroll);
 
   //t = current time
   //b = start value
@@ -313,8 +321,7 @@ class AggregatedTable{
    * */
   search(){
     let hierarchy = this.hierarchy,
-        settings = hierarchy.search,
-        self=this;
+        settings = hierarchy.search;
     return this.constructor.debounce(function(){
       let value = settings.query;
       if(value.length>0){
@@ -334,7 +341,7 @@ class AggregatedTable{
    * @param {Boolean} [immediate=false] - flag to be set when function needs to be executed immediately (overrides `wait` timeout)
    * @return {Function}
    * */
-  static debounce (func, wait=300, immediate=false){
+  static debounce (func, wait=300, immediate=true){
     var timeout;
     return ()=>{
       var context = this, args = arguments;

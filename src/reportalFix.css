@@ -78,16 +78,16 @@ a, .link{
   }
   &:hover>[class^=icon-]{opacity:1;}
   &.btn-primary {
-     color: var(--text-primary-color);
-     background-color: var(--default-accent-color);
-     border-color: transparent;
-      &:hover,
-      &:active,
-      &:focus{
-         color: var(--text-primary-color);
-         background-color: var(--dark-accent-color);
-      }
-   }
+    color: var(--text-primary-color);
+    background-color: var(--default-accent-color);
+    border-color: transparent;
+    &:hover,
+    &:active,
+    &:focus{
+      color: var(--text-primary-color);
+      background-color: var(--dark-accent-color);
+    }
+  }
 }
 
 .icon-export{
@@ -170,25 +170,52 @@ a, .link{
       fill:var(--text-primary-color);
     }
   }
-    & .SelectorHeading,
-    & .well-filter-summary{
-      height: 30px;
-      border-radius: 3px;
-      padding: 0 8px;
-      vertical-align: top;
-      line-height: 30px;
-      font-size: 13px;
-      cursor: default;
-      pointer-events: painted;
+  & .SelectorHeading,
+  & .well-filter-summary{
+    height: 30px;
+    border-radius: 3px;
+    padding: 0 8px;
+    vertical-align: top;
+    line-height: 30px;
+    font-size: 13px;
+    cursor: default;
+    pointer-events: painted;
+  }
+  & .well-filter-summary{
+    background: var(--secondary-text-color);
+    transition: .25s background-color ease-in-out;
+    color: var(--text-primary-color);
+    &:hover{
+      background-color: var(--dark-primary-color);
     }
-    & .well-filter-summary{
-      background: var(--secondary-text-color);
-      transition: .25s background-color ease-in-out;
-      color: var(--text-primary-color);
-      &:hover{
-        background-color: var(--dark-primary-color);
-      }
-    }
+  }
+
+  & div {
+    background: #8F97A2;
+    transition: .25s background-color ease-in-out;
+    color: #fff;
+    margin: 0 5px;
+    height: 30px;
+    border-radius: 3px;
+    padding: 0 8px;
+    vertical-align: top;
+    line-height: 30px;
+    font-size: 13px;
+    cursor: default;
+    pointer-events: painted;
+  }
+
+  & span{
+    height: 30px;
+    border-radius: 3px;
+    padding: 0 8px;
+    vertical-align: top;
+    line-height: 30px;
+    font-size: 13px;
+    cursor: default;
+    pointer-events: painted;
+  }
+
 }
 
 .cf_positive {
@@ -237,3 +264,14 @@ a, .link{
   }
 }
 
+.reportal-branding-panel{
+  background: #fff;
+
+  & .page-title{
+    display: inline;
+  }
+
+  & .customer-logo{
+    float: right
+  }
+}

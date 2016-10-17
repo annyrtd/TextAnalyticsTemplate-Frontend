@@ -45,7 +45,12 @@
   &.reportal-barchart>tbody>tr>th:nth-last-child(2) {
     text-align:right;
    }
-
+  &.reportal-barchart>tbody>tr>td:last-child,
+  & td>table.barchcart{
+    @media all and (min-width: 0px) and (max-width: 740px){
+      min-width:100px;width:100px !important;
+    }
+  }
   &>tbody>tr>td {
       padding: 2px 8px;
       min-height:24px;
