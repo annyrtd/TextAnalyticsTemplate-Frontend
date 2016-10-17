@@ -15,13 +15,13 @@ const AUTOPREFIXER_BROWSERS = [
 module.exports = {
   entry: {
     js:"./src/main.js",
-    css:"./src/main.css"
+    //css:"./src/main.css"
   },
   output: {
     path: "./dist",
     filename: "bundle.js"
   },
-  devtool: "source-map",
+  devtool: "eval-source-map",
   module: {
     loaders: [
       {

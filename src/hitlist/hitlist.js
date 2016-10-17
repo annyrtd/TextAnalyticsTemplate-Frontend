@@ -111,7 +111,7 @@ class Hitlist {
 
     types.forEach( type => {
       if (this.headers[type.type])
-        this.source.querySelectorAll(".yui3-datatable-col-" + this.headers[type.type]).forEach(item => item.classList.add("reportal-hitlist-" + type.postfix))
+        [].slice.call(this.source.querySelectorAll(".yui3-datatable-col-" + this.headers[type.type])).forEach(item => item.classList.add("reportal-hitlist-" + type.postfix))
     })
   }
 
