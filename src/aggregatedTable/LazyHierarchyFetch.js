@@ -79,7 +79,7 @@ class LazyHierarchyFetch extends HierarchyBase{
 
   parseHierarchy({level=0,rows,block=null,array,parent=null}={}){
     [].slice.call(this.source.parentNode.querySelectorAll(`table#${this.source.id}>tbody>tr`)).forEach((row,index)=>{
-      var data = this.stripRowData(row,(block!==null && row.rowIndex == block.cell.parentNode.rowIndex), block);
+      var data = HierarchyBase.stripRowData(row,(block!==null && row.rowIndex == block.cell.parentNode.rowIndex), block);
       array.push(data);
       var id = this.rowheaders[index][0];
       if(this.excludedRows.indexOf(index)==-1){
@@ -159,7 +159,7 @@ class LazyHierarchyFetch extends HierarchyBase{
         }
 
         childRows.forEach((childRow, index) => {
-          let currentRowData = this.stripRowData(childRow, firstInBlock);
+          let currentRowData = HierarchyBase.stripRowData(childRow, firstInBlock);
 
           //data.meta.children.push(currentRowData);
 
@@ -228,7 +228,7 @@ class LazyHierarchyFetch extends HierarchyBase{
       `PageStateId=${this.pageStateID}`
     ];
 
-    var hierarchyItemChildren = this.promiseRequest([path.join('/'),'?',query.join('&')].join(''));
+    var hierarchyItemChildren = HierarchyBase.promiseRequest([path.join('/'),'?',query.join('&')].join(''));
     return hierarchyItemChildren.then(response=>{return Promise.resolve(JSON.parse(response))});
   }
 
@@ -258,7 +258,7 @@ class LazyHierarchyFetch extends HierarchyBase{
       `persNodes=${encodeURIComponent(JSON.stringify([{NodeId:id,Text:null}]))}`, // child node id
       `origNodes=${encodeURIComponent(JSON.stringify([{NodeId:parentID,Text:null}]))}` // parent node id
     ];
-    var tableResult = this.promiseRequest([path.join('/'),'?',query.join('&')].join(''));
+    var tableResult = HierarchyBase.promiseRequest([path.join('/'),'?',query.join('&')].join(''));
     return tableResult.then(response=>{return Promise.resolve(this.constructor.stripRowsFromResponseTable(response, this.excludedRows))});
   }
 

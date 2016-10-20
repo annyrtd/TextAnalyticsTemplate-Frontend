@@ -15,7 +15,7 @@ const AUTOPREFIXER_BROWSERS = [
 module.exports = {
   entry: {
     js:"./src/main.js",
-    css:"./src/main.css"
+    //css:"./src/main.css"
   },
   output: {
     path: "./dist",
@@ -26,12 +26,12 @@ module.exports = {
     loaders: [
       {
         test: /\.js$/,
-        exclude: /node_modules/,
+        //exclude: /node_modules/,
         loader: "babel-loader"
       },
       {
         test:   /\.css$/,
-        exclude: /node_modules/,
+        //exclude: /node_modules/,
         loader:  ExtractTextPlugin.extract("style","css!postcss")
       }
     ]
