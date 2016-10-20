@@ -93,7 +93,7 @@ class TAHierarchyTable extends HierarchyBase{
         if(this.rowheaders[compoundID]){ //we want to skip those which aren't in rowheaders
           let row = rows[this.rowheaders[compoundID].index],
               firstInBlock = (block!==null && row.rowIndex === block.cell.parentNode.rowIndex), //this row is first in the block, which means it contains the first cell as a block cell and we need to indent the cell index when changing names in hierarchical column
-              currentRowArray = this.stripRowData(row,firstInBlock,block);
+              currentRowArray = HierarchyBase.stripRowData(row,firstInBlock,block);
           resultArray.push(currentRowArray);
           if(parent!=null){
             if(!parent.meta.children)parent.meta.children=[];

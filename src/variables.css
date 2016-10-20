@@ -1,6 +1,6 @@
 /* Config to define variables */
 :root {
-  /* theme colors defined */
+  /* theme colors defined*/
   --dark-primary-color:       #3f3f3f;
   --default-primary-color:    #e1e4e9;
   --light-primary-color:      #f0f2f5;
@@ -14,6 +14,7 @@
   --disabled-text-color:      #ccc;
   --divider-color:            #ccc;
   --light-divider-color:      #e1e4e9;
+
 
   /* conditional formatting colors */
   --positive-color:#7cc700;

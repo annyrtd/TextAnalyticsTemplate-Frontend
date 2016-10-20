@@ -65,9 +65,10 @@ class FixedHeader {
    * */
   cloneHeader(){
     this.clonedHeader = this.source.cloneNode(true);
-    [].slice.call(this.clonedHeader.querySelectorAll('tbody')).forEach(tbody=>this.clonedHeader.removeChild(tbody));
+    //this.clonedHeader.removeChild(this.clonedHeader.querySelector('tbody'));
     this.clonedHeader.classList.add('fixed');
     this.wrapper.appendChild(this.clonedHeader);
+    [].slice.call(this.clonedHeader.children).forEach(child=>{if(child.nodeName=='TBODY')this.clonedHeader.removeChild(child)});
   }
 
   /**

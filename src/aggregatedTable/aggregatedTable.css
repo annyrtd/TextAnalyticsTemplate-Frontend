@@ -1,3 +1,5 @@
+@import "../../node_modules/r-sort-table/src/sort-table-styles.css";
+
 .reportal-table{
   width:100%;
   font-size:14px;
@@ -45,7 +47,12 @@
   &.reportal-barchart>tbody>tr>th:nth-last-child(2) {
     text-align:right;
    }
-
+  &.reportal-barchart>tbody>tr>td:last-child,
+  & td>table.barchcart{
+    @media all and (min-width: 0px) and (max-width: 740px){
+      min-width:100px;width:100px !important;
+    }
+  }
   &>tbody>tr>td {
       padding: 2px 8px;
       min-height:24px;
@@ -139,7 +146,6 @@
       left:auto;
       transition:  width,background-color,left,transform,opacity .25s ease-in-out;
 
-
       &>input{
         display:none;
         background-color: transparent;
@@ -187,7 +193,7 @@
 
       }
     }
-  &>thead td.sortable:not(.hierarchy-search-visible){
+  /*&>thead td.sortable:not(.hierarchy-search-visible){
       cursor:pointer;
       &.sorted.asc:after{
         content: var(--icon-arrow-up);
@@ -204,7 +210,7 @@
         position: relative;
         color: var(--primary-text-color);
       }
-    }
+  }*/
 
 }
 
