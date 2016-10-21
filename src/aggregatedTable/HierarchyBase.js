@@ -255,7 +255,7 @@ class HierarchyBase extends ReportalBase {
    * @param {Array} data - initial data if passed
    * @param {Array} blocks - array of `blocks` passed in constructor
    * */
-  setUpBlocks(data,blocks){
+  setUpBlocks(data,blocks,clearLinks){
     if(data.length>0){return data} //if data was already passed, use it, we assume it's ready prepared
     var arr = [];
     let rows = [].slice.call(this.source.parentNode.querySelectorAll(`table#${this.source.id}>tbody>tr`));
@@ -266,12 +266,12 @@ class HierarchyBase extends ReportalBase {
           let block = blocks[i];
           arr[block] = {data:[], name:block, cell:tdBlocks[i]};
           arr.push(arr[block].data);
-          this.parseHierarchy({array: arr[block].data, block:arr[block], rows});
+          this.parseHierarchy({array: arr[block].data, block:arr[block], rows, clearLinks});
         }
       }
     } else {
       arr[0]=[];
-      this.parseHierarchy({array: arr[0], rows});
+      this.parseHierarchy({array: arr[0], rows, clearLinks});
     }
     return arr;
   }

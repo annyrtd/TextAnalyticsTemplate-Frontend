@@ -36,10 +36,11 @@ class TAHierarchyTable extends HierarchyBase{
     this.column = column;
     this.blocks = blocks;
     this.flatNameDelimiter = flatNameDelimiter;
-    this.data = this.setUpBlocks(data,blocks);
+    this.clearLinks = clearLinks;
+    this.data = this.setUpBlocks(data,blocks,clearLinks);
     this.flat = flat;
     this.search = this.setupSearch(search);
-    this.clearLinks = clearLinks;
+
     this.init();
   }
 
@@ -82,7 +83,7 @@ class TAHierarchyTable extends HierarchyBase{
    * @param {!Array} array - changed table for children levels
    * @return {Array}
    */
-  parseHierarchy({hierarchy=this.hierarchy,level=0,block=null,array,rows,parent=null}={}){
+  parseHierarchy({hierarchy=this.hierarchy,level=0,block=null,array,rows,parent=null, clearLinks = true}={}){
     let blockName = null;
     if(block!==null){
       blockName = block.name.toLowerCase();
@@ -118,7 +119,7 @@ class TAHierarchyTable extends HierarchyBase{
 
           row.classList.add("level" + level.toString());
 
-          if (level > 0 && this.clearLinks) {
+          if (level > 0 && clearLinks) {
             this.constructor.clearLink(row);
           }
 
