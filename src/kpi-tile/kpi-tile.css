@@ -7,6 +7,7 @@
   margin: var(--kpi-tile-margin);
   background: var(--light-primary-color);
   border-radius:var(--border-radius,3px);
+  min-width: 180px !important;
 
 /* mobile-small */
   @media all and (min-width: 0) and (max-width: 360px) and (orientation: portrait) {
