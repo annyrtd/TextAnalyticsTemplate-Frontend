@@ -39,11 +39,35 @@ class Hitlist {
                 </div>`,
         range: {min: -5, max: -2}
       }
-    ]}={}) {
+    ], icons = {
+    "positive": `<div class="icon">
+                  <svg class="cf_positive" height="48" viewBox="0 0 24 24" width="48" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="15.5" cy="9.5" r="1.5"></circle>
+                    <circle cx="8.5" cy="9.5" r="1.5"></circle>
+                    <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm0-4c-1.48 0-2.75-.81-3.45-2H6.88c.8 2.05 2.79 3.5 5.12 3.5s4.32-1.45 5.12-3.5h-1.67c-.7 1.19-1.97 2-3.45 2z"></path>
+                  </svg>
+                </div>`,
+    "neutral": `<div class="icon">
+                 <svg class="cf_neutral" height="48" viewBox="0 0 24 24" width="48" xmlns="http://www.w3.org/2000/svg">
+                   <path d="M9 14h6v1.5H9z"></path>
+                   <circle cx="15.5" cy="9.5" r="1.5"></circle>
+                   <circle cx="8.5" cy="9.5" r="1.5"></circle>
+                   <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"></path>
+                 </svg>
+                </div>`,
+    "negative": `<div class="icon">
+                  <svg class="cf_negative" height="48" viewBox="0 0 24 24" width="48" xmlns="http://www.w3.org/2000/svg">
+                     <circle cx="15.5" cy="9.5" r="1.5"></circle>
+                     <circle cx="8.5" cy="9.5" r="1.5"></circle>
+                     <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm0-6c-2.33 0-4.32 1.45-5.12 3.5h1.67c.69-1.19 1.97-2 3.45-2s2.75.81 3.45 2h1.67c-.8-2.05-2.79-3.5-5.12-3.5z"></path>
+                  </svg>
+                </div>`
+  }}={}) {
     this.source = hitlist;
     this.headers = headers;
     this.hitlistData = hitlistData;
     this.sentimentConfig = sentimentConfig;
+    this.icons = icons;
     this.init();
   }
 
@@ -98,7 +122,8 @@ class Hitlist {
 
 
   addClassesToHitlist(question,type) {
-    this.source.querySelectorAll(".yui3-datatable-col-" + question.name).forEach(item => {
+    var questionCells = this.source.querySelectorAll(".yui3-datatable-col-" + question.name);
+    [].slice.call(questionCells).forEach(item => {
         item.classList.add("reportal-hitlist-" + type.postfix);
         if (question.main)
           item.classList.add("reportal-hitlist-main");
@@ -139,7 +164,8 @@ class Hitlist {
   }
 
   processSortableColumns(){
-    this.source.querySelectorAll(".yui3-datatable-header.yui3-datatable-sortable-column").forEach( header => this.addSorting( header ))
+    var sortableColumns = this.source.querySelectorAll(".yui3-datatable-header.yui3-datatable-sortable-column");
+    [].slice.call(sortableColumns).forEach( header => this.addSorting( header ));
   }
 
   addSorting(header){
@@ -170,20 +196,25 @@ class Hitlist {
   }
 
   addIconsForSentiment(){
-    this.source.querySelectorAll(".yui3-datatable-cell.reportal-hitlist-sentiment").forEach(cell=>this.addIconForSentiment(cell))
+    let sentimentCells = this.source.querySelectorAll(".yui3-datatable-cell.reportal-hitlist-sentiment");
+    if(sentimentCells && sentimentCells.length > 0){
+      [].slice.call(sentimentCells).forEach(cell=>this.addIconForSentiment(cell));
+    }
+
   }
 
   addIconForSentiment(cell){
     var value = parseInt(cell.innerText);
     for(var i = 0; i < this.sentimentConfig.length; i++){
       if(value <= this.sentimentConfig[i].range.max && value >= this.sentimentConfig[i].range.min){
-        cell.innerHTML = this.sentimentConfig[i].icon;
+        cell.innerHTML = this.sentimentConfig[i].icon ? this.sentimentConfig[i].icon : this.icons[this.sentimentConfig[i].sentiment];
       }
     }
   }
 
   processMainColumn(){
-    this.source.querySelectorAll(".yui3-datatable-cell.reportal-hitlist-main").forEach((cell, index)=>{
+    var mainCells = this.source.querySelectorAll(".yui3-datatable-cell.reportal-hitlist-main");
+    [].slice.call(mainCells).forEach((cell, index)=>{
       this.wrapComment(cell);
       //this.addDateToComment(cell, index);
       if(this.headers["categories"])
@@ -192,7 +223,8 @@ class Hitlist {
   }
 
   processDates(){
-    this.source.querySelectorAll(".yui3-datatable-cell.reportal-hitlist-date").forEach((cell, index)=>{
+    var dateCells = this.source.querySelectorAll(".yui3-datatable-cell.reportal-hitlist-date");
+    [].slice.call(dateCells).forEach((cell, index)=>{
       var date = cell.innerText;
       cell.innerHTML = "";
       var dateElement = document.createElement("div");
