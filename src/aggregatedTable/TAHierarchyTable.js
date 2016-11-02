@@ -128,7 +128,7 @@ class TAHierarchyTable extends HierarchyBase{
           // initializes row headers according to `this.flat`
           this.updateCategoryLabel(currentRowArray);
 
-          if(level < 2)resultArray = this.parseHierarchy({hierarchy:item.subcells, level:level + 1, block, array:resultArray, rows, parent:currentRowArray });
+          if(level < 2)resultArray = this.parseHierarchy({hierarchy:item.subcells, level:level + 1, block, array:resultArray, rows, parent:currentRowArray , clearLinks});
         }
 
       return resultArray
