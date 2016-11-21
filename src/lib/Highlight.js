@@ -19,13 +19,14 @@ class Highlight {
    * @param {HTMLElement} element=document.body - Element in which the search and highlighting will happen. A valid Array (`!NodeList`) of nodes can be passed here.
    * @param {String} tag=EM - The tag used by default to apply highlighting to matched words is the  EM (emphasis) tag. We can change that if we want by passing a second parameter with a different tag name. You can use any tag that renders inline - so not a DIV or similar block element which would break the layout.
    * @param {String} type=left+right - Type of match. `open` will look at all occurences, `left` - at the left word boundary, `right` - at the right word boundary, by default it must match the whole word.
+   * @param {Array.<String>} colors = ["#ff6", "#a0ffff", "#9f9", "#f99", "#f6f"] - Color palette to iterate within when highlighting. Specify only one to make color static
    * */
-  constructor({element = document.body, tag = 'EM', type}={}){
+  constructor({element = document.body, tag = 'EM', type,colors = ["#ff6", "#a0ffff", "#9f9", "#f99", "#f6f"]}={}){
     this.targetNode = element;
     this.isArray = Array.isArray(this.targetNode);
     this.highlightTag = tag;
     this.skipTags = new RegExp("^(?:" + this.highlightTag + "|SCRIPT|FORM|SPAN)$");
-    this.colors = ["#ff6", "#a0ffff", "#9f9", "#f99", "#f6f"];
+    this.colors = colors;
     this.wordColor = [];
     this.colorIdx = 0;
     this.setMatchType(type);

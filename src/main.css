@@ -47,7 +47,7 @@ The following imports of classes files are available:
 /** Styles for kpi-tiles */
 @import "kpi-tile/kpi-tile.css";
 
-@import "aggregatedTable/aggregatedTable.css";
+/*@import "aggregatedTable/aggregatedTable.css";*/
 
 @import "hitlist/hitlist.css";
 

@@ -1,8 +1,20 @@
+@import "conditional-formatting.css";
+@import "reportal-barchart.css";
+
 .detailed-analysis-table{
   & td[class*=_chc]:not(:last-child) {
     width: 10%;
   }
   & td[class*=_chc]:last-child{width:200px}
+}
+
+/* specific class to set header for the first column */
+.reportal-table{
+  &.reportal-categories>thead>tr>td.reportal-hierarchical-header{position:relative;}
+  &.reportal-categories>thead>tr>td.reportal-hierarchical-header:before,
+  &.reportal-categories:not(.reportal-hierarchy-table)>thead>tr>td[class*="_cc"]:before{
+    content:"Categories";
+  }
 }
 
 

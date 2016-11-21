@@ -61,5 +61,5 @@ module.exports = {
       //require('cssnano')()
     ];
   },
-  watch:true
+  //watch:true
 };

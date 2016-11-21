@@ -326,7 +326,6 @@ class AggregatedTable{
         settings.searching=false;
       }
     }, settings.timeout, settings.immediate);
-
   }
 
   /**
