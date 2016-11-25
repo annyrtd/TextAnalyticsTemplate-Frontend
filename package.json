@@ -35,6 +35,7 @@
     "webpack": "^1.13.1"
   },
   "dependencies": {
+    "r-hitlist": "github:confirmitasa/r-hitlist",
     "r-reporal-base": "github:confirmitasa/r-reportal-base",
     "r-sort-table": "github:confirmitasa/r-sort-table",
     "r-table-hierarchy": "github:confirmitasa/r-table-hierarchy"
