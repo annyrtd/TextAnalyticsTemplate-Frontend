@@ -19,7 +19,7 @@ module.exports = {
   },
   output: {
     path: "./dist",
-    filename: "bundle.js"
+    filename: "bundle-v0.1.0.js"
   },
   devtool: "eval-source-map",
   module: {
@@ -37,7 +37,7 @@ module.exports = {
     ]
   },
   plugins: [
-    new ExtractTextPlugin('styles.css')
+    new ExtractTextPlugin('styles-v0.1.0.css')
 
     /*new webpack.optimize.UglifyJsPlugin({
       compress: {
