@@ -16,13 +16,14 @@ The following imports of classes files are available:
  - flex-factors
  - positioning
  */
-@import "layout/layout-mixins.css";
+@import "../node_modules/flexboxLayout/src/layout-mixins.css";
 
-@import "layout/flex.css";
-@import "layout/flex-reverse.css";
-@import "layout/flex-alignment.css";
-@import "layout/flex-factors.css";
-@import "layout/positioning.css";
+@import "../node_modules/flexboxLayout/src/flex.css";
+@import "../node_modules/flexboxLayout/src/flex-reverse.css";
+@import "../node_modules/flexboxLayout/src/flex-alignment.css";
+@import "../node_modules/flexboxLayout/src/flex-factors.css";
+@import "../node_modules/flexboxLayout/src/positioning.css";
+@import "../node_modules/r-loading-animation/loading-animation.css";
 
 /*creates boxes with class `.box` and on optional nested element `.heading` will pose as a header. a `.box` will have outer margin to separate from other elements*/
 @import "layout/box-model.css";
@@ -30,7 +31,6 @@ The following imports of classes files are available:
 /** Styles to override or fix default Reportal visuals */
 @import "reportalFix.css";
 
-@import "loading-animation/loading-animation.css";
 
 /*Viewer presentation styles fixes*/
 @import "viewerPresentation/viewerPresentation.css";
@@ -47,11 +47,8 @@ The following imports of classes files are available:
 /** Styles for kpi-tiles */
 @import "kpi-tile/kpi-tile.css";
 
-@import "aggregatedTable/aggregatedTable.css";
-
-@import "hitlist/hitlist.css";
-
 @import "datepicker/datepicker.css";
 
 /** Styles that are project specific to override generic styles and to be able to transfer them easily into any cloned report */
+
 @import "project-specific-stuff/project-specific-styles.css";

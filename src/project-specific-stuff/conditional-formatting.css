@@ -1,0 +1,81 @@
+.reportal-table{
+  &>tbody>tr>td.cf_positive,
+  &>tbody>tr>td.cf_negative,
+  &>tbody>tr>td.cf_neutral{
+    text-align:right;
+    &:after{
+      content: "";
+      display: inline-block;
+      margin: 0 0 1px 8px;
+      width: 8px;
+      height: 8px;
+    }
+  }
+  &>tbody>tr>td.cf_positive:after {
+    background: var(--positive-color,#7cc700);
+    border-radius: 50%;
+  }
+
+  &>tbody>tr>td.cf_neutral:after {
+    background: var(--neutral-color,#cdd1d9);
+    transform: rotateZ(45deg);
+    width: 7px;
+    height: 7px;
+  }
+
+  &>tbody>tr>td.cf_negative:after {
+    background: var(--negative-color,#fd9900);
+  }
+  & .cf_positive,
+  & .cf_neutral,
+  & .cf_negative{
+    color: var(--primary-text-color,#3F454C);
+  }
+}
+
+
+.cf_positive {
+  color:var(--positive-color,#7cc700);
+  fill: var(--positive-color,#7cc700);
+}
+.cf_neutral {
+  color:var(--neutral-color,#cdd1d9);
+  fill: var(--neutral-color,#cdd1d9);
+}
+.cf_negative {
+  color:var(--negative-color,#fd9900);
+  fill: var(--negative-color,#fd9900);
+}
+/* Legend styles */
+.legend {
+  position: absolute;
+  bottom: 14px;
+
+  & .cf_positive,
+  & .cf_negative,
+  & .cf_neutral{
+    margin-right: 20px;
+    color:inherit;
+
+    &:before{
+      content: "";
+      display: inline-block;
+      margin-right: 5px;
+      width: 11px;
+      height: 11px;
+    }
+  }
+  & .cf_positive:before {
+    background: var(--positive-color,#7cc700);
+    border-radius: 50%;
+  }
+  & .cf_neutral:before {
+    background: var(--neutral-color,#cdd1d9);
+    transform: rotateZ(45deg);
+    width: 10px;
+    height: 10px;
+  }
+  & .cf_negative:before {
+    background: var(--negative-color,#fd9900);
+  }
+}
