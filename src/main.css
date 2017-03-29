@@ -51,6 +51,10 @@ The following imports of classes files are available:
 
 @import "hitlist/hitlist.css";
 
+@import "reportal-filterpanel/reportal-filterpanel.css";
+
+@import "hierarchy-component/hierarchy-component.css";
+
 @import "datepicker/datepicker.css";
 
 /** Styles that are project specific to override generic styles and to be able to transfer them easily into any cloned report */

@@ -80,12 +80,14 @@
       }
     }
   }
+/*
   &.reportal-categories>thead>tr>td.reportal-hierarchical-header{position:relative;}
   &.reportal-categories>thead>tr>td.reportal-hierarchical-header:before,
   &.reportal-categories:not(.reportal-hierarchy-table)>thead>tr>td[class*="_cc"]:before{
-      /*cpecific class to set header for the first column*/
+
       content:"Categories";
   }
+*/
    &>tbody>tr>td.cf_positive,
    &>tbody>tr>td.cf_negative,
    &>tbody>tr>td.cf_neutral{
@@ -251,6 +253,7 @@
 
 .reportal-hierarchy-table .reportal-hierarchical-header{
   padding-right:100px;
+  position: relative;
 }
 
 .reportal-hierarchy-table td.reportal-hierarchical-cell {padding-left:0}

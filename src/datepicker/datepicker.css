@@ -9,8 +9,8 @@
   }
   &>img{
      position: absolute;
-     right: 5px;
-     bottom: 8px;
+      bottom: 8px;
+      left: 96px;
      filter: grayscale(100%);
   }
 }

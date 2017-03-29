@@ -4,14 +4,7 @@
   &>span{
     background:#fff;
     position:relative;
-    &:after {
-      @apply --arrow-down;
-      right: 11px;
-      bottom: 14px;
-      z-index:0;
-    }
   }
-
   & select {
     -webkit-appearance: none;
     -moz-appearance: none;
@@ -29,6 +22,15 @@
   }
     & select[multiple] {
     padding: 5px;
+  min-width: 120px;
   }
-  &.multiple :before, &.multiple :after{display:none}
+
+&.reportal-dropdown>span:after {
+  @apply --arrow-down;
+  right: 5px;
+  bottom: 14px;
+  z-index:0;
 }
+}
+
+

@@ -29,6 +29,18 @@
     background:var(--icon-filter);
   }
 }
+.hitlist-export-button.hitlist-btn{
+  background: var(--light-primary-color) !important;
+  border:0 !important;
+  width:37px !important;
+  position:relative;
+  padding:4px 10px !important;
+  transition:background 0.3s ease-in-out;
+
+  &:hover{
+  background: var(--default-primary-color) !important;
+}
+}
 
 .yui-ac-bd>ul>li{
   /*lookup dropdowns in filter select*/
@@ -275,6 +287,10 @@
 .reportal-hitlist-container .hitlist-nav-next.disabled {
   display: none;
   color: var(--disabled-text-color) !important;
+}
+
+.reportal-hitlist-container .aggregatedTableContainer{
+  overflow-x: hidden;
 }
 
 

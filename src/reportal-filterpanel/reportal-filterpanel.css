@@ -1,0 +1,55 @@
+.reportal-filterpanel {
+  display: flex;
+  flex-direction: column;
+  width: 14%;
+  position: absolute;
+  top: 252px;
+  left: 0;
+  background: #fff;
+  padding: 11px;
+  max-width: 200px;
+ & .reportal-filterpanel-wrapper{
+   width: 153px;
+   margin-left:auto;
+   margin-right: auto;
+
+@media screen and (max-width:1024px) {
+  flex-direction: row;
+  width: auto;
+  position: initial;
+  display: flex;
+  flex-wrap: wrap;
+  max-width: none;
+  width: 100%;
+  margin: 0px
+}
+ }
+
+& .reportal-select, & .reportal-datepicker, & .reportal-dropdown {
+  display: block;
+    & select, & .dd-target-button{
+      width: 120px;
+    }
+   &.reportal-dropdown>span:after {
+      right: 3px;
+    }
+  }
+
+& .reportal-select>span{
+  width: 115px;
+  }
+  @media screen and (max-width:1024px) {
+    flex-direction: row;
+    width: auto;
+    position: initial;
+    display: flex;
+    flex-wrap: wrap;
+    max-width: none;
+    width: 100%;
+  }
+    & .reportal-filterpanel-apply-button, & .reportal-dropdown {
+      flex: 1 100%;
+    }
+
+  }
+
