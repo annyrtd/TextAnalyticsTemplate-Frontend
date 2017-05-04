@@ -5,7 +5,7 @@
 
 .hitlist-dropdown-button{
   /*styles for filter toggle on hitlist*/
-  background: var(--light-primary-color) !important;
+  background: var(--background-color) !important;
   border:0 !important;
   width:50px;
   position:relative;
@@ -15,11 +15,11 @@
      @apply --arrow-down;
       right:10px;
       bottom:11px;
-      border-color: var(--dark-primary-color) transparent transparent;
+      border-color: var(--secondary-text-color) transparent transparent;
   }
 
   &:hover{
-    background: var(--default-primary-color) !important;
+    background: var(--divider-color) !important;
   }
 
   &>.hitlist-dropdown-arrow{
@@ -30,7 +30,7 @@
   }
 }
 .hitlist-export-button.hitlist-btn{
-  background: var(--light-primary-color) !important;
+  background: var(--background-color) !important;
   border:0 !important;
   width:37px !important;
   position:relative;
@@ -38,7 +38,7 @@
   transition:background 0.3s ease-in-out;
 
   &:hover{
-  background: var(--default-primary-color) !important;
+  background: var(--divider-color) !important;
 }
 }
 
@@ -47,13 +47,13 @@
   font-family:var(--font-family) !important;
   font-size:15px !important;
   &.yui-ac-highlight{
-    background-color: var(--default-accent-color) !important;
-    color: var(--text-primary-color) !important;
+    background-color: var(--button-main-color) !important;
+    color: var(--button-text-color) !important;
   }
 }
 
 .hitlist-filter{
-  border-color: var(--default-accent-color) !important;
+  border-color: var(--button-main-color) !important;
   background: var(--light-accent-color) !important;
   margin:1px 3px !important;
   &>.hitlist-filter-name{font-family:var(--font-family) !important;}
@@ -65,7 +65,7 @@
   border-color: var(--divider-color) !important;
   border-radius: var(--border-radius) !important;
   box-shadow: 0 2px 8px var(--light-divider-color) !important;
-  background-color: var(--primary-background-color) !important;
+  background-color: var(--table-column-color) !important;
   background-image: none !important;
   & .hitlist-filter-item{
     height:auto;
@@ -130,18 +130,18 @@
       font-size:15px !important;
     }
     &>.hitlist-dropdown-filter-apply{
-       background: var(--default-accent-color) !important;
-       color: var(--text-primary-color) !important;
+       background: var(--button-main-color) !important;
+       color: var(--button-text-color) !important;
        &:hover{
-          background:var(--dark-accent-color) !important;
+          background:var(--button-hover-color) !important;
        }
     }
     &>.hitlist-dropdown-clear{
-       background: var(--default-primary-color) !important;
+       background: var(--background-color) !important;
        color: var(--primary-text-color) !important;
        &:hover{
           background:var(--secondary-text-color) !important;
-          color:var(--text-primary-color) !important;
+          color:var(--button-text-color) !important;
        }
     }
     &>.hitlist-dropdown-cancel{
@@ -151,7 +151,7 @@
       color: var(--primary-text-color) !important;
       border:0 !important;
       &:hover{
-         background:var(--default-primary-color) !important;
+         background:var(--background-color) !important;
          text-decoration:none;
       }
     }
@@ -172,12 +172,13 @@
   width: 55px;
 }
 
-.reportal-hitlist-container .yui3-datatable-columns,
-.reportal-hitlist-container .yui3-datatable-header {
-  background-image: none !important;
-  background-color: #FFF !important;
-  border-top: 1px solid var(--divider-color) !important;
-  font-weight: normal !important;
+.reportal-hitlist-container {
+  & .yui3-datatable-columns,& .yui3-datatable-header,& .yui3-datatable-cell {
+    background-image: none !important;
+    background-color: #FFF !important;
+    border-bottom: 1px solid var(--light-divider-color) !important;
+    font-weight: normal !important;
+  }
 }
 
 .reportal-hitlist-container .yui3-datatable-header {
@@ -216,6 +217,7 @@
 .reportal-hitlist-container .yui3-datatable-cell:hover {
   background-color: #FFF !important;
   background-image: none !important;
+  color: var(--primary-text-color) !important;
 }
 
 .reportal-hitlist-container .reportal-hitlist-satisfaction {
@@ -278,9 +280,10 @@
   margin-top: 5px;
   padding: 2px 5px;
   border: solid 1px var(--divider-color);
-  background-color: var(--primary-background-color);
+  background-color: var(--table-column-color);
   font-size: 12px;
   display: inline-block;
+  color: var(--primary-text-color) !important;
 }
 
 .reportal-hitlist-container .hitlist-nav-prev.disabled,
@@ -298,13 +301,13 @@
   @apply --reportal-button;
   background-image: none !important;
   -webkit-appearance:none;
-  background: var(--default-accent-color) !important;
-  color: var(--text-primary-color) !important;
+  background: var(--button-main-color) !important;
+  color: var(--button-text-color) !important;
   border:0 !important;
   font-family: var(--font-family) !important;
   font-size:15px!important;
   &:hover{
-    background:var(--dark-accent-color) !important;
+    background:var(--button-hover-color) !important;
     text-decoration:none;
   }
 }

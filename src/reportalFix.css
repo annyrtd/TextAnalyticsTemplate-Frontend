@@ -1,13 +1,13 @@
 *{
   box-sizing:border-box;
-  outline-color: var(--dark-accent-color);
+  outline-color: var(--button-hover-color);
 }
 
 body, body.reportal-viewmode {
   font-size: 15px;
   line-height: 20px;
   color: var(--primary-text-color);
-  background-color: var(--default-primary-color);
+  background-color: var(--background-color);
   font-family: var(--font-family);
   min-width:initial;
 }
@@ -42,13 +42,13 @@ body, body.reportal-viewmode {
 }
 
 a, .link{
-  color: var(--default-accent-color) !important;
+  color: var(--button-main-color) !important;
   &:active,
   &:visited{
-    color: var(--default-accent-color);
+    color: var(--button-main-color);
   }
   &:hover{
-    color: var(--dark-accent-color);
+    color: var(--button-hover-color);
   }
 }
 
@@ -78,14 +78,14 @@ a, .link{
   }
   &:hover>[class^=icon-]{opacity:1;}
   &.btn-primary {
-     color: var(--text-primary-color);
-     background-color: var(--default-accent-color);
+     color: var(--button-text-color);
+     background-color: var(--button-main-color);
      border-color: transparent;
       &:hover,
       &:active,
       &:focus{
-         color: var(--text-primary-color);
-         background-color: var(--dark-accent-color);
+         color: var(--button-text-color);
+         background-color: var(--button-hover-color);
       }
    }
 }
@@ -152,8 +152,8 @@ a, .link{
   margin:16px 24px;
 
   & .filter-button{
-    background-color: var(--text-primary-color);
-    fill: var(--dark-primary-color);
+    background-color: var(--light-primary-color);
+    fill: var(--primary-text-color);
     transition: .25s background-color ease-in-out;
     margin-right:8px;
 
@@ -166,34 +166,14 @@ a, .link{
     &:hover,
     &:active,
     &:focus{
-      background-color: var(--dark-primary-color);
-      fill:var(--text-primary-color);
+      background-color: var(--primary-text-color);
+      fill:var(--light-primary-color);
     }
   }
-    & .SelectorHeading,
-    & .well-filter-summary{
-      height: 30px;
-      border-radius: 3px;
-      padding: 0 8px;
-      vertical-align: top;
-      line-height: 30px;
-      font-size: 13px;
-      cursor: default;
-      pointer-events: painted;
-    }
-    & .well-filter-summary{
+    & div {
       background: var(--secondary-text-color);
       transition: .25s background-color ease-in-out;
-      color: var(--text-primary-color);
-      &:hover{
-        background-color: var(--dark-primary-color);
-      }
-    }
-
-    & div {
-      background: #8F97A2;
-      transition: .25s background-color ease-in-out;
-      color: #fff;
+      color: var(--button-text-color);
       margin: 0 5px;
       height: 30px;
       border-radius: 3px;

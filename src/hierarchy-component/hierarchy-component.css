@@ -52,7 +52,7 @@
   & .dd-search-input{
   border-color: var(--light-divider-color) !important;
 &:focus{
-  outline-color: var(--default-accent-color) !important;
+  outline-color: var(--button-main-color) !important;
 }
 
 }
@@ -61,24 +61,24 @@
 
 }
   & .dd-item-text:focus{
-outline-color: var(--default-accent-color) !important;
+outline-color: var(--button-main-color) !important;
 }
 
 }
  & .dd-button-menu {
      border-color: var(--light-divider-color) !important;
 & button {
-  background-color: var(--default-accent-color);
+  background-color: var(--button-main-color);
   font-family: var(--font-family);
   font-size: 14px;
   border-radius: var(--border-radius);
   box-shadow: none;
   background-image: none !important;
   &:focus{
-    outline-color: var(--default-accent-color);
+    outline-color: var(--button-main-color);
   }
   &:hover{
-    background-color: var(--dark-accent-color);
+    background-color: var(--button-hover-color);
    }
 
 }

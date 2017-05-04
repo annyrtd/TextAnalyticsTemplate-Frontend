@@ -42,7 +42,7 @@
       &:before{
         display:block;
         content:'';
-        border: 1px solid var(--default-accent-color);
+        border: 1px solid var(--button-main-color);
         width:10px;
         height:10px;
         border-bottom: 0;
@@ -92,13 +92,13 @@
 
         &>a{
           /*border:1px solid var(--divider-color) !important;*/
-          background: var(--light-accent-color) !important;
+          background: var(--button-main-color) !important;
         }
       }
       &.calcellhover>a{background:var(--dark-primary-color) !important;}
       &.selected>a{
-         background:var(--default-accent-color) !important;
-         color: var(--text-primary-color) !important;
+         background:var(--button-main-color) !important;
+         color: var(--button-text-color) !important;
       }
     }
     & .calheader{padding: .6em 0 !important;}
@@ -110,8 +110,8 @@
       padding: 6px 8px !important;
       color: var(--secondary-text-color) !important;
       &:hover{
-        background:var(--default-accent-color) !important;
-        color:var(--text-primary-color) !important;
+        background:var(--button-main-color) !important;
+        color:var(--button-text-color) !important;
         border-color: transparent;
       }
     }
@@ -135,11 +135,11 @@
       border-radius: var(--border-radius);
       transition: background .3s ease-in-out;
       &:hover {
-        background:var(--default-primary-color) !important;
+        background:var(--background-color) !important;
       }
       &.yui-default{
-        background:var(--default-accent-color) !important;
-        &:hover{background:var(--dark-accent-color) !important;}
+        background:var(--button-main-color) !important;
+        &:hover{background:var(--button-hover-color) !important;}
       }
     }
   }
