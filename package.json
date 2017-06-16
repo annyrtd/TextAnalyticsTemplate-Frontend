@@ -35,9 +35,6 @@
     "webpack": "^1.13.1"
   },
   "dependencies": {
-    "highcharts": "^5.0.11",
-    "highcharts-exporting": "^0.1.2",
-    "highcharts-more": "^0.1.2",
     "r-reporal-base": "github:confirmitasa/r-reportal-base",
     "r-sort-table": "github:confirmitasa/r-sort-table"
   }
