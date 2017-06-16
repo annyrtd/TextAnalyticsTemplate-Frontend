@@ -59,3 +59,5 @@ The following imports of classes files are available:
 
 /** Styles that are project specific to override generic styles and to be able to transfer them easily into any cloned report */
 @import "project-specific-stuff/project-specific-styles.css";
+
+@import "correlationChart/correlationChart.css";

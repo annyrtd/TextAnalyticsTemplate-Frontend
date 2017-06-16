@@ -49,7 +49,7 @@ body:not(.masked)>#wait_c {left:0 !important}
     background-color:var(--light-primary-color);
   }
   to {
-    background-color:var(--dark-primary-color);
+    background-color:var(--primary-text-color);
   }
 }
 
@@ -58,6 +58,6 @@ body:not(.masked)>#wait_c {left:0 !important}
     background-color:var(--light-primary-color);
   }
   to {
-    background-color:var(--dark-primary-color);
+    background-color:var(--primary-text-color);
   }
 }

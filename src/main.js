@@ -1,4 +1,10 @@
 var styleBundle = require('./main.css');
+// import Highcharts from 'highcharts';
+// window.Highcharts = Highcharts;
+// import 'highcharts-exporting';
+// import 'highcharts-more';
+
+//HighchartsExporting(HighchartsMore(Highcharts));
 
 import FixedHeader from './aggregatedTable/FixedHeader.js';
 import AggregatedTable from './aggregatedTable/AggregatedTable.js';
@@ -9,8 +15,11 @@ import ReportalBase from '../node_modules/r-reporal-base';
 import TAHierarchyTable from  './aggregatedTable/TAHierarchyTable.js';
 import DefaultConfig from './hitlist/hitlist.js';
 import Hitlist from './hitlist/hitlist.js';
+import CorrelationChart from './correlationChart/correlationChart.js'
 
 import Filterpanel from './reportal-filterpanel/reportal-filterpanel.js'
+
+
 
 window.Reportal = window.Reportal || {};
 ReportalBase.mixin(window.Reportal,{
@@ -19,5 +28,6 @@ ReportalBase.mixin(window.Reportal,{
   Hitlist,
   TAHierarchyTable,
   SortModule,
-  Filterpanel
+   Filterpanel,
+    CorrelationChart
 });

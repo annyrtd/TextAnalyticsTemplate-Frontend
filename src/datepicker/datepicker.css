@@ -95,7 +95,7 @@
           background: var(--button-main-color) !important;
         }
       }
-      &.calcellhover>a{background:var(--dark-primary-color) !important;}
+      &.calcellhover>a{background:var(--primary-text-color) !important;}
       &.selected>a{
          background:var(--button-main-color) !important;
          color: var(--button-text-color) !important;

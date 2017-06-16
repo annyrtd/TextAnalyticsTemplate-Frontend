@@ -122,7 +122,7 @@ class Hitlist {
 
 
   addClassesToHitlist(question,type) {
-    var questionCells = this.source.querySelectorAll(".yui3-datatable-col-" + question.name);
+    let questionCells = this.source.querySelectorAll(".yui3-datatable-col-" + question.name);
     [].slice.call(questionCells).forEach(item => {
         item.classList.add("reportal-hitlist-" + type.postfix);
         if (question.main)

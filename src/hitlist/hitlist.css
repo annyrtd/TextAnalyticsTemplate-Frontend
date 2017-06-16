@@ -54,7 +54,7 @@
 
 .hitlist-filter{
   border-color: var(--button-main-color) !important;
-  background: var(--light-accent-color) !important;
+  background: var(--background-color) !important;
   margin:1px 3px !important;
   &>.hitlist-filter-name{font-family:var(--font-family) !important;}
   &>.hitlist-filter-remove{top:3px !important;}
