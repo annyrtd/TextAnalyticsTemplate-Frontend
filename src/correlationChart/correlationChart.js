@@ -1,7 +1,7 @@
-import Highcharts from 'highcharts';
+import Highcharts from '../lib/highcharts';
 window.Highcharts = Highcharts;
-require('highcharts-exporting')(Highcharts);
-require('highcharts-more')(Highcharts);
+require('../lib/exporting')(Highcharts);
+require('../lib/highcharts-more')(Highcharts);
 
 export default class CorrelationChart {
   constructor({container, table, palette}) {
