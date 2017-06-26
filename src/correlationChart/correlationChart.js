@@ -26,7 +26,7 @@ export default class CorrelationChart {
     })
   }
 
-  setupChart(){
+  setupChart() {
     let chartConfig = {
 
       chart: {
@@ -115,7 +115,7 @@ export default class CorrelationChart {
           allowPointSelect: true,
           point: {
             events: {
-              select: function(e){
+              select: function (e) {
                 e.target.click();
               }
             }
@@ -124,7 +124,7 @@ export default class CorrelationChart {
             enabled: true,
             format: '{point.name}',
             color: '#3F454C',
-            style : {
+            style: {
               "color": "#3F454C",
               "fontFamily": '"Helvetica Neue", Roboto, sans-serif',
               "textOutline": 'none'
@@ -148,7 +148,7 @@ export default class CorrelationChart {
         cursor: 'pointer',
         stickyTracking: false,
         states: {
-          hover:{
+          hover: {
             enabled: false,
             animation: false
           }
@@ -161,41 +161,84 @@ export default class CorrelationChart {
     Highcharts.chart(this.container, chartConfig, this.SetupChartAreas);
   }
 
-  SetupChartAreas(chart){
+  SetupChartAreas(chart) {
     console.log(chart);
-    let plotline = chart.xAxis[0].plotLinesAndBands[0];
-    chart.renderer.label('lala', 0, 0, 'rect')
-      .css({
-        color: '#FFFFFF'
-      })
-      .attr({
-        fill: 'rgba(0, 0, 0, 0.75)',
-        padding: 8,
-        r: 5,
-        zIndex: 6
-      })
-      .add();
+    let {plotLeft, plotWidth, plotTop, plotBottom, xAxis, plotHeight} = chart;
+    let yPlotline = xAxis[0].toPixels(xAxis[0].plotLinesAndBands[0].options.value);
+    let titleHeight = 30;
 
+    let areas = [
+      {
+        title: "Priority Issues",
+        color: "#ee627d",
+        coordinates: [
+          plotLeft,
+          plotTop - titleHeight,
+          yPlotline - plotLeft,
+          titleHeight
+        ]
+      },
+      {
+        title: "Strength",
+        color: "#7cc700",
+        coordinates: [
+          yPlotline,
+          plotTop - titleHeight,
+          plotWidth - yPlotline + plotLeft,
+          titleHeight
+        ]
+      },
+      {
+        title: "Monitor add Improve",
+        color: "#fd9900",
+        coordinates: [
+          plotLeft,
+          plotHeight + plotTop,
+          yPlotline - plotLeft,
+          titleHeight
+        ]
+      },
+      {
+        title: "Maintain",
+        color: "#82b8ec",
+        coordinates: [
+          yPlotline,
+          plotHeight + plotTop,
+          plotWidth - yPlotline + plotLeft,
+          titleHeight
+        ]
+      }
+    ];
 
+    areas.forEach((area) => {
+      let { title, color, coordinates} = area;
+      chart.renderer.rect(...coordinates)
+        .attr({
+          fill: color
+        })
+        .add();
+    })
   }
 
-  GetCellValue(row,index) {
+  GetCellValue(row, index) {
     return row.children.item(index).innerText
   }
 
-  CellClick(row){
+  CellClick(row) {
     row.children.item(0).children.item(0).click()
   }
 
   GetRowValues(row, index) {
     const GetCurrentRowCellValue = (cellIndex) => this.GetCellValue(row, cellIndex);
-    const paletteColorIndex = index >= this.palette.length ? (index - this.palette.length * parseInt(index/this.palette.length)) : index;
+    const paletteColorIndex = index >= this.palette.length ? (index - this.palette.length * parseInt(index / this.palette.length)) : index;
     const name = GetCurrentRowCellValue(0);
     const x = +GetCurrentRowCellValue(1);
     const y = +GetCurrentRowCellValue(2);
-    const z = +(GetCurrentRowCellValue(3).replace(/,/g , ""));
+    const z = +(GetCurrentRowCellValue(3).replace(/,/g, ""));
     const color = this.palette[paletteColorIndex];
-    const click = () => {this.CellClick(row)};
+    const click = () => {
+      this.CellClick(row)
+    };
 
     return {x, y, z, name, color, click};
   }
