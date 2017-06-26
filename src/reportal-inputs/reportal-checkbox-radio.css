@@ -6,7 +6,8 @@
 
   & + label {
     position:relative;
-    padding-left:24px
+    padding-left:24px;
+    color: var(--secondary-text-color);
   }
 &:not(:checked) + label:after {
    opacity: 0;
@@ -46,7 +47,7 @@
        position: absolute;
        left:1px; top: 2px;
        width: 14px; height: 14px;
-       border: 1px solid var(--disabled-text-color);
+       border: 1px solid var(--divider-color);
        background: #FFF;
     }
     &:after{
@@ -79,7 +80,7 @@
        margin-right: 10px;
        left: 0;
        bottom: 0;
-       border: 1px solid var(--disabled-text-color);
+       border: 1px solid var(--divider-color);
     }
     &:after{
         width:9px;

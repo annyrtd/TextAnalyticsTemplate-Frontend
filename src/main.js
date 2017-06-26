@@ -1,11 +1,23 @@
-let styleBundle = require('./main.css');
+var styleBundle = require('./main.css');
 
-import TAhierarchy from 'r-table-hierarchy';
-import TableFloatingHeader from 'r-table-floating-header';
-import AggregatedTable from 'r-aggregated-table';
-import ReportalBase from 'r-reportal-base'
-import Hitlist from 'r-hitlist';
+import FixedHeader from './aggregatedTable/FixedHeader.js';
+import AggregatedTable from './aggregatedTable/AggregatedTable.js';
+import LazyHierarchyFetch from './aggregatedTable/LazyHierarchyFetch.js';
 
-let Reportal = window.Reportal;
+import SortModule from '../node_modules/r-sort-table';
+import ReportalBase from '../node_modules/r-reporal-base';
+import TAHierarchyTable from  './aggregatedTable/TAHierarchyTable.js';
+import DefaultConfig from './hitlist/hitlist.js';
+import Hitlist from './hitlist/hitlist.js';
 
-export default Reportal
+import Filterpanel from './reportal-filterpanel/reportal-filterpanel.js'
+
+window.Reportal = window.Reportal || {};
+ReportalBase.mixin(window.Reportal,{
+  FixedHeader,
+  AggregatedTable,
+  Hitlist,
+  TAHierarchyTable,
+  SortModule,
+  Filterpanel
+});

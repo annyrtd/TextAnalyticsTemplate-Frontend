@@ -19,6 +19,7 @@
    width: 100%;
  }
 
+
   & .box{
     width: calc(100% - 16px);
     padding: 8px;
@@ -56,3 +57,4 @@
 .flex.box.two-column table{
   overflow: scroll
 }
+

@@ -1,5 +1,6 @@
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const ReportalPostcssExtractor = require('reportal-postcss-extractor');
 
 const AUTOPREFIXER_BROWSERS = [
   'Android 2.3',
@@ -19,7 +20,7 @@ module.exports = {
   },
   output: {
     path: "./dist",
-    filename: "bundle-v0.1.0.js"
+    filename: "bundle-v0.2.0.js"
   },
   devtool: "eval-source-map",
   module: {
@@ -37,16 +38,17 @@ module.exports = {
     ]
   },
   plugins: [
-    new ExtractTextPlugin('styles-v0.1.0.css')
+    new ReportalPostcssExtractor(),
+    new ExtractTextPlugin('styles-v0.2.0.css')
 
     /*new webpack.optimize.UglifyJsPlugin({
-      compress: {
-        warnings: false
-      },
-      output: {
-        comments: false
-      }
-    })*/
+     compress: {
+     warnings: false
+     },
+     output: {
+     comments: false
+     }
+     })*/
   ],
   postcss: function (webpack) {
     return [
@@ -61,5 +63,5 @@ module.exports = {
       //require('cssnano')()
     ];
   },
-  //watch:true
+  watch:true
 };

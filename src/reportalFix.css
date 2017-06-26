@@ -1,15 +1,37 @@
 *{
   box-sizing:border-box;
-  outline-color: var(--dark-accent-color);
+  outline-color: var(--button-hover-color);
 }
 
 body, body.reportal-viewmode {
   font-size: 15px;
   line-height: 20px;
   color: var(--primary-text-color);
-  background-color: var(--default-primary-color);
+  background-color: var(--background-color);
   font-family: var(--font-family);
   min-width:initial;
+}
+
+/** Page Title styles. Page Title must have a `.page-title` class configured in its properties */
+.page-title{
+  @apply --container;
+
+  background-color: #fff;
+  display: block;
+  line-height: 60px;
+  font-size: 22px;
+  font-weight: 500;
+}
+
+/** PageArea Title styles. Page Title must have a `.page-title` class configured in its properties */
+.pagearea-title {
+  padding: 0;
+  margin: 0 auto;
+  background-color: #fff;
+  display: block;
+  line-height: 30px;
+  font-size: 22px;
+  font-weight: 500;
 }
 
 .report-filters-horizontal{
@@ -20,16 +42,32 @@ body, body.reportal-viewmode {
 }
 
 a, .link{
-  color: var(--default-accent-color) !important;
+  color: var(--button-main-color) !important;
   &:active,
   &:visited{
-    color: var(--default-accent-color);
+    color: var(--button-main-color);
   }
   &:hover{
-    color: var(--dark-accent-color);
+    color: var(--button-hover-color);
   }
 }
 
+[class^=icon-] {
+  fill: var(--primary-text-color);
+  opacity:0.4;
+  width:24px;
+  height:24px;
+  margin-right:8px;
+}
+[class*=" icon-"], [class^=icon-] {
+  display: inline-block;
+  line-height: 1;
+  pointer-events: none;
+  position: relative;
+  text-transform: none;
+  top: 1px;
+  transition: inherit;
+}
 
 /* styles for buttons and elements with class `.btn` */
 .btn, button {
@@ -40,18 +78,188 @@ a, .link{
   }
   &:hover>[class^=icon-]{opacity:1;}
   &.btn-primary {
-     color: var(--text-primary-color);
-     background-color: var(--default-accent-color);
+     color: var(--button-text-color);
+     background-color: var(--button-main-color);
      border-color: transparent;
       &:hover,
       &:active,
       &:focus{
-         color: var(--text-primary-color);
-         background-color: var(--dark-accent-color);
+         color: var(--button-text-color);
+         background-color: var(--button-hover-color);
       }
    }
 }
 
+.icon-export{
+  vertical-align:bottom;
+  background:var(--icon-export);
+}
+.icon-hierarchy-tree,.icon-hierarchy-flat,.icon-search{
+  margin:0;
+  cursor:pointer;
+  pointer-events: all;
+}
+.icon-hierarchy-tree{
+  background:var(--icon-hierarchy-tree);
+}
+.icon-hierarchy-flat{
+  background:var(--icon-hierarchy-flat);
+}
+.icon-filter{
+  width:20px;
+  height:15px;
+  vertical-align:bottom;
+  background:var(--icon-filter);
+}
+.icon-add{
+  width:20px;
+  height:20px;
+  vertical-align:bottom;
+  background:var(--icon-add);
+}
+.icon-search{
+  background:var(--icon-search);
+}
+.icon-comment,
+.icon-face-positive,
+.icon-face-neutral,
+.icon-face-negative{
+  width:48px;
+  height:48px;
+  margin-right:8px;
+}
+.icon-comment{
+  background:var(--icon-comment);
+}
+.icon-face-positive{
+  background:var(--icon-face-positive);
+  fill: var(--positive-color);
+}
+.icon-face-neutral{
+  background:var(--icon-face-neutral);
+  fill: var(--neutral-color);
+}
+.icon-face-negative{
+  background:var(--icon-face-negative);
+  fill: var(--negative-color);
+}
+
+/* styles for filter-bar which includes a filter button and filter summary + clear button */
+.filter-bar{
+  @apply --layout-horizontal;
+  @apply --layout-wrap;
+
+  margin:16px 24px;
+
+  & .filter-button{
+    background-color: var(--light-primary-color);
+    fill: var(--primary-text-color);
+    transition: .25s background-color ease-in-out;
+    margin-right:8px;
+
+    &>svg{
+      background:none;
+      opacity:1;
+      margin:0;
+      vertical-align:middle;
+    }
+    &:hover,
+    &:active,
+    &:focus{
+      background-color: var(--primary-text-color);
+      fill:var(--light-primary-color);
+    }
+  }
+    & div {
+      background: var(--secondary-text-color);
+      transition: .25s background-color ease-in-out;
+      color: var(--button-text-color);
+      margin: 0 5px;
+      height: 30px;
+      border-radius: 3px;
+      padding: 0 8px;
+      vertical-align: top;
+      line-height: 30px;
+      font-size: 13px;
+      cursor: default;
+      pointer-events: painted;
+    }
+
+    & span{
+      height: 30px;
+      border-radius: 3px;
+      padding: 0 8px;
+      vertical-align: top;
+      line-height: 30px;
+      font-size: 13px;
+      cursor: default;
+      pointer-events: painted;
+    }
+
+}
+
+.cf_positive {
+  color:var(--positive-color);
+  fill: var(--positive-color);
+}
+.cf_neutral {
+  color:var(--neutral-color);
+  fill: var(--neutral-color);
+}
+.cf_negative {
+  color:var(--negative-color);
+  fill: var(--negative-color);
+}
+/* Legend styles */
+.legend {
+  position: absolute;
+  bottom: 14px;
+
+  & .cf_positive,
+  & .cf_negative,
+  & .cf_neutral{
+    margin-right: 20px;
+    color:inherit;
+
+    &:before{
+      content: "";
+      display: inline-block;
+      margin-right: 5px;
+      width: 11px;
+      height: 11px;
+    }
+  }
+  & .cf_positive:before {
+    background: var(--positive-color,#7cc700);
+    border-radius: 50%;
+  }
+  & .cf_neutral:before {
+    background: var(--neutral-color,#cdd1d9);
+    transform: rotateZ(45deg);
+    width: 10px;
+    height: 10px;
+  }
+  & .cf_negative:before {
+    background: var(--negative-color,#fd9900);
+  }
+}
+
+.reportal-branding-panel{
+  background: #fff;
+
+  & .page-title{
+    display: inline;
+  }
+
+  & .customer-logo{
+    float: right
+  }
+}
+
+/* drilldown fix */
+.tbl-dd .yui3-menu {
+  z-index: 1;
+}
 
 
 

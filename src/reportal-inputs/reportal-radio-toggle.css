@@ -21,13 +21,14 @@
     }
   }
   & input:checked + label {
-    background: var(--dark-primary-color);
-    color: var(--text-primary-color);
-    border-color: var(--dark-primary-color);
+    background: var(--secondary-text-color);
+    color: var(--button-text-color);
+    border-color: var(--secondary-text-color);
   }
   & input:not(checked) + label {
-    background: transparent;
-    color: var(--dark-primary-color);
+    background: var(--button-text-color);
+    color: var(--secondary-text-color);
+    border-color: var(--secondary-text-color);
   }
   & [type=radio] + label:before,
   & [type=radio] + label:after { display: none; } /* override styled checkboxes */
