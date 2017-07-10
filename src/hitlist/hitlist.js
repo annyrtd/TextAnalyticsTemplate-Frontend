@@ -86,7 +86,6 @@ class Hitlist {
       this.scrollTo(offset,200);
     }
   }
-  //TODO: make scrollTO reusable across scripts
   /**
    * Implements smooth srolling
    * @param {Number} to - offset from top of the page the window needs to be scrolled to

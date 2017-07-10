@@ -4,10 +4,12 @@ require('../lib/exporting')(Highcharts);
 require('../lib/highcharts-more')(Highcharts);
 
 export default class CorrelationChart {
-  constructor({container, table, palette}) {
+  constructor({container, table, palette, translations}) {
     this.container = container;
     this.table = table;
     this.palette = palette;
+    this.translations = translations;
+    console.log(translations["Priority Issues"]);
     this.data = [];
     this.init();
   }
@@ -40,7 +42,8 @@ export default class CorrelationChart {
       },
 
       title: {
-        text: 'Correlation chart'
+        text: this.translations['Correlation chart'],
+        margin: 21
       },
 
       subtitle: {
@@ -50,11 +53,14 @@ export default class CorrelationChart {
       xAxis: {
         gridLineWidth: 1,
         title: {
-          text: 'Average Category Sentiment'
+          text: this.translations['Average Category Sentiment'],
+          margin: 40
         },
         labels: {
-          format: '{value}'
+          format: '{value}',
+          y: -5
         },
+        tickWidth: 0,
         plotLines: [{
           color: 'black',
           dashStyle: 'dot',
@@ -66,7 +72,7 @@ export default class CorrelationChart {
             style: {
               fontStyle: 'italic'
             },
-            text: 'Average Overall Sentiment'
+            text: this.translations['Average Overall Sentiment']
           },
           zIndex: 3
         }]
@@ -76,7 +82,7 @@ export default class CorrelationChart {
         startOnTick: false,
         endOnTick: false,
         title: {
-          text: 'Correlation with NPS'
+          text: this.translations['Correlation with NPS']
         },
         labels: {
           format: '{value}'
@@ -93,7 +99,7 @@ export default class CorrelationChart {
             style: {
               fontStyle: 'italic'
             },
-            text: 'Zero correlation'
+            text: this.translations['Zero correlation']
           },
           zIndex: 3
         }]
@@ -154,71 +160,96 @@ export default class CorrelationChart {
           }
         }
 
-      }]
+      }],
+
+      exporting: {
+        buttons: {
+          contextButton: {
+            y: -5
+          }
+        }
+      }
 
     };
 
-    Highcharts.chart(this.container, chartConfig, this.SetupChartAreas);
+    Highcharts.chart(this.container, chartConfig, this.SetupChartAreasWithTranslationsAndPalette(this.translations, this.palette));
   }
 
-  SetupChartAreas(chart) {
-    console.log(chart);
-    let {plotLeft, plotWidth, plotTop, plotBottom, xAxis, plotHeight} = chart;
-    let yPlotline = xAxis[0].toPixels(xAxis[0].plotLinesAndBands[0].options.value);
-    let titleHeight = 30;
+  SetupChartAreasWithTranslationsAndPalette (translations, palette){
+    const SetupChartAreas = (chart) => {
+      console.log(this);
+      let {plotLeft, plotWidth, plotTop, plotBottom, xAxis, plotHeight} = chart;
+      let yPlotline = xAxis[0].toPixels(xAxis[0].plotLinesAndBands[0].options.value);
+      let titleHeight = 30;
 
-    let areas = [
-      {
-        title: "Priority Issues",
-        color: "#ee627d",
-        coordinates: [
-          plotLeft,
-          plotTop - titleHeight,
-          yPlotline - plotLeft,
-          titleHeight
-        ]
-      },
-      {
-        title: "Strength",
-        color: "#7cc700",
-        coordinates: [
-          yPlotline,
-          plotTop - titleHeight,
-          plotWidth - yPlotline + plotLeft,
-          titleHeight
-        ]
-      },
-      {
-        title: "Monitor add Improve",
-        color: "#fd9900",
-        coordinates: [
-          plotLeft,
-          plotHeight + plotTop,
-          yPlotline - plotLeft,
-          titleHeight
-        ]
-      },
-      {
-        title: "Maintain",
-        color: "#82b8ec",
-        coordinates: [
-          yPlotline,
-          plotHeight + plotTop,
-          plotWidth - yPlotline + plotLeft,
-          titleHeight
-        ]
-      }
-    ];
+      let areas = [
+        {
+          title: translations["Priority Issues"],
+          color: palette.areasColors["Priority Issues"],
+          coordinates: [
+            plotLeft,
+            plotTop - titleHeight,
+            yPlotline - plotLeft,
+            titleHeight
+          ]
+        },
+        {
+          title: translations["Strength"],
+          color: palette.areasColors["Strength"],
+          coordinates: [
+            yPlotline,
+            plotTop - titleHeight,
+            plotWidth - yPlotline + plotLeft,
+            titleHeight
+          ]
+        },
+        {
+          title: translations["Monitor and Improve"],
+          color: palette.areasColors["Monitor and Improve"],
+          coordinates: [
+            plotLeft,
+            plotHeight + plotTop,
+            yPlotline - plotLeft,
+            titleHeight
+          ]
+        },
+        {
+          title: translations["Maintain"],
+          color: palette.areasColors['Maintain'],
+          coordinates: [
+            yPlotline,
+            plotHeight + plotTop,
+            plotWidth - yPlotline + plotLeft,
+            titleHeight
+          ]
+        }
+      ];
 
-    areas.forEach((area) => {
-      let { title, color, coordinates} = area;
-      chart.renderer.rect(...coordinates)
-        .attr({
-          fill: color
-        })
-        .add();
-    })
+      areas.forEach((area) => {
+        let { title, color, coordinates} = area;
+        chart.renderer.rect(...coordinates)
+          .attr({
+            fill: color
+          })
+          .add();
+        let textX = coordinates[0] + 10,
+          textY = coordinates[1] + 21;
+
+        chart.renderer.text( title, textX, textY).css(
+          {
+            color: "#ffffff",
+            zIndex: 10,
+            fontSize: 16,
+            fontWeight: "bold"
+          }
+        ).add();
+      })
+    }
+
+    return SetupChartAreas
   }
+
+
 
   GetCellValue(row, index) {
     return row.children.item(index).innerText
@@ -230,12 +261,12 @@ export default class CorrelationChart {
 
   GetRowValues(row, index) {
     const GetCurrentRowCellValue = (cellIndex) => this.GetCellValue(row, cellIndex);
-    const paletteColorIndex = index >= this.palette.length ? (index - this.palette.length * parseInt(index / this.palette.length)) : index;
+    const paletteColorIndex = index >= this.palette.chartColors.length ? (index - this.palette.chartColors.length * parseInt(index / this.palette.chartColors.length)) : index;
     const name = GetCurrentRowCellValue(0);
     const x = +GetCurrentRowCellValue(1);
     const y = +GetCurrentRowCellValue(2);
     const z = +(GetCurrentRowCellValue(3).replace(/,/g, ""));
-    const color = this.palette[paletteColorIndex];
+    const color = this.palette.chartColors[paletteColorIndex];
     const click = () => {
       this.CellClick(row)
     };
