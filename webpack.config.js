@@ -42,13 +42,13 @@ module.exports = {
     new ExtractTextPlugin('styles-v0.2.0.css')
 
     /*new webpack.optimize.UglifyJsPlugin({
-      compress: {
-        warnings: false
-      },
-      output: {
-        comments: false
-      }
-    })*/
+     compress: {
+     warnings: false
+     },
+     output: {
+     comments: false
+     }
+     })*/
   ],
   postcss: function (webpack) {
     return [
