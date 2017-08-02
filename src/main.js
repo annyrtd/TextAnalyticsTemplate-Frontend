@@ -17,8 +17,6 @@ import DefaultConfig from './hitlist/hitlist.js';
 import Hitlist from './hitlist/hitlist.js';
 import CorrelationChart from './correlationChart/correlationChart.js'
 
-import Filterpanel from './reportal-filterpanel/reportal-filterpanel.js'
-
 
 
 window.Reportal = window.Reportal || {};
@@ -28,6 +26,5 @@ ReportalBase.mixin(window.Reportal,{
   Hitlist,
   TAHierarchyTable,
   SortModule,
-   Filterpanel,
     CorrelationChart
 });
