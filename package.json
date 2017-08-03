@@ -28,14 +28,15 @@
     "postcss": "^5.0.21",
     "postcss-apply": "^0.2.0",
     "postcss-cssnext": "github:confirmitasa/postcss-cssnext",
-    "reportal-postcss-extractor": "github:confirmitasa/reportal-postcss-extractor",
+    "postcss-import": "^10.0.0",
     "postcss-inline-svg": "trysound/postcss-inline-svg",
     "postcss-loader": "^0.9.1",
+    "reportal-postcss-extractor": "github:confirmitasa/reportal-postcss-extractor",
     "style-loader": "^0.13.1",
     "webpack": "^1.13.1"
   },
   "dependencies": {
-    "r-reporal-base": "github:confirmitasa/r-reportal-base",
+    "r-reportal-base": "github:confirmitasa/r-reportal-base",
     "r-sort-table": "github:confirmitasa/r-sort-table"
   }
 }

@@ -2,7 +2,7 @@ import FixedHeader from "../aggregatedTable/FixedHeader.js"
 
 class Hitlist {
 
-  constructor({ hitlist, headers, hitlistData, sentimentConfig =
+  constructor({separator = ' ',hitlist, headers, hitlistData, sentimentConfig =
     [
       {
         sentiment: "positive",
@@ -68,6 +68,7 @@ class Hitlist {
     this.hitlistData = hitlistData;
     this.sentimentConfig = sentimentConfig;
     this.icons = icons;
+    this.separator = separator;
     this.init();
   }
 
@@ -241,20 +242,106 @@ class Hitlist {
   }
 
   addCategoriesToComment(cell, index){
-    var categories = this.source.querySelectorAll(".yui3-datatable-cell.reportal-hitlist-categories")[index].innerText.split(", ");
-    var categoriesContainer = document.createElement("div");
-    categories.forEach(category=>{
-      categoriesContainer.appendChild(this.createCategoryCard(category));
-    });
+    let separator = this.separator;
+    let categories = this.source.querySelectorAll(".yui3-datatable-cell.reportal-hitlist-categories")[index].innerText.split(", ");
+    let main = [];
+
+    categories
+      .map(fullNameCategory => ({
+        fullNameCategory,
+        categories: fullNameCategory.split(separator).map(category => category.trim())
+      }))
+      .sort((first, second) => first.categories.length - second.categories.length)
+      .forEach(categoryObject => this.pushCategory(main, categoryObject));
+
+    let categoriesContainer = document.createElement("div");
+
     categoriesContainer.classList.add("hitlist-tags-container");
     cell.appendChild(categoriesContainer);
+
+    main.forEach(item => {
+      categoriesContainer.appendChild(this.createCategoryCard(item.name));
+      this.createCards(item.children, categoriesContainer);
+    });
+  }
+
+  pushCategory(main, categoryObject) {
+    if (categoryObject.categories.length === 1) {
+      main.push({
+        name: categoryObject.categories[0],
+        fullName: categoryObject.fullNameCategory,
+        children: []
+      });
+    } else {
+      const currentCategory = categoryObject.categories.shift();
+      const parent = main.find(cat => cat.name === currentCategory);
+      if (parent) {
+        this.pushCategory(parent.children, categoryObject)
+      } else {
+        main.push({
+          name: [currentCategory, ...categoryObject.categories].join(` ${this.separator} `),
+          fullName: categoryObject.fullNameCategory,
+          children: []
+        });
+      }
+    }
   }
 
   createCategoryCard(category){
-    var categoryCard = document.createElement("span");
+    const categoryCard = document.createElement("span");
     categoryCard.innerText = category;
     categoryCard.classList.add("hitlist-tag");
     return categoryCard
+  }
+
+  createCards(main, categoriesContainer) {
+    main.forEach(item => {
+      const categoryCard = this.createCategoryDiv(item.fullName.substring(0, item.fullName.length - item.name.length), item.name);
+      categoriesContainer.appendChild(categoryCard);
+      this.createCards(item.children, categoriesContainer);
+    });
+  }
+
+  createCategoryDiv(mainCategoty, category) {
+    const mainCategoryCard = document.createElement("span");
+    mainCategoryCard.innerText = mainCategoty;
+    const width = this.getWidth(mainCategoryCard);
+
+    const categoryCard = document.createElement("span");
+    categoryCard.innerText = category;
+
+    const categoryDiv = document.createElement("div");
+    categoryDiv.classList.add("hitlist-tag");
+    categoryDiv.classList.add("hitlist-tag-container");
+    categoryDiv.appendChild(mainCategoryCard);
+    categoryDiv.appendChild(categoryCard);
+
+    categoryDiv.onmouseover = () => {
+      mainCategoryCard.style.width = width;
+    };
+
+    categoryDiv.onmouseout = () => {
+      mainCategoryCard.style.width = '';
+    };
+
+    return categoryDiv
+  }
+
+  getWidth(element) {
+    //const styles = window.getComputedStyle(element, null);
+    const newElement = element.cloneNode(true);
+    newElement.style.position = 'absolute';
+    newElement.style.top = 0;
+    newElement.style.left = '-1000px';
+    // TODO: count these things from element
+    newElement.style.fontFamily = 'verdana, arial, sans-serif'; //styles.getPropertyValue('font-family');
+    newElement.style.fontSize = '12px'; //styles.getPropertyValue('font-size');
+
+    document.body.appendChild(newElement);
+    const width = (newElement.clientWidth + 5) + 'px';
+    document.body.removeChild(newElement);
+
+    return width;
   }
 }
 
