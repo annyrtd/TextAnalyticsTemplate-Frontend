@@ -26,7 +26,7 @@
     "extract-text-webpack-plugin": "^1.0.1",
     "jsdoc": "^3.4.0",
     "postcss": "^5.0.21",
-    "postcss-apply": "^0.2.0",
+    "postcss-apply": "^0.8.0",
     "postcss-cssnext": "github:confirmitasa/postcss-cssnext",
     "postcss-import": "^10.0.0",
     "postcss-inline-svg": "trysound/postcss-inline-svg",

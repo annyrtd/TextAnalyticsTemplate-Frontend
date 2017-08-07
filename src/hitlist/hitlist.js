@@ -246,10 +246,11 @@ class Hitlist {
     let categories = this.source.querySelectorAll(".yui3-datatable-cell.reportal-hitlist-categories")[index].innerText.split(", ");
     let main = [];
 
+
     categories
       .map(fullNameCategory => ({
         fullNameCategory,
-        categories: fullNameCategory.split(separator).map(category => category.trim())
+        categories: (separator ? fullNameCategory.split(separator) : [fullNameCategory]).map(category => category.trim())
       }))
       .sort((first, second) => first.categories.length - second.categories.length)
       .forEach(categoryObject => this.pushCategory(main, categoryObject));
@@ -279,7 +280,7 @@ class Hitlist {
         this.pushCategory(parent.children, categoryObject)
       } else {
         main.push({
-          name: [currentCategory, ...categoryObject.categories].join(` ${this.separator} `),
+          name: [currentCategory, ...categoryObject.categories].join(this.separator === ' ' ? ' ' : ` ${this.separator.trim()} `),
           fullName: categoryObject.fullNameCategory,
           children: []
         });
