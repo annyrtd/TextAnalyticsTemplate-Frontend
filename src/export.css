@@ -1,0 +1,125 @@
+.pdfExportVisibleOnly {
+  display: none;
+}
+
+
+@media print {
+  .pdfExportVisibleOnly {
+    display: inline;
+  }
+
+  .layout-wrapper {
+    width: 100%;
+    margin: auto;
+  }
+
+  .reportal-table > thead > tr > td, .reportal-table > thead > tr > th {
+    font-size: 9px;
+    padding: 2px;
+  }
+
+  .reportal-table {
+    font-size: 11px;
+  }
+
+  .reportal-hierarchy-table td.reportal-hierarchical-cell {
+    white-space: normal;
+  }
+
+  .reportal-table > tbody > tr > td {
+    font-size: 9px;
+  }
+
+  .flex.box.two-column {
+    width: 100%;
+    min-width: 100%;
+  }
+
+  .hierarchy-tree, .hierarchy-flat, .hierarchy-search {
+    display: none;
+  }
+
+  .reportal-hierarchical-header * {
+    display: none;
+  }
+
+  .report-filters-horizontal, .filter-button, .reportal-filterpanel {
+    display: none;
+  }
+
+  .reportal-hierarchy-table:not(.reportal-heirarchy-flat-view) > tbody > tr.reportal-hidden-row > td:not([rowspan]) {
+    display: table-cell;
+  }
+
+  .reportal-checkbox > *, .reportal-radio > *, .reportal-select > *, .reportal-input > *, .reportal-datepicker > *, .reportal-hierarchy > * {
+    display: inline-block;
+  }
+
+  .reportal_hide_print {
+    display: none;
+  }
+
+  div.hitlist-tag-container span:first-child {
+    width: auto;
+    padding-right: 5px;
+  }
+
+  .hitlist-dropdown-button, .hitlist-export-button, .hitlist-nav {
+    display: none !important;
+  }
+
+  div.hitlist-container * {
+    font-size: 11px !important;
+  }
+
+  .reportal-hitlist-container .hitlist-tags-container .hitlist-tag {
+    margin-right: 4px;
+    margin-top: 4px;
+    padding: 2px 4px;
+  }
+
+  .reportal-hitlist-container .yui3-datatable-header:not(.reportal-hitlist-verbatim):not(.reportal-hitlist-sentiment) {
+    min-width: 50px;
+  }
+
+  .light-grey .hitlist th, .light-grey .hitlist td {
+    padding: 5px 2px;
+  }
+
+  .reportal-select.reportal-dropdown label .pdfExportVisibleOnly {
+    font-weight: normal;
+    padding-right: 16px;
+  }
+
+  .reportal-select.reportal-dropdown label {
+    font-weight: bold;
+  }
+
+  .hitlist-active-filters.reportal-clearfix {
+    height: 0;
+  }
+
+  .layout-wrapper .box {
+    padding: 0 8px;
+  }
+
+  .layout-wrapper .box.reportal-hitlist-container {
+    padding: 0 0;
+  }
+
+  .layout-wrapper {
+    padding-bottom: 0;
+  }
+
+  body, body.reportal-viewmode {
+    background-color: #fff;
+  }
+
+  .page-title {
+    padding: 0 16px;
+  }
+
+  .filter-bar {
+    margin: 16px 11px;
+  }
+}

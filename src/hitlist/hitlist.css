@@ -1,3 +1,5 @@
+@import "./hitlist-tags.css";
+
 .reportal-hitlist-container .hitlist .yui3-datatable-table {
   border: none !important;
   width: 100%;
@@ -282,7 +284,7 @@
   border: solid 1px var(--divider-color);
   background-color: var(--table-column-color);
   font-size: 12px;
-  display: inline-block;
+  display: flex;
   color: var(--primary-text-color) !important;
 }
 
