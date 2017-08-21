@@ -2,7 +2,7 @@
  * Created by IvanP on 15.08.2016.
  */
 import Highlight from '../lib/Highlight.js';
-import ReportalBase from '../../node_modules/r-reporal-base/src/reportal-base.js';
+import ReportalBase from '../../node_modules/r-reportal-base/src/reportal-base.js';
 import AggregatedTableRowMeta from './AggregatedTableRowMeta.js';
 /**
  * @namespace AggregatedTable.Hierarchy
