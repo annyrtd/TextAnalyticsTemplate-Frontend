@@ -1,3 +1,4 @@
+
 *{
   box-sizing:border-box;
   outline-color: var(--button-hover-color);
@@ -197,6 +198,7 @@ a, .link{
     }
 
 }
+
 
 .cf_positive {
   color:var(--positive-color);

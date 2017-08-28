@@ -1,3 +1,45 @@
 .highcharts-point {
   fill-opacity: 0.5;
 }
+
+.correlation-header {
+  font-size: 16px;
+  font-weight: bold;
+  color: #ffffff;
+  height: 30px;
+
+  &--issues {
+    background-color: #ee627d;
+  }
+
+  &--strength {
+    background-color: #7cc700;
+  }
+
+  &--monitor {
+    background-color: #ffb944;
+  }
+
+  &--maintain {
+    background-color: #82b8ec;
+  }
+}
+
+#correlation-chart.hidden,#correlation-tables.hidden{
+  display: none !important;
+}
+
+#chart-tables-switcher{
+  float: right;
+  & span {
+      height: 36px;
+      cursor: pointer;
+   }
+  & svg {
+    fill: var(--primary-text-color, #3F454C);
+  }
+}
+
+#chart-tables-switcher .selected svg{
+  fill: var(--button-main-color, #30b8f1)
+}

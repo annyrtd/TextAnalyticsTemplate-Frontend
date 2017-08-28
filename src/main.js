@@ -15,7 +15,7 @@ import ReportalBase from '../node_modules/r-reportal-base';
 import TAHierarchyTable from  './aggregatedTable/TAHierarchyTable.js';
 import DefaultConfig from './hitlist/hitlist.js';
 import Hitlist from './hitlist/hitlist.js';
-import CorrelationChart from './correlationChart/correlationChart.js'
+import CorrelationView from './correlationChart/correlationview.js'
 
 
 
@@ -26,5 +26,5 @@ ReportalBase.mixin(window.Reportal,{
   Hitlist,
   TAHierarchyTable,
   SortModule,
-    CorrelationChart
+    CorrelationView
 });
