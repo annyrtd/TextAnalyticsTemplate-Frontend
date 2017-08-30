@@ -2,7 +2,7 @@ import FixedHeader from "../aggregatedTable/FixedHeader.js"
 
 class Hitlist {
 
-  constructor({separator = ' ',hitlist, headers, hitlistData, sentimentConfig =
+  constructor({currentCategory = '', separator = ' ',hitlist, headers, hitlistData, sentimentConfig =
     [
       {
         sentiment: "positive",
@@ -69,6 +69,7 @@ class Hitlist {
     this.sentimentConfig = sentimentConfig;
     this.icons = icons;
     this.separator = separator;
+    this.currentCategory = currentCategory;
     this.init();
   }
 
@@ -245,13 +246,19 @@ class Hitlist {
     let separator = this.separator;
     let categories = this.source.querySelectorAll(".yui3-datatable-cell.reportal-hitlist-categories")[index].innerText.split(", ");
     let main = [];
-
+    let currentCategory = this.currentCategory;
+    let findCategory = category => category === currentCategory;
 
     categories
       .map(fullNameCategory => ({
         fullNameCategory,
         categories: (separator ? fullNameCategory.split(separator) : [fullNameCategory]).map(category => category.trim())
       }))
+      .filter(item => currentCategory ? item.categories.some(findCategory) : true)
+      .map(item => (currentCategory ? {
+        fullNameCategory: item.fullNameCategory.substr(item.fullNameCategory.indexOf(currentCategory)),
+        categories: item.categories.slice(item.categories.findIndex(findCategory))
+      } : item))
       .sort((first, second) => first.categories.length - second.categories.length)
       .forEach(categoryObject => this.pushCategory(main, categoryObject));
 
