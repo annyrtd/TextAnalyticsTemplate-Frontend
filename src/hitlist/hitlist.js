@@ -250,15 +250,30 @@ class Hitlist {
     let findCategory = category => category === currentCategory;
 
     categories
+      .filter(category => currentCategory ? category.startsWith(currentCategory) : true)
       .map(fullNameCategory => ({
         fullNameCategory,
-        categories: (separator ? fullNameCategory.split(separator) : [fullNameCategory]).map(category => category.trim())
+        categories: (() => {
+          let categoryEnd;
+          if(currentCategory) {
+            const updatedFullNameCategory = fullNameCategory.substr(currentCategory.length);
+            const firstIndexOfSeparator = updatedFullNameCategory.indexOf(separator);
+            categoryEnd = updatedFullNameCategory.substr(firstIndexOfSeparator + separator.length);
+          } else {
+            categoryEnd = fullNameCategory;
+          }
+
+          const categoriesArray = (separator ? categoryEnd.split(separator) : [categoryEnd]);
+
+          if (currentCategory) {
+            categoriesArray.unshift(currentCategory);
+          }
+
+          return categoriesArray
+            .map(category => category.trim())
+            .filter(category => category !== '')
+        })()
       }))
-      .filter(item => currentCategory ? item.categories.some(findCategory) : true)
-      .map(item => (currentCategory ? {
-        fullNameCategory: item.fullNameCategory.substr(item.fullNameCategory.indexOf(currentCategory)),
-        categories: item.categories.slice(item.categories.findIndex(findCategory))
-      } : item))
       .sort((first, second) => first.categories.length - second.categories.length)
       .forEach(categoryObject => this.pushCategory(main, categoryObject));
 
