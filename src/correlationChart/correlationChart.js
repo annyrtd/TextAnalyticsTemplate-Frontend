@@ -175,7 +175,7 @@ export default class CorrelationChart {
     Highcharts.chart(this.container, chartConfig, this.SetupChartAreasWithTranslationsAndPalette(this.translations, this.palette));
   }
 
-  SetupChartAreasWithTranslationsAndPalette (translations, palette){
+  SetupChartAreasWithTranslationsAndPalette(translations, palette) {
     const SetupChartAreas = (chart) => {
       console.log(this);
       let {plotLeft, plotWidth, plotTop, plotBottom, xAxis, plotHeight} = chart;
@@ -226,7 +226,7 @@ export default class CorrelationChart {
       ];
 
       areas.forEach((area) => {
-        let { title, color, coordinates} = area;
+        let {title, color, coordinates} = area;
         chart.renderer.rect(...coordinates)
           .attr({
             fill: color
@@ -235,7 +235,7 @@ export default class CorrelationChart {
         let textX = coordinates[0] + 10,
           textY = coordinates[1] + 21;
 
-        chart.renderer.text( title, textX, textY).css(
+        chart.renderer.text(title, textX, textY).css(
           {
             color: "#ffffff",
             zIndex: 10,
@@ -248,7 +248,6 @@ export default class CorrelationChart {
 
     return SetupChartAreas
   }
-
 
 
   GetCellValue(row, index) {

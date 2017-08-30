@@ -15,8 +15,8 @@ export default class CorrelationView {
       this.correlationChart = new CorrelationChart({container: this.chartContainer, table, palette, translations});
       this.correlationTable = new CorrelationTable({table, palette, translations});
 
-      document.querySelector(`#${this.chartContainer}`).classList.add('hidden');
-      document.querySelector(`#${this.buttonsContainer}>#table-switcher`).classList.add('selected');
+      document.querySelector(`#${this.tableContainer}`).classList.add('hidden');
+      document.querySelector(`#${this.buttonsContainer}>#chart-switcher`).classList.add('selected');
 
       document.querySelector(`#${this.buttonsContainer}>#table-switcher`).addEventListener('click', () => {
         document.querySelector(`#${this.tableContainer}`).classList.remove('hidden');

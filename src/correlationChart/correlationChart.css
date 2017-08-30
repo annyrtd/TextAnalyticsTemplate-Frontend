@@ -7,25 +7,85 @@
   font-weight: bold;
   color: #ffffff;
   height: 30px;
+  line-height: 30px;
+  align-items: center;
+  text-align: center;
 
   &--issues {
-    background-color: #ee627d;
+    background-color: var(--issues,#ee627d);
   }
 
   &--strength {
-    background-color: #7cc700;
+    background-color: var(--strength,#7cc700);
   }
 
   &--monitor {
-    background-color: #ffb944;
+    background-color: var(--monitor,#ffb944);
   }
 
   &--maintain {
-    background-color: #82b8ec;
+    background-color: var(--maintain,#82b8ec);
   }
 }
 
-#correlation-chart.hidden,#correlation-tables.hidden{
+.reportal-table>tbody.correlation-list>tr:first-child>td {
+    padding-top: 2px !important;
+    height: 32px;
+  }
+
+.correlation-list{
+  &>tr>td:first-child{
+    text-align: center;
+    height: 40px;
+    font-size: 20px;
+    font-weight: 700;
+    margin: 7px 0 5px 10px;
+    padding: 2px;
+  }
+
+  &>tr>td:last-child>div {
+    text-align: center;
+    font-size: 13px;
+    color: #000;
+    padding: 0 5px;
+    font-weight: 700;
+    background-color: #dcdfe4;
+    line-height: 20px;
+    margin: 10px 10px 10px auto ;
+    width: fit-content;
+  }
+
+
+    &--issues{
+      &>tr>td:first-child{
+          color: var(--issues,#ee627d)
+        }
+    }
+
+
+    &--strength {
+      &>tr>td:first-child {
+        color: var(--strength,#7cc700);
+      }
+    }
+
+
+    &--monitor {
+        &>tr>td:first-child {
+          color: var(--monitor,#ffb944);
+        }
+    }
+
+    &--maintain {
+      &>tr>td:first-child {
+          color: var(--maintain,#82b8ec);
+        }
+      }
+
+}
+
+
+#correlation-chart.hidden,#correlation-tables-view.hidden{
   display: none !important;
 }
 
@@ -39,6 +99,7 @@
     fill: var(--primary-text-color, #3F454C);
   }
 }
+
 
 #chart-tables-switcher .selected svg{
   fill: var(--button-main-color, #30b8f1)

@@ -21,6 +21,13 @@
   --neutral-color:#cdd1d9;
   --negative-color:#fd9900;
 
+  /*correlaton colors */
+
+  --issues:#ee627d;
+  --strength: #7cc700;
+  --monitor: #ffb944;
+  --maintain: #82b8ec;
+
   --font-family: "Helvetica Neue", Roboto, sans-serif;
 
   /* `container` gives a contained effect by setting a padding on sides to push contents from edges of the screen */
