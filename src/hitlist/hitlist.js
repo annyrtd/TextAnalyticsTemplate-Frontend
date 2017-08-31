@@ -2,7 +2,7 @@ import FixedHeader from "../aggregatedTable/FixedHeader.js"
 
 class Hitlist {
 
-  constructor({separator = ' ',hitlist, headers, hitlistData, sentimentConfig =
+  constructor({currentCategory = '', separator = ' ',hitlist, headers, hitlistData, sentimentConfig =
     [
       {
         sentiment: "positive",
@@ -69,6 +69,7 @@ class Hitlist {
     this.sentimentConfig = sentimentConfig;
     this.icons = icons;
     this.separator = separator;
+    this.currentCategory = currentCategory;
     this.init();
   }
 
@@ -245,12 +246,33 @@ class Hitlist {
     let separator = this.separator;
     let categories = this.source.querySelectorAll(".yui3-datatable-cell.reportal-hitlist-categories")[index].innerText.split(", ");
     let main = [];
-
+    let currentCategory = this.currentCategory;
+    let findCategory = category => category === currentCategory;
 
     categories
+      .filter(category => currentCategory ? category.startsWith(currentCategory) : true)
       .map(fullNameCategory => ({
         fullNameCategory,
-        categories: (separator ? fullNameCategory.split(separator) : [fullNameCategory]).map(category => category.trim())
+        categories: (() => {
+          let categoryEnd;
+          if(currentCategory) {
+            const updatedFullNameCategory = fullNameCategory.substr(currentCategory.length);
+            const firstIndexOfSeparator = updatedFullNameCategory.indexOf(separator);
+            categoryEnd = updatedFullNameCategory.substr(firstIndexOfSeparator + separator.length);
+          } else {
+            categoryEnd = fullNameCategory;
+          }
+
+          const categoriesArray = (separator ? categoryEnd.split(separator) : [categoryEnd]);
+
+          if (currentCategory) {
+            categoriesArray.unshift(currentCategory);
+          }
+
+          return categoriesArray
+            .map(category => category.trim())
+            .filter(category => category !== '')
+        })()
       }))
       .sort((first, second) => first.categories.length - second.categories.length)
       .forEach(categoryObject => this.pushCategory(main, categoryObject));
