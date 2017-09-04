@@ -3,6 +3,8 @@
   /* theme colors defined*/
  /* --dark-primary-color:       #3f3f3f;*/
   --background-color:    #e1e4e9;
+  --header-background-color: #ffffff;
+  --header-text-color: #3F454C;
   --light-primary-color:      #f0f2f5;
   --button-text-color:       #FFFFFF;
   --button-hover-color:        #0087c4;

@@ -247,10 +247,12 @@ a, .link{
 }
 
 .reportal-branding-panel{
-  background: #fff;
+  background: var(--header-background-color, #ffffff);
 
   & .page-title{
     display: inline;
+    background: var(--header-background-color, #ffffff);
+    color: var(--header-text-color, #3F454C)
   }
 
   & .customer-logo{
