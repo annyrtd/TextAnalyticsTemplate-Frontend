@@ -58,6 +58,9 @@ export default class CorrelationTable {
     this.areas.forEach(area => {
       area.rows = rows.filter((row, index) => ( index > 0 && row.children[1].classList.contains(`cf_${area.id}`)))
       area.rows.forEach((row, index) => document.getElementById(area.id).firstElementChild.appendChild(this.createRow(row, index+1)))
+      if(area.rows.length === 0){
+        document.querySelector(`.correlation-header--${area.id}`).classList.add("hidden");
+      }
     })
   }
 }
