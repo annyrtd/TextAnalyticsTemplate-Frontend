@@ -297,9 +297,9 @@ class Hitlist {
       });
     } else {
       const currentCategory = categoryObject.categories.shift();
-      const parent = main.find(cat => cat.name === currentCategory);
-      if (parent) {
-        this.pushCategory(parent.children, categoryObject)
+      const parent = main.filter(cat => cat.name === currentCategory);
+      if (parent.length > 0) {
+        this.pushCategory(parent[0].children, categoryObject)
       } else {
         main.push({
           name: [currentCategory, ...categoryObject.categories].join(this.separator === ' ' ? ' ' : ` ${this.separator.trim()} `),

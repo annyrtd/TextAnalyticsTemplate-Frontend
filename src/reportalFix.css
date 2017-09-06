@@ -172,6 +172,7 @@ a, .link{
     }
   }
     & div {
+      display: inline-block;
       background: var(--secondary-text-color);
       transition: .25s background-color ease-in-out;
       color: var(--button-text-color);
