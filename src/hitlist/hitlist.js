@@ -328,6 +328,12 @@ class Hitlist {
   createCategoryDiv(mainCategoty, category) {
     const mainCategoryCard = document.createElement("span");
     mainCategoryCard.innerText = mainCategoty;
+
+    const isFirefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
+    if(isFirefox) {
+      mainCategoryCard.classList.add('firefox');
+    }
+
     const width = this.getWidth(mainCategoryCard);
 
     const categoryCard = document.createElement("span");
