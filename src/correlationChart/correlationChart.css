@@ -11,6 +11,10 @@
   align-items: center;
   text-align: center;
 
+  &.hidden{
+    display: none
+   }
+
   &--issues {
     background-color: var(--issues,#ee627d);
   }

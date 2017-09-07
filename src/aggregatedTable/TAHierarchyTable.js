@@ -103,6 +103,7 @@ class TAHierarchyTable extends HierarchyBase{
 
           //build a prototype for a row
           //let flatName = item.name.split(this.flatNameDelimiter).reverse()[0].trim();
+          debugger;
           currentRowArray.meta = new this.setupMeta({
             row,
             id: item.id,

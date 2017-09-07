@@ -5,6 +5,8 @@ var styleBundle = require('./main.css');
 // import 'highcharts-more';
 
 //HighchartsExporting(HighchartsMore(Highcharts));
+import ArrayFrom from './polyfills/array-from';
+ArrayFrom();
 
 import FixedHeader from './aggregatedTable/FixedHeader.js';
 import AggregatedTable from './aggregatedTable/AggregatedTable.js';

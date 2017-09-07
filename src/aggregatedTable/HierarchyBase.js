@@ -167,6 +167,7 @@ class HierarchyBase extends ReportalBase {
 
     this._flatEvent = ReportalBase.newEvent('reportal-table-hierarchy-flat-view');
     this._treeEvent = ReportalBase.newEvent('reportal-table-hierarchy-tree-view');
+    debugger;
     this.setupMeta=HierarchyRowMeta;
   }
 
@@ -185,10 +186,9 @@ class HierarchyBase extends ReportalBase {
    * @param {Object} meta - meta for the row element in the table
    */
   static addCollapseButton(meta){
-    debugger;
     var collapseButton = document.createElement("div");
     collapseButton.classList.add("reportal-collapse-button");
-    collapseButton.addEventListener('click', () => {debugger; meta.collapsed = !meta.collapsed;});
+    collapseButton.addEventListener('click', () => {meta.collapsed = !meta.collapsed;});
     meta.nameCell.insertBefore(collapseButton,meta.nameCell.firstChild);
     meta.nameCell.classList.add('reportal-hierarchical-cell');
   }
