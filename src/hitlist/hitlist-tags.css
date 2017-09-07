@@ -5,7 +5,9 @@ div.hitlist-tag-container {
     overflow: hidden;
     transition: 0.5s width ease-in-out;
     white-space: nowrap;
-    display: inline-block;
+    display: list-item;
+    -o-text-overflow: ellipsis;
+    -ms-text-overflow: ellipsis;
     text-overflow: ellipsis;
   }
 }
