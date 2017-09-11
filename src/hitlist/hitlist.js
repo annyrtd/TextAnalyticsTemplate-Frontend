@@ -1,8 +1,9 @@
 import FixedHeader from "../aggregatedTable/FixedHeader.js"
+var dateformat = require('dateformat');
 
 class Hitlist {
 
-  constructor({currentCategory = '', separator = ' ',hitlist, headers, hitlistData, sentimentConfig =
+  constructor({currentCategory = '', separator = ' ',hitlist, headers, hitlistData, dateTimeFormat, sentimentConfig =
     [
       {
         sentiment: "positive",
@@ -70,6 +71,7 @@ class Hitlist {
     this.icons = icons;
     this.separator = separator;
     this.currentCategory = currentCategory;
+    this.dateTimeFormat = dateTimeFormat;
     this.init();
   }
 
@@ -226,7 +228,8 @@ class Hitlist {
   processDates(){
     var dateCells = this.source.querySelectorAll(".yui3-datatable-cell.reportal-hitlist-date");
     [].slice.call(dateCells).forEach((cell, index)=>{
-      var date = cell.innerText;
+      var dateTimeFormat = this.dateTimeFormat;
+      var date = dateTimeFormat ? dateformat(new Date(cell.innerText), dateTimeFormat) : cell.innerText;
       cell.innerHTML = "";
       var dateElement = document.createElement("div");
       dateElement.innerText = date;

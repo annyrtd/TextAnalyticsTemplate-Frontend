@@ -36,6 +36,7 @@
     "webpack": "^1.13.1"
   },
   "dependencies": {
+    "dateformat": "^2.0.0",
     "r-reportal-base": "github:confirmitasa/r-reportal-base",
     "r-sort-table": "github:confirmitasa/r-sort-table"
   }
