@@ -3,16 +3,16 @@ import CorrelationChart from './correlationChart'
 import CorrelationTable from './correlationTable'
 
 export default class CorrelationView {
-  constructor({tableContainer, chartContainer, buttonsContainer, table, palette, translations}){
+  constructor({tableContainer, chartContainer, buttonsContainer, table, palette, translations, questionName}){
     this.tableContainer = tableContainer;
     this.chartContainer = chartContainer;
     this.buttonsContainer = buttonsContainer;
 
-    this.init({table, palette, translations});
+    this.init({table, palette, translations, questionName});
   }
 
-  init({table, palette, translations}) {
-      this.correlationChart = new CorrelationChart({container: this.chartContainer, table, palette, translations});
+  init({table, palette, translations, questionName}) {
+      this.correlationChart = new CorrelationChart({container: this.chartContainer, table, palette, translations, questionName});
       this.correlationTable = new CorrelationTable({table, palette, translations});
 
       document.querySelector(`#${this.tableContainer}`).classList.add('hidden');
