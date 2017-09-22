@@ -1,7 +1,7 @@
 /** styles for Reportal Navigator configured to show as `tabs` with style set to `None` */
 
 .yui3-menu-horizontal{
-  background-color: #FFF;
+  background-color: var(--header-background-color, #fff);
   border:0;
 
    & ul{
@@ -42,7 +42,7 @@
           position: relative;
           display: block;
           padding: 10px 15px;
-          background-color: var(--default-primary-color);
+          background-color: var(--background-color);
           border: 0;
           border-radius: 0;
           color: var(--primary-text-color) !important;
@@ -79,7 +79,7 @@
 
           &:before{
             border-width: 5px 0 5px 5px;
-            border-color: transparent transparent transparent var(--default-primary-color);
+            border-color: transparent transparent transparent var(--background-color);
             bottom:13px;
           }
         }

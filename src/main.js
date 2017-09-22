@@ -1,11 +1,32 @@
-let styleBundle = require('./main.css');
+var styleBundle = require('./main.css');
+// import Highcharts from 'highcharts';
+// window.Highcharts = Highcharts;
+// import 'highcharts-exporting';
+// import 'highcharts-more';
 
-import TAhierarchy from 'r-table-hierarchy';
-import TableFloatingHeader from 'r-table-floating-header';
-import AggregatedTable from 'r-aggregated-table';
-import ReportalBase from 'r-reportal-base'
-import Hitlist from 'r-hitlist';
+//HighchartsExporting(HighchartsMore(Highcharts));
+import ArrayFrom from './polyfills/array-from';
+ArrayFrom();
 
-let Reportal = window.Reportal;
+import FixedHeader from './aggregatedTable/FixedHeader.js';
+import AggregatedTable from './aggregatedTable/AggregatedTable.js';
+import LazyHierarchyFetch from './aggregatedTable/LazyHierarchyFetch.js';
 
-export default Reportal
+import SortModule from '../node_modules/r-sort-table';
+import ReportalBase from '../node_modules/r-reportal-base';
+import TAHierarchyTable from  './aggregatedTable/TAHierarchyTable.js';
+import DefaultConfig from './hitlist/hitlist.js';
+import Hitlist from './hitlist/hitlist.js';
+import CorrelationView from './correlationChart/correlationview.js'
+
+
+
+window.Reportal = window.Reportal || {};
+ReportalBase.mixin(window.Reportal,{
+  FixedHeader,
+  AggregatedTable,
+  Hitlist,
+  TAHierarchyTable,
+  SortModule,
+  CorrelationView
+});
