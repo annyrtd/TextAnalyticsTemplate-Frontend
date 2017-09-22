@@ -1,4 +1,4 @@
-.reportal-checkbox, .reportal-radio, .reportal-select, .reportal-input, .reportal-datepicker{
+.reportal-checkbox, .reportal-radio, .reportal-select, .reportal-input, .reportal-datepicker, .reportal-hierarchy{
     position: relative;
     display: inline-block;
     box-sizing: border-box;
@@ -10,9 +10,11 @@
     }
 
     & > label {
-      font-size: inherit;
+      font-size: ;
       color:var(--secondary-text-color);
       padding: 7px 0;
       font-family:inherit;
     }
 }
+
+
