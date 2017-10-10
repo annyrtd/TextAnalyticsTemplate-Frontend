@@ -22,6 +22,12 @@
   vertical-align:bottom;
   background:var(--icon-export);
 }
+
+.icon-report-list{
+  vertical-align:bottom;
+  background:var(--icon-report-list);
+}
+
 .icon-hierarchy-tree,.icon-hierarchy-flat,.icon-search{
   margin:0;
   cursor:pointer;

@@ -44,7 +44,7 @@ Besides there are various modules that are included as dependencies in the proje
 * `flexboxLayout`: https://github.com/ConfirmitASA/flexboxLayout,
 * `r-hitlist`: https://github.com/ConfirmitASA/r-hitlist,
 * `r-loading-animation`: https://github.com/ConfirmitASA/r-loading-animation,
-* `r-reporal-base`: https://github.com/ConfirmitASA/r-reportal-base,
+* `r-reportal-base`: https://github.com/ConfirmitASA/r-reportal-base,
 * `r-sort-table`: https://github.com/ConfirmitASA/r-sort-table,
 * `r-table-hierarchy`: https://github.com/ConfirmitASA/r-table-hierarchy
 
