@@ -2,36 +2,10 @@
 
 /*A set of layout classes and mixins that let you specify layout properties directly in markup.
 Guide to use classes and mixins are in the README.md of this boilerplate
-
 Sample use when `flex flex-alignment` are included:
-
     <div class="layout horizontal layout-start">
       <div>cross axis start alignment</div>
     </div>
-
-The following imports of classes files are available:
- - flex
- - flex-reverse
- - flex-alignment
- - flex-factors
- - positioning
- */
-@import "../node_modules/flexboxLayout/src/layout-mixins.css";
-
-@import "../node_modules/flexboxLayout/src/flex.css";
-@import "../node_modules/flexboxLayout/src/flex-reverse.css";
-@import "../node_modules/flexboxLayout/src/flex-alignment.css";
-@import "../node_modules/flexboxLayout/src/fl@import "./variables.css";
-
-/*A set of layout classes and mixins that let you specify layout properties directly in markup.
-Guide to use classes and mixins are in the README.md of this boilerplate
-
-Sample use when `flex flex-alignment` are included:
-
-    <div class="layout horizontal layout-start">
-      <div>cross axis start alignment</div>
-    </div>
-
 The following imports of classes files are available:
  - flex
  - flex-reverse
@@ -89,54 +63,3 @@ The following imports of classes files are available:
 
 /** Styles for export */
 @import "export.css";
-
-ex-factors.css";
-@import "../node_modules/flexboxLayout/src/positioning.css";
-@import "../node_modules/r-loading-animation/loading-animation.css";
-
-/*creates boxes with class `.box` and on optional nested element `.heading` will pose as a header. a `.box` will have outer margin to separate from other elements*/
-@import "layout/box-model.css";
-
-/** Styles to override or fix default Reportal visuals */
-@import "reportalFix.css";
-
-
-/*Viewer presentation styles fixes*/
-@import "viewerPresentation/viewerPresentation.css";
-
-/** styles for Reportal Navigator configured to show as `tabs` with style set to `None` */
-@import "reportalNavigator-DA/style.css";
-
-/** styles for Reportal List selects. A select needs to be wrapped with an element with `reportal-select` or `reportal-select multiple` class and may have a preceding <label>  */
-@import "reportal-inputs/reportal-select.css";
-
-@import "reportal-inputs/reportal-checkbox-radio.css";
-@import "reportal-inputs/reportal-radio-toggle.css";
-
-/** Styles for kpi-tiles */
-@import "kpi-tile/kpi-tile.css";
-
-<<<<<<< HEAD
-=======
-@import "aggregatedTable/aggregatedTable.css";
-
-@import "hitlist/hitlist.css";
-
-@import "reportal-filterpanel/reportal-filterpanel.css";
-
-@import "hierarchy-component/hierarchy-component.css";
-
->>>>>>> 8aae575ce56bd82131dce2812b08fc3df55bd639
-@import "datepicker/datepicker.css";
-
-/** Styles that are project specific to override generic styles and to be able to transfer them easily into any cloned report */
-
-@import "project-specific-stuff/project-specific-styles.css";
-
-
-@import "correlationChart/correlationChart.css";
-
-
-/** Styles for export */
-@import "export.css";
-
