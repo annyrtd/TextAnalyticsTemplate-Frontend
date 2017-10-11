@@ -39,18 +39,18 @@ body, body.reportal-viewmode {
   padding:10px 20px;
   background-color: var(--light-primary-color);
 
-& > * {display:inline-block}
+  & > * {display:inline-block}
 }
 
 a, .link{
   color: var(--button-main-color) !important;
-&:active,
-&:visited{
-   color: var(--button-main-color);
- }
-&:hover{
-   color: var(--button-hover-color);
- }
+  &:active,
+  &:visited{
+    color: var(--button-main-color);
+  }
+  &:hover{
+    color: var(--button-hover-color);
+  }
 }
 
 [class^=icon-] {
@@ -73,27 +73,31 @@ a, .link{
 /* styles for buttons and elements with class `.btn` */
 .btn, button {
   @apply --reportal-button;
-&.active, &:active{
-             box-shadow: none;
-&>[class^=icon-]{opacity:1;}
-}
-&:hover>[class^=icon-]{opacity:1;}
-&.btn-primary {
-   color: var(--button-text-color);
-   background-color: var(--button-main-color);
-   border-color: transparent;
-&:hover,
-&:active,
-&:focus{
-   color: var(--button-text-color);
-   background-color: var(--button-hover-color);
- }
-}
+  &.active, &:active{
+    box-shadow: none;
+    &>[class^=icon-]{opacity:1;}
+  }
+  &:hover>[class^=icon-]{opacity:1;}
+  &.btn-primary {
+     color: var(--button-text-color);
+     background-color: var(--button-main-color);
+     border-color: transparent;
+      &:hover,
+      &:active,
+      &:focus{
+         color: var(--button-text-color);
+         background-color: var(--button-hover-color);
+      }
+   }
 }
 
 .icon-export{
   vertical-align:bottom;
   background:var(--icon-export);
+}
+.icon-report-list{
+  vertical-align:bottom;
+  background:var(--icon-report-list);
 }
 .icon-hierarchy-tree,.icon-hierarchy-flat,.icon-search{
   margin:0;
@@ -152,51 +156,51 @@ a, .link{
 
   margin:16px 24px;
 
-& .filter-button{
+  & .filter-button{
     background-color: var(--light-primary-color);
     fill: var(--primary-text-color);
     transition: .25s background-color ease-in-out;
     margin-right:8px;
 
-&>svg{
-    background:none;
-    opacity:1;
-    margin:0;
-    vertical-align:middle;
+    &>svg{
+      background:none;
+      opacity:1;
+      margin:0;
+      vertical-align:middle;
+    }
+    &:hover,
+    &:active,
+    &:focus{
+      background-color: var(--primary-text-color);
+      fill:var(--light-primary-color);
+    }
   }
-&:hover,
-&:active,
-&:focus{
-   background-color: var(--primary-text-color);
-   fill:var(--light-primary-color);
- }
-}
-& div {
-    display: inline-block;
-    background: var(--secondary-text-color);
-    transition: .25s background-color ease-in-out;
-    color: var(--button-text-color);
-    margin: 0 5px;
-    height: 30px;
-    border-radius: 3px;
-    padding: 0 8px;
-    vertical-align: top;
-    line-height: 30px;
-    font-size: 13px;
-    cursor: default;
-    pointer-events: painted;
-  }
+    & div {
+      display: inline-block;
+      background: var(--secondary-text-color);
+      transition: .25s background-color ease-in-out;
+      color: var(--button-text-color);
+      margin: 0 5px;
+      height: 30px;
+      border-radius: 3px;
+      padding: 0 8px;
+      vertical-align: top;
+      line-height: 30px;
+      font-size: 13px;
+      cursor: default;
+      pointer-events: painted;
+    }
 
-& span{
-    height: 30px;
-    border-radius: 3px;
-    padding: 0 8px;
-    vertical-align: top;
-    line-height: 30px;
-    font-size: 13px;
-    cursor: default;
-    pointer-events: painted;
-  }
+    & span{
+      height: 30px;
+      border-radius: 3px;
+      padding: 0 8px;
+      vertical-align: top;
+      line-height: 30px;
+      font-size: 13px;
+      cursor: default;
+      pointer-events: painted;
+    }
 
 }
 
@@ -218,31 +222,31 @@ a, .link{
   position: absolute;
   bottom: 14px;
 
-& .cf_positive,
-& .cf_negative,
-& .cf_neutral{
+  & .cf_positive,
+  & .cf_negative,
+  & .cf_neutral{
     margin-right: 20px;
     color:inherit;
 
-&:before{
-   content: "";
-   display: inline-block;
-   margin-right: 5px;
-   width: 11px;
-   height: 11px;
- }
-}
-& .cf_positive:before {
+    &:before{
+      content: "";
+      display: inline-block;
+      margin-right: 5px;
+      width: 11px;
+      height: 11px;
+    }
+  }
+  & .cf_positive:before {
     background: var(--positive-color,#7cc700);
     border-radius: 50%;
   }
-& .cf_neutral:before {
+  & .cf_neutral:before {
     background: var(--neutral-color,#cdd1d9);
     transform: rotateZ(45deg);
     width: 10px;
     height: 10px;
   }
-& .cf_negative:before {
+  & .cf_negative:before {
     background: var(--negative-color,#fd9900);
   }
 }
@@ -250,13 +254,13 @@ a, .link{
 .reportal-branding-panel{
   background: var(--header-background-color, #ffffff);
 
-& .page-title{
+  & .page-title{
     display: inline;
     background: var(--header-background-color, #ffffff);
     color: var(--header-text-color, #3F454C)
   }
 
-& .customer-logo{
+  & .customer-logo{
     float: right
   }
 }

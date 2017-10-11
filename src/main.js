@@ -28,5 +28,5 @@ ReportalBase.mixin(window.Reportal,{
   Hitlist,
   TAHierarchyTable,
   SortModule,
-  CorrelationView
+    CorrelationView
 });

@@ -89,48 +89,48 @@ class TAHierarchyTable extends HierarchyBase{
       blockName = block.name.toLowerCase();
     }
     return hierarchy.reduce((resultArray,item,index)=>{
-      let compoundID = block!==null? `${item.id}_${blockName}` : item.id; //this row is first in the block, which means it contains the first cell as a block cell and we need to indent the cell index when changing names in hierarchical column
+        let compoundID = block!==null? `${item.id}_${blockName}` : item.id; //this row is first in the block, which means it contains the first cell as a block cell and we need to indent the cell index when changing names in hierarchical column
 
-      if(this.rowheaders[compoundID]){ //we want to skip those which aren't in rowheaders
-        let row = rows[this.rowheaders[compoundID].index],
-          firstInBlock = (block!==null && row.rowIndex === block.cell.parentNode.rowIndex), //this row is first in the block, which means it contains the first cell as a block cell and we need to indent the cell index when changing names in hierarchical column
-          currentRowArray = HierarchyBase.stripRowData(row,firstInBlock,block);
-        resultArray.push(currentRowArray);
-        if(parent!=null){
-          if(!parent.meta.children)parent.meta.children=[];
-          parent.meta.children.push(currentRowArray);
+        if(this.rowheaders[compoundID]){ //we want to skip those which aren't in rowheaders
+          let row = rows[this.rowheaders[compoundID].index],
+              firstInBlock = (block!==null && row.rowIndex === block.cell.parentNode.rowIndex), //this row is first in the block, which means it contains the first cell as a block cell and we need to indent the cell index when changing names in hierarchical column
+              currentRowArray = HierarchyBase.stripRowData(row,firstInBlock,block);
+          resultArray.push(currentRowArray);
+          if(parent!=null){
+            if(!parent.meta.children)parent.meta.children=[];
+            parent.meta.children.push(currentRowArray);
+          }
+
+          //build a prototype for a row
+          //let flatName = item.name.split(this.flatNameDelimiter).reverse()[0].trim();
+          debugger;
+          currentRowArray.meta = new this.setupMeta({
+            row,
+            id: item.id,
+            block: block,
+            flatName: item.text.trim(),
+            name: item.name.trim(),//flatName,
+            nameCell: row.children.item(block!==null ? (firstInBlock? this.column: this.column-1) : this.column),
+            parent: parent,
+            level,
+            collapsed: item.subcells.length > 0,
+            hasChildren: item.subcells.length > 0,
+            hidden: level > 0
+          });
+
+          row.classList.add("level" + level.toString());
+
+          if (level > 0 && clearLinks) {
+            this.constructor.clearLink(row);
+          }
+
+          // adds a toggle button
+          HierarchyBase.addCollapseButton(currentRowArray.meta);
+          // initializes row headers according to `this.flat`
+          this.updateCategoryLabel(currentRowArray);
+
+          if(item.subcells && item.subcells.length > 0)resultArray = this.parseHierarchy({hierarchy:item.subcells, level:level + 1, block, array:resultArray, rows, parent:currentRowArray, clearLinks });
         }
-
-        //build a prototype for a row
-        //let flatName = item.name.split(this.flatNameDelimiter).reverse()[0].trim();
-        debugger;
-        currentRowArray.meta = new this.setupMeta({
-          row,
-          id: item.id,
-          block: block,
-          flatName: item.text.trim(),
-          name: item.name.trim(),//flatName,
-          nameCell: row.children.item(block!==null ? (firstInBlock? this.column: this.column-1) : this.column),
-          parent: parent,
-          level,
-          collapsed: item.subcells.length > 0,
-          hasChildren: item.subcells.length > 0,
-          hidden: level > 0
-        });
-
-        row.classList.add("level" + level.toString());
-
-        if (level > 0 && clearLinks) {
-          this.constructor.clearLink(row);
-        }
-
-        // adds a toggle button
-        HierarchyBase.addCollapseButton(currentRowArray.meta);
-        // initializes row headers according to `this.flat`
-        this.updateCategoryLabel(currentRowArray);
-
-        if(item.subcells && item.subcells.length > 0)resultArray = this.parseHierarchy({hierarchy:item.subcells, level:level + 1, block, array:resultArray, rows, parent:currentRowArray, clearLinks });
-      }
 
       return resultArray
     },array);

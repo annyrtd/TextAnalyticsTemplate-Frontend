@@ -2,10 +2,13 @@
 
 /*A set of layout classes and mixins that let you specify layout properties directly in markup.
 Guide to use classes and mixins are in the README.md of this boilerplate
+
 Sample use when `flex flex-alignment` are included:
+
     <div class="layout horizontal layout-start">
       <div>cross axis start alignment</div>
     </div>
+
 The following imports of classes files are available:
  - flex
  - flex-reverse
@@ -63,3 +66,4 @@ The following imports of classes files are available:
 
 /** Styles for export */
 @import "export.css";
+

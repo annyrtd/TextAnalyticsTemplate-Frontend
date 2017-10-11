@@ -202,7 +202,7 @@ class HierarchyBase extends ReportalBase {
   static stripRowData(row,firstInBlock,block){
     let willPass;
     return [].slice.call(row.children).reduce((childRows,current)=>{
-      willPass = (firstInBlock && (block!==null && current === block.cell));
+        willPass = (firstInBlock && (block!==null && current === block.cell));
       if(!willPass){
         childRows.push(current.children.length == 0 ? ReportalBase.isNumber(current.textContent.trim()) : (current.innerHTML).trim())
       }
@@ -316,9 +316,9 @@ class HierarchyBase extends ReportalBase {
             button.parentNode.classList.add('hierarchy-search-visible'); //to hide sorting arrow because it overlaps the search field
           }else{
             button.classList.remove('visible');
-            button.parentNode.classList.remove('hierarchy-search-visible');
-          }
-        });
+        button.parentNode.classList.remove('hierarchy-search-visible');
+      }
+      });
       },
 
       get searching(){return _searching},

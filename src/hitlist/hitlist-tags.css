@@ -1,6 +1,6 @@
 div.hitlist-tag-container {
 
-& span:first-child {
+  & span:first-child {
     width: 10px;
     overflow: hidden;
     transition: 0.5s width ease-in-out;
@@ -11,9 +11,9 @@ div.hitlist-tag-container {
     text-overflow: ellipsis;
   }
 
-& .firefox {
-    list-style-type: none;
-    list-style-position: inside;
+  & .firefox {
+     list-style-type: none;
+     list-style-position: inside;
   }
 }
 

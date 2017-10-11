@@ -9,7 +9,7 @@
   border-radius:var(--border-radius,3px);
   min-width: 180px !important;
 
-  /* mobile-small */
+/* mobile-small */
   @media all and (min-width: 0) and (max-width: 360px) and (orientation: portrait) {
     min-width: calc(100% - var(--kpi-tile-margin) * 2) !important;
   }
@@ -19,9 +19,9 @@
 
   & .icon {padding-right:8px}
   & .digit {
-    font-size:24px;
-    &>table{
-      &>thead, &>tbody>tr>td:first-child{display:none}
+      font-size:24px;
+      &>table{
+       &>thead, &>tbody>tr>td:first-child{display:none}
+      }
     }
-  }
 }
