@@ -228,7 +228,6 @@
 .aggregatedTableContainer{
   position: relative;
   width:100%;
-  overflow-x: auto;
 }
 
 
