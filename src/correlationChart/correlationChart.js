@@ -9,7 +9,6 @@ export default class CorrelationChart {
     this.table = table;
     this.palette = palette;
     this.translations = translations;
-    this.questionName = questionName;
     console.log(translations["Priority Issues"]);
     this.data = [];
     this.init();
