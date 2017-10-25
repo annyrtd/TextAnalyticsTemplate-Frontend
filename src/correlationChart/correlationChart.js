@@ -4,7 +4,7 @@ require('../lib/exporting')(Highcharts);
 require('../lib/highcharts-more')(Highcharts);
 
 export default class CorrelationChart {
-  constructor({container, table, palette, translations}) {
+  constructor({container, table, palette, translations, questionName}) {
     this.container = container;
     this.table = table;
     this.palette = palette;
@@ -43,7 +43,7 @@ export default class CorrelationChart {
       },
 
       title: {
-        text: this.translations['Correlation chart'],
+        text: this.questionName ? `${this.translations['Impact on']} ${this.questionName}` : this.translations['Correlation chart'],
         margin: 21
       },
 
@@ -83,7 +83,7 @@ export default class CorrelationChart {
         startOnTick: false,
         endOnTick: false,
         title: {
-          text: this.translations['Correlation with NPS']
+          text: this.questionName ? `${this.translations['Correlation with']} ${this.questionName}` : this.translations['Correlation with NPS']
         },
         labels: {
           format: '{value}'
