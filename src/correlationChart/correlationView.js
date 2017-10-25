@@ -36,7 +36,5 @@ export default class CorrelationView {
       document.querySelector(`#quadrant-table`).classList.add('hidden');
       document.querySelector(`#quadrant-chart`).classList.remove('hidden');
     });
-
-
   }
 }
