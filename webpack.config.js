@@ -20,6 +20,7 @@ module.exports = {
   },
   output: {
     path: "./dist",
+
     filename: "bundle-v0.3.0.js"
   },
   devtool: "eval-source-map",
@@ -38,6 +39,7 @@ module.exports = {
     ]
   },
   plugins: [
+
     new ReportalPostcssExtractor(),
     new ExtractTextPlugin('styles-v0.3.0.css')
 
@@ -63,5 +65,5 @@ module.exports = {
       //require('cssnano')()
     ];
   },
-  watch:true
+  //watch:true
 };
