@@ -111,7 +111,7 @@ export default class CorrelationChart {
         headerFormat: '<table>',
         pointFormat: `<tr><th colspan="2"><h3 onclick="{point.click}">{point.name}</h3></th></tr>
         <tr><th>${this.translations['Average Category Sentiment']}:</th><td>{point.x}</td></tr>
-        <tr><th>${this.translations['Correlation with NPS']}:</th><td>{point.y}</td></tr>
+        <tr><th>${this.questionName ? `${this.translations['Correlation with']} ${this.questionName}` : this.translations['Correlation with NPS']}:</th><td>{point.y}</td></tr>
         <tr><th>${this.translations['Answer Count'] || 'Answer Count'}:</th><td>{point.z}</td></tr>`,
         footerFormat: '</table>',
         followPointer: true
