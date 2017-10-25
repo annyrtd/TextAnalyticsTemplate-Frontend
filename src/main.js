@@ -8,6 +8,12 @@ var styleBundle = require('./main.css');
 import ArrayFrom from './polyfills/array-from';
 ArrayFrom();
 
+import CustomAdminMenu from './adminMenu/adminMenu';
+
+window.addEventListener('load', function() {
+  const customMenu = new CustomAdminMenu();
+});
+
 import FixedHeader from './aggregatedTable/FixedHeader.js';
 import AggregatedTable from './aggregatedTable/AggregatedTable.js';
 import LazyHierarchyFetch from './aggregatedTable/LazyHierarchyFetch.js';
@@ -18,8 +24,6 @@ import TAHierarchyTable from  './aggregatedTable/TAHierarchyTable.js';
 import DefaultConfig from './hitlist/hitlist.js';
 import Hitlist from './hitlist/hitlist.js';
 import CorrelationView from './correlationChart/correlationview.js'
-
-
 
 window.Reportal = window.Reportal || {};
 ReportalBase.mixin(window.Reportal,{

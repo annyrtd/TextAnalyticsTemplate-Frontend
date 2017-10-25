@@ -1,0 +1,75 @@
+.report-settings {
+  position: relative;
+  height: 34px;
+}
+
+.report-settings * {
+  outline: none;
+}
+
+.report-settings-options {
+  position: absolute;
+  width: 152px;
+  height: 162px;
+  overflow: hidden;
+  right: 4px;
+  display: flex;
+  flex-direction: column;
+  top: 48px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  z-index: 1;
+}
+
+.report-settings-options li:hover {
+  background: #f0f2f5;
+}
+
+.report-settings-options button {
+  width: 100%;
+  text-align: left;
+  padding: 8px 12px;
+  padding-top: 4px;
+  height: 40px;
+}
+
+.report-settings-options li:hover {
+  background: #f0f2f5;
+}
+
+.report-settings > .settings-button {
+  height: 100%;
+  vertical-align: middle;
+  text-align: center;
+  padding: 0 10px;
+}
+
+.hidden-menu {
+  width: 0;
+  height: 0;
+}
+
+.icon-admin-menu {
+  vertical-align:bottom;
+}
+
+.icon-export{
+  background:var(--icon-export);
+}
+
+.icon-report-list{
+  background:var(--icon-report-list);
+}
+
+.icon-report-logoff {
+  background-image: var(--icon-report-logoff);
+}
+
+.icon-report-filters {
+  background-image: var(--icon-report-filters);
+}
+
+.icon-report-settings {
+  background-image: var(--icon-report-settings);
+}

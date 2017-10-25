@@ -30,7 +30,7 @@
       & .vp-show-export,
       & .vp-menu-addpresentation{
          width:20px;
-         height:20px;
+         height:19px;
          margin-top:0;
          opacity:0.6;
          @apply --transition;

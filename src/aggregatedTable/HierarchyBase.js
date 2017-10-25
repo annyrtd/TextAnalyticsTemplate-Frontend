@@ -167,7 +167,6 @@ class HierarchyBase extends ReportalBase {
 
     this._flatEvent = ReportalBase.newEvent('reportal-table-hierarchy-flat-view');
     this._treeEvent = ReportalBase.newEvent('reportal-table-hierarchy-tree-view');
-    debugger;
     this.setupMeta=HierarchyRowMeta;
   }
 
