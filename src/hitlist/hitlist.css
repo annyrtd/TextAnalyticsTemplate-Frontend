@@ -202,12 +202,13 @@
 .reportal-hitlist-container .reportal-hitlist-verbatim{
   width: 100%;
 }
-.yui3-datatable-table.fixed{
+.fixed.yui3-datatable-table{
   position:absolute;
   top:0;
   width:auto;
   display:none;
   border:none;
+
   & tbody{display:none !important;}
 }
 
