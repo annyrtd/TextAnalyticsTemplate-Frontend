@@ -66,7 +66,7 @@ class FixedHeader {
   cloneHeader(){
     this.clonedHeader = this.source.cloneNode(true);
     //this.clonedHeader.removeChild(this.clonedHeader.querySelector('tbody'));
-    this.clonedHeader.classList.add('fixed');
+    this.clonedHeader.classList.add('ta-fixed');
     this.wrapper.appendChild(this.clonedHeader);
     [].slice.call(this.clonedHeader.children).forEach(child=>{if(child.nodeName=='TBODY')this.clonedHeader.removeChild(child)});
   }
