@@ -30,12 +30,17 @@ export default class CorrelationChart {
   }
 
   setupChart() {
+    const setupChartAreas = this.SetupChartAreasWithTranslationsAndPalette(this.translations, this.palette);
+
     let chartConfig = {
 
       chart: {
         type: 'bubble',
         plotBorderWidth: 1,
-        zoomType: 'xy'
+        zoomType: 'xy',
+        events: {
+          redraw: (a) => setupChartAreas(a.target)
+        }
       },
 
       legend: {
@@ -173,12 +178,16 @@ export default class CorrelationChart {
 
     };
 
-    Highcharts.chart(this.container, chartConfig, this.SetupChartAreasWithTranslationsAndPalette(this.translations, this.palette));
+    Highcharts.chart(this.container, chartConfig, setupChartAreas);
   }
 
   SetupChartAreasWithTranslationsAndPalette(translations, palette) {
     const SetupChartAreas = (chart) => {
       console.log(this);
+      [].forEach.call(document.querySelectorAll('.ta-correlation-table--area-label'), (item) => {
+        item.parentNode.removeChild(item);
+      });
+
       let {plotLeft, plotWidth, plotTop, plotBottom, xAxis, plotHeight} = chart;
       let yPlotline = xAxis[0].toPixels(xAxis[0].plotLinesAndBands[0].options.value);
       let titleHeight = 30;
@@ -230,7 +239,8 @@ export default class CorrelationChart {
         let {title, color, coordinates} = area;
         chart.renderer.rect(...coordinates)
           .attr({
-            fill: color
+            fill: color,
+            class: "ta-correlation-table--area-label"
           })
           .add();
         let textX = coordinates[0] + 10,
@@ -245,7 +255,7 @@ export default class CorrelationChart {
           }
         ).add();
       })
-    }
+    };
 
     return SetupChartAreas
   }
