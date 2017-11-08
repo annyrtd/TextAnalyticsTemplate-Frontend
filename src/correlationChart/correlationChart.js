@@ -182,78 +182,41 @@ export default class CorrelationChart {
   }
 
   SetupChartAreasWithTranslationsAndPalette(translations, palette) {
+    const headers = [];
+    const texts = [];
+
     const SetupChartAreas = (chart) => {
-      console.log(this);
-      [].forEach.call(document.querySelectorAll('.ta-correlation-table--area-label'), (item) => {
-        item.parentNode.removeChild(item);
-      });
+      let areas = this.GetChartAreasMetaData(chart);
 
-      let {plotLeft, plotWidth, plotTop, plotBottom, xAxis, plotHeight} = chart;
-      let yPlotline = xAxis[0].toPixels(xAxis[0].plotLinesAndBands[0].options.value);
-      let titleHeight = 30;
-
-      let areas = [
-        {
-          title: translations["Priority Issues"],
-          color: palette.areasColors["Priority Issues"],
-          coordinates: [
-            plotLeft,
-            plotTop - titleHeight,
-            yPlotline - plotLeft,
-            titleHeight
-          ]
-        },
-        {
-          title: translations["Strength"],
-          color: palette.areasColors["Strength"],
-          coordinates: [
-            yPlotline,
-            plotTop - titleHeight,
-            plotWidth - yPlotline + plotLeft,
-            titleHeight
-          ]
-        },
-        {
-          title: translations["Monitor and Improve"],
-          color: palette.areasColors["Monitor and Improve"],
-          coordinates: [
-            plotLeft,
-            plotHeight + plotTop,
-            yPlotline - plotLeft,
-            titleHeight
-          ]
-        },
-        {
-          title: translations["Maintain"],
-          color: palette.areasColors['Maintain'],
-          coordinates: [
-            yPlotline,
-            plotHeight + plotTop,
-            plotWidth - yPlotline + plotLeft,
-            titleHeight
-          ]
-        }
-      ];
-
-      areas.forEach((area) => {
+      areas.forEach((area, index) => {
         let {title, color, coordinates} = area;
-        chart.renderer.rect(...coordinates)
-          .attr({
+        headers[index] = headers[index] || chart.renderer.rect().attr({
             fill: color,
             class: "ta-correlation-table--area-label"
-          })
-          .add();
+          }).add();
+
+        headers[index].attr({
+          x: coordinates[0],
+          y: coordinates[1],
+          width: coordinates[2],
+          height: coordinates[3],
+        });
+
         let textX = coordinates[0] + 10,
           textY = coordinates[1] + 21;
 
-        chart.renderer.text(title, textX, textY).css(
-          {
+        texts[index] = texts[index] ||
+          chart.renderer.text(title).css({
             color: "#ffffff",
             zIndex: 10,
             fontSize: 16,
             fontWeight: "bold"
-          }
-        ).add();
+          }).add();
+
+        texts[index].attr({
+          x: textX,
+          y: textY
+        });
       })
     };
 
@@ -282,5 +245,65 @@ export default class CorrelationChart {
     };
 
     return {x, y, z, name, color, click};
+  }
+
+  GetChartAreasMetaData(chart) {
+    const translations = this.translations;
+    const palette = this.palette;
+    let {plotLeft, plotWidth, plotTop, plotBottom, xAxis, plotHeight} = chart;
+    let yPlotline = xAxis[0].toPixels(xAxis[0].plotLinesAndBands[0].options.value);
+
+    if(yPlotline > plotWidth + plotLeft) {
+      yPlotline = plotWidth + plotLeft;
+    } else if(yPlotline < plotLeft) {
+      yPlotline = plotLeft;
+    }
+
+    let titleHeight = 30;
+
+    const areas = [
+      {
+        title: translations["Priority Issues"],
+        color: palette.areasColors["Priority Issues"],
+        coordinates: [
+          plotLeft,
+          plotTop - titleHeight,
+          yPlotline - plotLeft,
+          titleHeight
+        ]
+      },
+      {
+        title: translations["Strength"],
+        color: palette.areasColors["Strength"],
+        coordinates: [
+          yPlotline,
+          plotTop - titleHeight,
+          plotWidth - yPlotline + plotLeft,
+          titleHeight
+        ]
+      },
+      {
+        title: translations["Monitor and Improve"],
+        color: palette.areasColors["Monitor and Improve"],
+        coordinates: [
+          plotLeft,
+          plotHeight + plotTop,
+          yPlotline - plotLeft,
+          titleHeight
+        ]
+      },
+      {
+        title: translations["Maintain"],
+        color: palette.areasColors['Maintain'],
+        coordinates: [
+          yPlotline,
+          plotHeight + plotTop,
+          plotWidth - yPlotline + plotLeft,
+          titleHeight
+        ]
+      }
+    ];
+
+    return areas;
   }
 }
