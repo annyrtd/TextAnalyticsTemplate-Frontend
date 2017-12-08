@@ -65,6 +65,8 @@ The following imports of classes files are available:
 
 @import "correlationChart/correlationChart.css";
 
+@import "wordCloud/cloud.css";
+
 
 /** Styles for export */
 @import "export.css";
