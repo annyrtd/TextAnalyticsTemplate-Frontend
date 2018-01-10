@@ -1,6 +1,6 @@
 import cloud from 'd3-cloud';
 import * as d3 from 'd3';
-import takeDataFromTable from './data.js';
+import {takeDataFromTable, takeExceptionsFromSelect} from './data';
 
 const fontSize = {
     min: 13,
@@ -9,13 +9,17 @@ const fontSize = {
 
 
 class WordCloud {
-  constructor({elementFromId, elementToId, countId, sentimentId, clickFunc, colorConfig}) {
-
+  constructor({elementFromId, elementToId, exceptionsFromId, countId, sentimentId, clickFunc, colorConfig}) {
     let data = takeDataFromTable({
       elementId: elementFromId,
       countId,
       sentimentId
     });
+
+    let exceptions = takeExceptionsFromSelect({
+      elementId: exceptionsFromId
+    });
+    data = data.filter(item => exceptions.indexOf(item.text.toUpperCase()) < 0);
 
     let fill = d3.scaleOrdinal(d3.schemeCategory10);
     let size = d3.scaleLinear()
@@ -23,12 +27,23 @@ class WordCloud {
       .range([fontSize.min, fontSize.max]);
 
     let update = ({ratio}) => {
-      //to save fontSizes's scale
-      // fontSize.min *= ratio;
-      // fontSize.max *= ratio;
-      // size.range([fontSize.min, fontSize.max]);
-
       layout.size([cloudContainer.clientWidth, cloudContainer.clientHeight]);
+      layout.stop().words(data).start();
+    };
+
+    let restart = () => {
+      let newData = takeDataFromTable({
+        elementId: elementFromId,
+        countId,
+        sentimentId
+      });
+
+      let newExceptions = takeExceptionsFromSelect({
+        elementId: exceptionsFromId
+      });
+      data = newData.filter(item => newExceptions.indexOf(item.text.toUpperCase()) < 0);
+
+      layout.stop().words([]).start();
       layout.stop().words(data).start();
     };
 
@@ -66,6 +81,8 @@ class WordCloud {
           }
         })
         .text(d => d.text);
+
+      text.exit().remove();
     };
 
     let oldHeight = window.innerHeight;
@@ -103,6 +120,8 @@ class WordCloud {
     tags.forEach(element => {
       element.onclick = clickFunc;
     });
+
+    return {restart};
   }
 }
 
