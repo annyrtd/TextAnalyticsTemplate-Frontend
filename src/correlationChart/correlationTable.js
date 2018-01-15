@@ -42,7 +42,7 @@ export default class CorrelationTable {
 
     const counts = document.createElement('td');
     const countsDiv = document.createElement('div');
-    const countsValue = row.children[3].innerText;
+    const countsValue = row.children[row.children.length - 2].innerText;
     countsDiv.innerText = countsValue;
     counts.appendChild(countsDiv);
 
