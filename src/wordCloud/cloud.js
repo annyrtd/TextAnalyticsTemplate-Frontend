@@ -45,6 +45,11 @@ class WordCloud {
 
       layout.stop().words([]).start();
       layout.stop().words(data).start();
+
+      let tags = Array.from(document.getElementsByClassName('tag'));
+      tags.forEach(element => {
+        element.onclick = clickFunc;
+      });
     };
 
     let end = (words) => {
