@@ -86,12 +86,12 @@
     padding: 5px 2px;
   }
 
-  .reportal-select.reportal-dropdown label .pdfExportVisibleOnly {
+  .reportal-select label .pdfExportVisibleOnly {
     font-weight: normal;
     padding-right: 16px;
   }
 
-  .reportal-select.reportal-dropdown label {
+  .reportal-select label {
     font-weight: bold;
   }
 
