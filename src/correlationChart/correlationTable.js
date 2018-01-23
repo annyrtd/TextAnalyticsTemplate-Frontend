@@ -1,5 +1,6 @@
 export default class CorrelationTable {
   constructor({container, table, palette, translations}) {
+    this.container = container;
     this.table = table;
     this.palette = palette;
     this.translations = translations;
@@ -37,8 +38,13 @@ export default class CorrelationTable {
     order.innerText = index;
 
     const categoryCell = document.createElement('td');
-    const categoryName = row.firstElementChild.firstElementChild.cloneNode(true);
-    categoryCell.appendChild(categoryName);
+    const categoryContainer = row.firstElementChild;
+    if(categoryContainer.firstElementChild && categoryContainer.firstElementChild.tagName.toLowerCase() === 'a') {
+      const categoryName = categoryContainer.firstElementChild.cloneNode(true);
+      categoryCell.appendChild(categoryName);
+    } else {
+      categoryCell.innerText = categoryContainer.innerText;
+    }
 
     const counts = document.createElement('td');
     const countsDiv = document.createElement('div');
@@ -54,13 +60,21 @@ export default class CorrelationTable {
   }
 
   init() {
-    const rows = [...this.table.querySelectorAll("tbody>tr")]
-    this.areas.forEach(area => {
-      area.rows = rows.filter((row, index) => ( index > 0 && row.children[1].classList.contains(`cf_${area.id}`)))
-      area.rows.forEach((row, index) => document.getElementById(area.id).firstElementChild.appendChild(this.createRow(row, index+1)))
-      if(area.rows.length === 0){
-        document.querySelector(`.correlation-header--${area.id}`).classList.add("hidden");
-      }
-    })
+    const rows = [...this.table.querySelectorAll("tbody>tr")];
+
+    if(rows.length > 0) {
+      this.areas.forEach((area, index)=> {
+        area.rows = rows.filter((row, index) => ( index > 0 && row.children[1].classList.contains(`cf_${area.id}`)));
+        area.rows.forEach((row, index) => document.getElementById(area.id).children[0].appendChild(this.createRow(row, index + 1)));
+        if (area.rows.length === 0) {
+          document.querySelector(`.correlation-header--${area.id}`).classList.add("hidden");
+        }
+      });
+    } else {
+      const container = document.getElementById(this.container);
+      container.innerHTML = '<label class="no-data-label">No data to display</label>';
+      container.style.marginBottom = '16px';
+      container.style.marginLeft = '8px';
+    }
   }
 }

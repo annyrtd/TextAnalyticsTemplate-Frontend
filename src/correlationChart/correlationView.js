@@ -13,7 +13,7 @@ export default class CorrelationView {
 
   init({table, palette, translations, questionName}) {
     this.correlationChart = new CorrelationChart({container: this.chartContainer, table, palette, translations, questionName});
-    this.correlationTable = new CorrelationTable({table, palette, translations});
+    this.correlationTable = new CorrelationTable({container: this.tableContainer, table, palette, translations});
 
     if (localStorage && localStorage['switcher-state'] === 'table') {
       document.querySelector(`#${this.chartContainer}`).classList.add('hidden');

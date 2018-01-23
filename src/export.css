@@ -122,4 +122,12 @@
   .filter-bar {
     margin: 16px 11px;
   }
+
+  #correlation-chart.hidden {
+    display: block !important;
+  }
+
+  #correlation-tables-view.hidden {
+    display: block !important;;
+  }
 }

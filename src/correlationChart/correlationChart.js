@@ -17,10 +17,16 @@ export default class CorrelationChart {
 
   init() {
     this.getDataFromTable();
-    this.setupChart();
-
+    if(this.data.length > 0) {
+      this.setupChart();
+    } else {
+      const container = document.getElementById(this.container);
+      container.innerHTML = '<label class="no-data-label">No data to display</label>';
+      container.style.height = '';
+      container.style.marginBottom = '16px';
+      container.style.marginLeft = '8px';
+    }
   }
-
   getDataFromTable() {
     let rows = [...this.table.querySelectorAll("tbody>tr")];
 
