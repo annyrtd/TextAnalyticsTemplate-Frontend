@@ -14,6 +14,10 @@ const AUTOPREFIXER_BROWSERS = [
 ];
 
 module.exports = {
+  node: {
+    "child_process": "empty",
+    "fs": "empty"
+  },
   entry: {
     js:"./src/main.js",
     //css:"./src/main.css"

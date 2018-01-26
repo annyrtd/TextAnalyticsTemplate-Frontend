@@ -5,6 +5,9 @@
   & td[class*=_chc]:last-child{width:200px}
 }
 
+.no-data-label {
+  color: var(--secondary-text-color);
+}
 
 /*breakpoint-specific styles*/
 /* mobile-small */
